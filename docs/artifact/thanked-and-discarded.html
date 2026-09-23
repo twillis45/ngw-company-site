@@ -6,7 +6,7 @@
 :root{
   --ground:#F5F6F8; --surface:#FFFFFF; --surface-2:#EDEFF3; --line:#D6DAE2;
   --ink:#131C2E; --ink-2:#4A5568; --ink-3:#77839A;
-  --accent:#0E8F80; --accent-soft:rgba(14,143,128,.10);
+  --accent:#425C77; --accent-soft:rgba(66,92,119,.10);
   --warn:#9A6212; --warn-soft:rgba(154,98,18,.10);
   --alarm:#B23A2E; --alarm-soft:rgba(178,58,46,.09);
   --lock:#9AA3B2; --lock-soft:rgba(154,163,178,.10);
@@ -14,7 +14,7 @@
 @media (prefers-color-scheme:dark){ :root:not([data-theme="light"]){
   --ground:#0B1220; --surface:#121C2C; --surface-2:#18243A; --line:#25334C;
   --ink:#DCE3ED; --ink-2:#9BA9BE; --ink-3:#74839B;
-  --accent:#2DD4BF; --accent-soft:rgba(45,212,191,.12);
+  --accent:#849EB8; --accent-soft:rgba(132,158,184,.13);
   --warn:#E3A44A; --warn-soft:rgba(227,164,74,.13);
   --alarm:#E5786B; --alarm-soft:rgba(229,120,107,.13);
   --lock:#5C6A82; --lock-soft:rgba(92,106,130,.13);
@@ -22,7 +22,7 @@
 :root[data-theme="dark"]{
   --ground:#0B1220; --surface:#121C2C; --surface-2:#18243A; --line:#25334C;
   --ink:#DCE3ED; --ink-2:#9BA9BE; --ink-3:#74839B;
-  --accent:#2DD4BF; --accent-soft:rgba(45,212,191,.12);
+  --accent:#849EB8; --accent-soft:rgba(132,158,184,.13);
   --warn:#E3A44A; --warn-soft:rgba(227,164,74,.13);
   --alarm:#E5786B; --alarm-soft:rgba(229,120,107,.13);
   --lock:#5C6A82; --lock-soft:rgba(92,106,130,.13);
@@ -154,9 +154,9 @@ code{font-family:"IBM Plex Mono",monospace;font-size:.86em;background:var(--surf
     and no mechanism existed by which anyone could have found out.</p>
 
   <div class="stamp">
-    <span><b>Recorded</b> <span data-recorded="2026-09-23T04:47:05.129Z">2026-09-23</span></span>
-    <span><b>Gate</b> stage 0 · passed-with-conditions</span>
-    <span><b>HEAD</b> d85e516a</span>
+    <span><b>Recorded</b> <span data-recorded="2026-09-23T05:20:10.179Z">2026-09-23</span></span>
+    <span><b>Gates</b> 0, 1, 2 · all passed-with-conditions</span>
+    <span><b>HEAD</b> fbe5c70f</span>
     <span><b>Live</b> noguessworksystems.com</span>
     <span><b>Facing</b> public · reach public</span>
   </div>
@@ -204,6 +204,43 @@ code{font-family:"IBM Plex Mono",monospace;font-size:.86em;background:var(--surf
   <section class="sec">
     <h2>Corrections</h2>
     <p>What was believed, what replaced it, and the evidence. The original stays visible.</p>
+
+    <div class="corr">
+      <p class="was">The site should be redesigned to align with the brand.</p>
+      <p class="now"><b>A design system already existed, and the site was in breach of
+        its single most explicit rule.</b> Studio Matte lives in
+        <code>ngw-leadgen/docs/brand/</code>, dated 2026-08-15, with every contrast
+        pair already measured. Its light spec ends: <em>&ldquo;No warm gold. No pink.
+        No neon teal. No blue.&rdquo;</em> The site was neon teal on navy. This was
+        not a redesign — it was a re-skin onto a system that was already written.</p>
+      <p class="src">Ruled 2026-09-23 · verified in the LIVE stylesheet, not the HTML —
+        Tailwind emits colour to CSS, so a grep of the HTML returns zero for both the
+        presence and the absence, and proves nothing either way</p>
+    </div>
+
+    <div class="corr">
+      <p class="was">The accent is the brand, so it belongs on every section.</p>
+      <p class="now"><b>&ldquo;The accent, used once.&rdquo;</b> The landing reference
+        states the discipline in four words. Steel had been on every section kicker, a
+        3px rule across every card, 64px ghost numerals and five check glyphs. It is
+        now on actions only; kickers dropped to the metadata tier, where the Role
+        Ladder says a kicker belongs.</p>
+      <p class="src">2026-09-23 · the Attention System: one hero, three contrast tiers, one accent</p>
+    </div>
+
+    <div class="corr">
+      <p class="was">The entity domain is fine — it is in the register and it resolves.</p>
+      <p class="now"><b>It has no lock of any kind and expires in 139 days.</b> Live
+        RDAP returns status <code>["active"]</code> — no transfer lock, no delete
+        lock, no update lock — with <code>delegationSigned: false</code>. Every other
+        domain in the portfolio carries <code>client transfer prohibited</code> and
+        runs to 2029. So does <code>noguesswork.com</code>, held by the trademark
+        holder. A lapse takes the entity name, <code>info@</code>,
+        <code>admin@</code>, every product subdomain and the Apple enrollment site at
+        once.</p>
+      <p class="src">Verified 2026-09-23 against Verisign RDAP, independently of the
+        register that first flagged it · <b>the only unrecoverable item in this record</b></p>
+    </div>
 
     <div class="corr">
       <p class="was">The site is hosted on Vercel — a <code>.vercel/project.json</code> binding exists in the working copy.</p>
@@ -254,8 +291,15 @@ code{font-family:"IBM Plex Mono",monospace;font-size:.86em;background:var(--surf
         <tr><td>Accent on off-white contrast</td><td class="num">1.78 : 1</td><td>Computed from the live DOM; WCAG 1.4.3 needs 4.5</td><td>re-measure when the palette changes</td></tr>
         <tr><td>Hamburger tap target</td><td class="num">24 × 16 px</td><td>Measured at 375×812 device emulation; 2.5.5 needs 44×44</td><td>re-measure on nav change</td></tr>
         <tr><td>Red-proofs passing</td><td class="num">6 of 6 RED</td><td><code>npm run redproof</code></td><td>every run</td></tr>
-        <tr><td>Gates green</td><td class="num">4 of 5</td><td><code>npm run verify:all</code></td><td>every run</td></tr>
+        <tr><td>Gates green</td><td class="num">7 of 8</td><td><code>npm run verify:all</code></td><td>every run</td></tr>
         <tr><td>Deploy propagation</td><td class="num">~50 s</td><td>Polled production until <code>robots.txt</code> returned 200</td><td>re-measure if the host changes</td></tr>
+        <tr><td>Entity domain expiry</td><td class="num">2027-02-08</td><td>Verisign RDAP, live. 139 days from this record. Status <code>["active"]</code> — <b>no transfer, delete or update lock</b>; <code>delegationSigned: false</code></td><td><b>hard deadline</b></td></tr>
+        <tr><td>Other portfolio domains</td><td class="num">2029</td><td>RDAP: all carry <code>client transfer prohibited</code></td><td>2029</td></tr>
+        <tr><td>Accent on off-white, before</td><td class="num">1.78 : 1</td><td>Computed; WCAG 1.4.3 needs 4.5</td><td>fixed 2026-09-23</td></tr>
+        <tr><td>Accent on paper, after</td><td class="num">5.55 : 1</td><td>Computed. Chosen with margin rather than scraping the 4.5 bar</td><td>re-run every <code>verify:contrast</code></td></tr>
+        <tr><td>Contrast pairs verified</td><td class="num">18</td><td><code>verify:contrast</code>, values read from <code>globals.css</code> rather than restated</td><td>every run</td></tr>
+        <tr><td>Red-proofs passing</td><td class="num">10 of 10 RED</td><td><code>npm run redproof</code> — 0 green, 0 unevaluated</td><td>every run</td></tr>
+        <tr><td>Trademark, class 9</td><td class="num">UNVERIFIED</td><td>&ldquo;NO GUESSWORK&rdquo; held by No Guess Work LLC for downloadable software. Primary record returned <b>HTTP 403</b>; this is reconnaissance, <b>not a clearance</b></td><td>before any app ships under the mark</td></tr>
         <tr><td>Rebuild estimate</td><td class="num">8–12 h</td><td>Dispatched <code>adopt-project</code> audit, against a 6–9 h adopt backlog</td><td>stale once the backlog is worked</td></tr>
         <tr><td>Demand-scan sources</td><td class="num">6 (5 load-bearing)</td><td>Google Suggest, HN 47822940, Consulting Success, Hinge, amazingcto.com, SBE Council. <b>Reddit coverage failed</b> — rate-limited through three paced retries, so the SMB buyer voice is untested</td><td>re-run with open discovery</td></tr>
         <tr><td>Unsubstantiated capability claims</td><td class="num">13</td><td><code>claim-verification</code> ledger against <code>ngw-consulting/case-studies/CLAIM-LEDGER.md</code></td><td>on any copy change</td></tr>
@@ -299,32 +343,32 @@ const STAGES = [
       ["h","Gate recorded","passed-with-conditions, 5 conditions, 2026-09-23"],
       ["h","Path artifact published in the same session as the gate","this page"]]},
 
-  { n:"1", t:"Idea → Problem statement", chip:["owed","reached, never recorded"], gates:[
+  { n:"1", t:"Idea → Problem statement", chip:["passed","recorded — split verdict"], gates:[
       ["Gate (all)","I can name who hits this problem today. If I can't, it's not a problem yet — it's a preference."]],
     items:[
-      ["o","Problem statement, one or two sentences","What is broken or missing, for whom"],
-      ["o","Name who hits this today","The gate. Not who the company wants as a client — who has the problem"],
-      ["o","Declare the basis at intake","Wedge, execution, distribution, internal, or portfolio. The basis selects which gate applies"],
+      ["h","Problem statement, one or two sentences","Ruled by the board: the person handed this company name by a referral or an enrollment form, who has about a minute to decide whether it is real and reachable"],
+      ["h","Name who hits this today","<b>Split verdict.</b> PASSES for the problem the site itself creates — referral-checkers, the Apple enrollment reviewer, counterparties verifying the address. FAILS for the buyer operational problem, which names nobody and is marked PROVISIONAL"],
+      ["h","Declare the basis at intake","<b>PORTFOLIO.</b> The register calls this domain Entity + all products: it gates Apple enrollment, hosts info@ and admin@, and every product subdomain hangs off it. Entity infrastructure, not acquisition"],
       ["h","<code>demand-scan</code>","RAN per Step 1c, which requires it for every project. Verdict <b>NO-GO</b> on the current positioning as a converting asset, 6 independent sources"],
       ["n","Open-discovery demand pass","The scan that ran was validation-mode only, and its Reddit coverage failed through three paced retries. The SMB buyer's own voice is <b>untested, not answered</b> — the agent reported this rather than papering over it"],
       ["h","<code>claim-verification</code>","~34 buyer-facing claims ledgered against executed checks"],
-      ["n","<code>convene-review-board</code> — the project core, once, early","Required for <b>every</b> project by the 2026-09-09 ruling, internal or not. Never convened. The largest process gap remaining"],
+      ["h","<code>convene-review-board</code> — the project core, once, early","<b>Convened 2026-09-23</b>, seven seats, the first ever seated here. The owner proposed-and-confirmed the seats, satisfying the first-board stop rather than skipping it. It named its own missing seats and its own limits of authority unprompted"],
       ["n","<code>superpowers:brainstorming</code>","Never run on this project"],
       ["h","<code>third-party-content</code>","Recorded as blank, not left empty: the site ingests nothing external"],
-      ["o","Kill check and threshold, pre-registered before the check runs",""],
-      ["o","Gate recorded",""]]},
+      ["h","Kill check and threshold","<b>n/a under a PORTFOLIO basis</b>, recorded as such rather than left blank. The failure mode is not nobody-buys but the-entity-loses-its-own-name — and that one has a date"],
+      ["h","Gate recorded","passed-with-conditions, 2026-09-23"]]},
 
-  { n:"2", t:"Scope & design", chip:["owed","reached, never recorded"], gates:[
+  { n:"2", t:"Scope & design", chip:["passed","recorded — re-skinned to Studio Matte"], gates:[
       ["Gate (all)","criteria are checkable. \"Add validation\" fails; \"blank and malformed email each show a specific error, both covered by passing tests\" passes."],
       ["Gate (public)","activation/UX doctrine applied <em>here</em>, not bolted on later — Ruthless Host Lens, no-guesswork-advance, the Attention System."]],
     items:[
-      ["n","<code>reference-scan</code>, before any design work","Own design system → prior recorded scans → Mobbin → decide and record the reason. A scan run after the design is built is not research, it is looking for permission"],
+      ["o","<code>reference-scan</code>, before any design work","<b>PARTIAL.</b> Step 1 — own design system — run in full: Studio Matte read end to end. The leaders / Mobbin / structural-properties steps were NOT run and cannot be retrofitted honestly. Recorded as a deviation, not as completion"],
       ["n","Name the leaders' 3–4 structural properties, dated before the first build","Every board thereafter scores against those, never against the previous round"],
-      ["o","Success criteria stated so a machine can check them",""],
+      ["h","Success criteria stated so a machine can check them","Eight gates, all reachable from one entry point whose coverage is itself asserted rather than eyeballed. 7 PASS / 1 FAIL at fbe5c70f; redproof 10 of 10 RED"],
       ["n","<span class='tag pub'>public</span> Activation / UX doctrine applied here","The gate a public surface owes at this stage. Never applied — and the site is already public"],
       ["n","<code>frontend-design</code>",""],
       ["n","<code>impeccable</code>, on any surface that exists before it reaches Verify",""],
-      ["n","<code>measure-dont-look</code> on the rung-0 style frames",""],
+      ["h","<code>measure-dont-look</code> on the style frames","Every colour computed, never judged. The 1.78:1 failure reproduced independently, candidates ranked by ratio, the replacement chosen at 5.55:1 with margin rather than scraping 4.5, and the final set verified across 18 composited pairs"],
       ["n","<code>motion-design</code>","Nothing on the site is animated; recorded as not run rather than assumed inapplicable"],
       ["n","<code>pick-generation-model</code>","No assets were generated this session"],
       ["n","<code>clearance</code>","Scoped to revenue. The name fronts a revenue line and has never been searched"],
