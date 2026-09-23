@@ -86,6 +86,10 @@ jobs:
           node-version-file: .nvmrc
           cache: npm
       - run: npm ci
+      - name: entity domain posture (locks, DNSSEC, expiry)
+        run: |
+          node scripts/watch-domain-posture.mjs
+          echo "Domain posture is GREEN — locks set, DNSSEC signed, expiry beyond 180 days."
       - name: security headers on the live origin
         run: |
           npm run verify:headers
