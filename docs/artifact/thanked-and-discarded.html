@@ -154,9 +154,9 @@ code{font-family:"IBM Plex Mono",monospace;font-size:.86em;background:var(--surf
     and no mechanism existed by which anyone could have found out.</p>
 
   <div class="stamp">
-    <span><b>Recorded</b> <span data-recorded="2026-09-23T05:20:10.179Z">2026-09-23</span></span>
-    <span><b>Gates</b> 0, 1, 2 · all passed-with-conditions</span>
-    <span><b>HEAD</b> fbe5c70f</span>
+    <span><b>Recorded</b> <span data-recorded="2026-09-23T05:23:48.335Z">2026-09-23</span></span>
+    <span><b>Gates</b> 0–4 · all passed-with-conditions</span>
+    <span><b>HEAD</b> 790b2064</span>
     <span><b>Live</b> noguessworksystems.com</span>
     <span><b>Facing</b> public · reach public</span>
   </div>
@@ -373,9 +373,9 @@ const STAGES = [
       ["n","<code>pick-generation-model</code>","No assets were generated this session"],
       ["n","<code>clearance</code>","Scoped to revenue. The name fronts a revenue line and has never been searched"],
       ["n","<code>superpowers:writing-plans</code>",""],
-      ["o","Gate recorded",""]]},
+      ["h","Gate recorded","passed-with-conditions, 2026-09-23"]]},
 
-  { n:"3", t:"Build", chip:["owed","no gate defined"], gates:[
+  { n:"3", t:"Build", chip:["passed","recorded — spine defines no gate"], gates:[
       ["Spine","<b>No stage-specific gate.</b> The gate is that the code exists and matches the scope."]],
     items:[
       ["m","The spine defines no gate at this stage. Inventing a checkbox here would invent an obligation that can never be discharged.",""],
@@ -385,17 +385,18 @@ const STAGES = [
       ["h","Admin / ops console created here, not deferred to stage 6","<code>docs/ADMIN-CONSOLE.md</code> — and its most important row is the one that says the lost submissions are not recoverable"],
       ["h","Run it on the real target","Dev server driven in the browser pane; the deployed site smoke-tested against the live origin"]]},
 
-  { n:"4", t:"Verify", chip:["owed","reached, never recorded"], gates:[
+  { n:"4", t:"Verify", chip:["passed","recorded — two instruments of three"], gates:[
       ["Gate (all)","the project's own guard script passes. A criterion I have to verify by looking is not a guard."],
       ["Gate (all)","a measurement pass on any surface that renders in more than one layout regime — assert computed geometry in a real browser; do not eyeball it."],
       ["Gate (public)","a structured Nielsen 10-heuristics critique, run as its own dispatch."]],
     items:[
       ["h","<code>verify:all</code> exists and is ONE command","The repo had fifteen-suite-shaped ambitions and zero entry points: no tests, no CI, nothing"],
       ["h","<code>verify:all</code> coverage asserted, not eyeballed","<code>verify:coverage</code> diffs gates on disk against gates the entry point names. \"Does it exist\" and \"does it run everything\" are different questions"],
-      ["o","Guard script passes","<b>4 of 5 green.</b> <code>verify:headers</code> is legitimately red — see stage 5"],
-      ["h","<code>red-proof</code> — every gate watched failing","6 of 6 RED. The first sweep reported 3 green under fault, which decomposed into one blind gate and two inert faults"],
-      ["o","Measurement pass committed as a script","Contrast and tap targets <b>were</b> measured in a real browser by the dispatched audit — but that measurement lives in a transcript, not in <code>scripts/</code>, so nothing re-runs it"],
-      ["n","<span class='tag pub'>public</span> <code>nielsen-critique</code> as its own dispatch","The public gate at this stage. Never run"],
+      ["o","Guard script passes","<b>7 of 8 green</b> at 790b2064. <code>verify:headers</code> is legitimately red and cannot be fixed from this repo — see stage 5"],
+      ["h","<code>red-proof</code> — every gate watched failing","<b>10 of 10 RED</b>, 0 green, 0 unevaluated. The first sweep reported 3 green under fault, which the spine warns is TWO hypotheses: it decomposed into ONE genuinely blind gate and TWO inert faults. The runner own change metric was also wrong — a length delta, so a same-length substitution printed 0 bytes and read exactly like an inert fault"],
+      ["o","Measurement pass committed as a script","<b>Half done.</b> <code>verify:contrast</code> now computes 18 pairs on every run, so the colour half is permanently gated. The geometry half — tap targets, 375px overflow — was measured in a real browser but lives in a transcript, not in <code>scripts/</code>, so nothing re-runs it"],
+      ["n","<span class='tag pub'>public</span> <code>nielsen-critique</code> as its own dispatch","The public gate at this stage, and the instrument that was skipped. Two of three ran — measurement and red-proof — and the spine warns two of three is an incomplete gate"],
+      ["n","A board re-scores the build on the CODE","The session that wrote the gates is the session reporting they pass. Step 4e exists to break exactly that asymmetry: the builder never scores its own work"],
       ["n","<code>impeccable</code> critique",""],
       ["o","Gate recorded",""]]},
 

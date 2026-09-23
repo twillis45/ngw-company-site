@@ -5,12 +5,22 @@
 | | |
 |---|---|
 | Repo | `twillis45/ngw-company-site` (**public**) |
-| HEAD at write | `881d918d` |
+| HEAD at write | `790b2064` |
 | Live at | https://noguessworksystems.com — Cloudflare proxy in front of a **Render** origin |
 | Stack | Next.js 16.2.1 static export (`output: "export"`), React 19, Tailwind 4, TypeScript 6 |
 | Node | **≥ 20.9 required.** Pinned in `engines` + `.nvmrc`. The build fails hard below it and nothing said so before. |
-| Gates | 5, all reachable from `verify:all` (coverage asserted, not eyeballed) |
-| Red-proofs | 6, **all watched going red** |
+| Gates | 8, all reachable from `verify:all` (coverage asserted, not eyeballed). 7 PASS, 1 FAIL |
+| Red-proofs | 10, **all watched going red** — 0 green, 0 unevaluated |
+
+## Spine position
+
+Gates **0 through 4** recorded 2026-09-23, all `passed-with-conditions`. Before
+today this project had **zero** gates and was invisible to the tracker, because
+the repo had never been cloned into `~/Code`.
+
+Stages 5, 6 and 7 are reached and owed. Stage 9 applies **retroactively** — the
+surface has been public since 2026-03-27 and has passed none of its four public
+gates. Stages 8 and 10 are unreached.
 
 ## Path artifact
 
@@ -20,8 +30,8 @@
 | URL | https://claude.ai/artifact/VHZk1nx6VrNRFmAmxEUuot |
 | Source | `docs/artifact/thanked-and-discarded.html` — edit and republish THIS file so the URL stays stable |
 | Watch | confirmed 2026-09-23T04:56:47.802Z — connected, armed by a publish, auto-replies armed |
-| Measured | 11 stages · 87 rows · 82 checkboxes · 5 markers · 27 handled · 21 open · 30 NOT RUN · 4 unreached · 0 sideways scroll · 0 JS errors |
-| Stamp | `data-recorded="2026-09-23T04:47:05.129Z"`, equal to the stage-0 gate record's `recordedAt` |
+| Measured | 11 stages · 88 rows · 82 checkboxes · 5 markers · 36 handled · 15 open · 28 NOT RUN · 4 unreached · 0 sideways scroll · 0 JS errors |
+| Stamp | `data-recorded="2026-09-23T05:23:48.335Z"`, equal to the newest gate record's `recordedAt` |
 
 ## How it deploys
 
