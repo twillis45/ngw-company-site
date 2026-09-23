@@ -16,13 +16,68 @@
 // Each fault prints WHAT IT CHANGED, in bytes, so an inert fault is visible as
 // an inert fault rather than misread as a blind gate.
 
-import { readFileSync, writeFileSync, rmSync } from "node:fs";
+import { readFileSync, writeFileSync, rmSync, existsSync, unlinkSync } from "node:fs";
 import { createServer } from "node:http";
 import { execSync, spawn } from "node:child_process";
 import { join } from "node:path";
 import { ROOT } from "./lib.mjs";
 
 const only = process.argv.find((a) => a.startsWith("--only="))?.split("=")[1];
+
+// A CRASH-SAFE RESTORE MANIFEST.
+//
+// This runner mutates real source files and restores them in a `finally`. A
+// `finally` does not run on SIGKILL — so a killed sweep leaves the tree
+// MUTATED, and on 2026-09-23 a `git add -A` swept one of those mutations into
+// a commit and shipped it. The live company site read "No Guesswork Systems
+// LLC exists to serve businesses work toward more structure" — ungrammatical,
+// and a firm-voice assertion the claim ledger prohibits — for thirteen
+// minutes. CI caught it; I did not.
+//
+// So the mutation is now journalled before it is written, and restored from
+// the journal on every exit path INCLUDING signals, and on the next startup if
+// a previous run never got the chance.
+const MANIFEST = join(ROOT, ".redproof-active.json");
+
+function journal(path, original) {
+  writeFileSync(MANIFEST, JSON.stringify({ path, original, at: new Date().toISOString() }));
+}
+function clearJournal() {
+  if (existsSync(MANIFEST)) unlinkSync(MANIFEST);
+}
+function restoreFromJournal(reason) {
+  if (!existsSync(MANIFEST)) return false;
+  try {
+    const { path, original, at } = JSON.parse(readFileSync(MANIFEST, "utf8"));
+    writeFileSync(path, original);
+    clearJournal();
+    console.error(
+      `\nRESTORED ${path} from a red-proof mutation left by a previous run (${at}).\n` +
+        `Reason: ${reason}. A killed sweep does not run its finally block, and a\n` +
+        `mutated file in the tree is one 'git add -A' away from production.`
+    );
+    return true;
+  } catch (e) {
+    console.error(`\nCOULD NOT RESTORE from ${MANIFEST}: ${e.message}`);
+    console.error("Check `git status` before committing anything.");
+    return false;
+  }
+}
+
+// If a previous run died, put the tree back before doing anything else.
+restoreFromJournal("stale manifest found at startup");
+
+for (const sig of ["SIGINT", "SIGTERM", "SIGHUP"]) {
+  process.on(sig, () => {
+    restoreFromJournal(`received ${sig}`);
+    process.exit(130);
+  });
+}
+process.on("uncaughtException", (e) => {
+  restoreFromJournal(`uncaught exception: ${e.message}`);
+  console.error(e);
+  process.exit(1);
+});
 
 // Assembled here so this runner does not itself contain the literal the
 // placeholder gate hunts for — but the file it WRITES does. The first draft
@@ -306,6 +361,7 @@ for (const c of CASES) {
   let note = "";
   try {
     let changed;
+    journal(path, original);
     if (c.deleteFile) {
       rmSync(path);
       changed = original.length;
@@ -354,6 +410,7 @@ for (const c of CASES) {
     note = e.message;
   } finally {
     writeFileSync(path, original);
+    clearJournal();
   }
 
   results.push({ gate: c.gate, verdict, describe: c.describe, note });
