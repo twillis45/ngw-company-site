@@ -20,7 +20,7 @@
 
 import { readFileSync } from "node:fs";
 import { join } from "node:path";
-import { ROOT, shippedFiles, requireExport, report } from "./lib.mjs";
+import { ROOT, shippedFiles, requireExport, report, visibleText } from "./lib.mjs";
 
 requireExport();
 
@@ -85,7 +85,14 @@ if (!street || !cityStateZip) {
       }
     }
     // React splits adjacent text nodes, so match the street alone.
-    if (text.includes(street)) carriedBy++;
+    //
+    // visibleText, not the raw markup: the Organization JSON-LD carries
+    // streetAddress on EVERY page, so a red-proof that stripped the address
+    // out of the footer went green against raw HTML. A check for what a
+    // reader sees has to read what a reader sees. The SUPERSEDED scan above
+    // deliberately stays on raw text — a stale address hidden in structured
+    // data is still a stale address shipping.
+    if (visibleText(f.text).includes(street)) carriedBy++;
     else missing.push(f.rel);
   }
   // EVERY page, not merely one. The address lives in the footer, and the footer

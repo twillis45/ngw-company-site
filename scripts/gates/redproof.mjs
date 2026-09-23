@@ -278,6 +278,41 @@ const CASES = [
     mutate: (s) => s.replace("was created to help", "exists to serve"),
   },
   {
+    gate: "identity",
+    file: "src/site.ts",
+    needsBuild: true,
+    describe: "delete the principal's name — the gate must go RED on ABSENCE",
+    mutate: (s) => s.replace('name: "Todd Willis",', 'name: "",'),
+  },
+  {
+    gate: "identity",
+    file: "src/app/layout.tsx",
+    needsBuild: true,
+    // THE FAULT THAT MATTERS, in the board's words: "leave the name and change
+    // only the JSON-LD founder so the two disagree". A careless gate asserts
+    // the name is present SOMEWHERE and passes this. A page whose markup and
+    // structured data name different people is checkable and fails the check.
+    describe: "desync ONLY the JSON-LD founder — markup and machine record disagree",
+    mutate: (s) =>
+      s.replace("founder: { \"@type\": \"Person\", name: site.principal.name },",
+                "founder: { \"@type\": \"Person\", name: \"Someone Else\" },"),
+  },
+  {
+    gate: "identity",
+    file: "src/app/page.tsx",
+    needsBuild: true,
+    // Proves rule 1 of the gate's header. Removing the VISIBLE block leaves
+    // the name shipping in JSON-LD only. MEASURED under this exact fault,
+    // 2026-09-23, rather than argued: a naive /<[^>]+>/ strip of the built
+    // index.html finds "Todd Willis" (true) because the JSON-LD becomes body
+    // text; removing <script> blocks first does not (false). So the careless
+    // gate passes this fault and the real one fails it — the identical shape
+    // to the firm voice surviving in <meta> because the claim gate read text
+    // content and a meta tag has none.
+    describe: "name in JSON-LD ONLY — a tag-strip would read it as body text and pass",
+    mutate: (s) => s.replace("{site.principal.name}", "{null}"),
+  },
+  {
     gate: "hero",
     file: "src/app/page.tsx",
     needsBuild: true,

@@ -14,6 +14,19 @@ export const site = {
   shortName: "No Guesswork Systems",
   email: "info@noguessworksystems.com",
   domain: "noguessworksystems.com",
+  // ASSUMPTION (owner-held, undo = edit these two strings). The name is taken
+  // from the repo's own git identity and the owner's address; the role line is
+  // the board's recommendation, chosen because a role is a STATUS, not an
+  // outcome — nothing for verify:claims to refuse. The owner ruled 2026-09-23
+  // for a name and role WITHOUT a photograph, so no portrait ships and the
+  // gate asserts none. That is a recorded decision, not an omission.
+  //
+  // This closes clause (b) of the portfolio gate — "who is behind it" — which
+  // was the single RED clause: the site named no human being anywhere.
+  principal: {
+    name: "Todd Willis",
+    role: "Principal",
+  },
   address: {
     street: "306 W Redwood St, STE 201",
     cityStateZip: "Baltimore, MD 21201",

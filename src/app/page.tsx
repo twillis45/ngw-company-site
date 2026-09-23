@@ -1,4 +1,5 @@
 import { Button } from "@/components/Button";
+import { site } from "@/site";
 import { ServiceCard } from "@/components/ServiceCard";
 import { WorkedProblem } from "@/components/WorkedProblem";
 
@@ -177,6 +178,24 @@ export default function Home() {
             and operational systems designed to reduce friction and support
             better outcomes — without unnecessary complexity.
           </p>
+
+          {/* Clause (b) of the portfolio gate. A checker who arrives holding
+              the name could previously find an LLC, a mailbox and a suite
+              address, and no human at all — which a referral-checker names as
+              a rule-out. A suite address corroborates REGISTRATION; a name
+              corroborates ACCOUNTABILITY. */}
+          <div className="mt-10 border-t border-hair pt-8">
+            <p className="text-[17px] font-semibold text-ink">
+              {site.principal.name}
+            </p>
+            <p className="mt-1 text-[15px] text-faint">
+              {site.principal.role}, {site.legalName}
+            </p>
+            <p className="mx-auto mt-4 max-w-[52ch] text-[15px] leading-6 text-muted">
+              {site.address.cityStateZip.replace(/ \d{5}$/, "")}. The work shown
+              on this site was built and checked by the person named here.
+            </p>
+          </div>
         </div>
       </section>
 

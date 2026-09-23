@@ -51,6 +51,7 @@ jobs:
       - run: npm run verify:claims
       - run: npm run verify:assets
       - run: npm run verify:brand
+      - run: npm run verify:identity
       - run: npm run verify:hero
       - run: npm run verify:affordance
       - run: npm run verify:contrast

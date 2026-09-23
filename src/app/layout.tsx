@@ -42,6 +42,32 @@ export default function RootLayout({
   return (
     <html lang="en" className={inter.variable}>
       <body className="bg-carbon text-muted">
+        {/* Structured data, built from the SAME source as the visible block.
+            The fault that matters is not a missing name — it is a name that
+            ships in the markup while the machine-readable record says someone
+            else. Deriving both from site.ts makes them unable to disagree,
+            and verify:identity proves they do not. */}
+        <script
+          type="application/ld+json"
+          dangerouslySetInnerHTML={{
+            __html: JSON.stringify({
+              "@context": "https://schema.org",
+              "@type": "Organization",
+              name: site.legalName,
+              url: `https://${site.domain}`,
+              email: site.email,
+              founder: { "@type": "Person", name: site.principal.name },
+              address: {
+                "@type": "PostalAddress",
+                streetAddress: site.address.street,
+                addressLocality: "Baltimore",
+                addressRegion: "MD",
+                postalCode: "21201",
+                addressCountry: "US",
+              },
+            }),
+          }}
+        />
         <Navbar />
         <main>{children}</main>
         <Footer />

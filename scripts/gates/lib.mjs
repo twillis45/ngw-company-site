@@ -83,3 +83,30 @@ export function stripComments(text) {
     // check a comment can trip is a check a comment can also silence.
     .replace(/<!--[\s\S]*?-->/g, "");
 }
+
+/**
+ * The text a READER sees: script and style blocks removed BEFORE tags.
+ *
+ * Twice in one session a gate meant to check visible copy was satisfied by
+ * markup no reader sees. First the firm voice shipped in <meta description>
+ * for hours, because verify:claims stripped tags to get text and a meta tag
+ * has no text content. Then — an hour after that was fixed — an Organization
+ * JSON-LD block was added carrying streetAddress on every page, and a
+ * red-proof that stripped the address out of the FOOTER went green, because
+ * verify:copy searched raw HTML and found it in the structured data.
+ *
+ * Measured under that second fault: a naive /<[^>]+>/ strip finds the value
+ * (the JSON-LD becomes body text); this does not. Same shape, two gates, so
+ * it lives here once rather than being re-derived a third time.
+ *
+ * Structured data still deserves its own assertions — see verify:identity,
+ * which checks that JSON-LD AGREES with the visible text. What it must never
+ * do is stand in for the visible text.
+ */
+export function visibleText(html) {
+  return html
+    .replace(/<script\b[^>]*>[\s\S]*?<\/script>/gi, " ")
+    .replace(/<style\b[^>]*>[\s\S]*?<\/style>/gi, " ")
+    .replace(/<[^>]+>/g, " ")
+    .replace(/\s+/g, " ");
+}
