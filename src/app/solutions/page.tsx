@@ -33,12 +33,12 @@ export default function Solutions() {
             Solutions
           </p>
           <h1 className="mb-5 text-4xl font-semibold leading-tight text-ink md:text-[48px] md:leading-[56px]">
-            Each one removes a specific act of guessing
-          </h1>
+              Two things, and what each one replaces
+            </h1>
           <p className="text-lg leading-8 text-muted md:text-xl">
-            Each one removes a specific act of guessing and replaces it with
-            something you can check.
-          </p>
+              Every system here takes one act of guessing out of an operation
+              and puts something checkable in its place.
+            </p>
         </div>
       </section>
 
@@ -66,11 +66,11 @@ export default function Solutions() {
       <section className="bg-surface py-20 md:py-24">
         <div className="mx-auto max-w-[600px] px-6 md:px-12 text-center">
           <h2 className="mb-5 text-[28px] font-semibold leading-tight text-ink md:text-[40px] md:leading-[48px]">
-            A smarter, more structured way to operate
+            Start with the act of guessing
           </h2>
           <p className="mb-8 text-[17px] leading-7 text-muted">
-            If your business needs better systems, clearer workflows, or more
-            reliable decision-making — let&apos;s talk.
+            Name the one your operation keeps repeating, and the rest is a
+            question of what evidence would settle it.
           </p>
           <Button href="/contact">Contact Us →</Button>
         </div>
