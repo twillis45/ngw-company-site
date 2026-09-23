@@ -18,7 +18,7 @@
 
 import { readFileSync, writeFileSync, rmSync } from "node:fs";
 import { createServer } from "node:http";
-import { execSync } from "node:child_process";
+import { execSync, spawn } from "node:child_process";
 import { join } from "node:path";
 import { ROOT } from "./lib.mjs";
 
@@ -252,9 +252,20 @@ async function runOriginCases() {
           resolve();
         });
       });
-      const code = run("npm run verify:headers", {
-        ...process.env,
-        NGWS_ORIGIN: `http://localhost:${port}`,
+      // ASYNC, deliberately. execSync blocks this process's event loop, so
+      // the server above could not accept the child's connections at all —
+      // every fetch failed, verify:headers exited 2 (CANNOT CHECK), and all
+      // six cases came back `?`. A synchronous exec cannot talk to a server
+      // living in the same process. The runner was right to refuse a verdict;
+      // the harness was what could not produce one.
+      const code = await new Promise((resolve) => {
+        const child = spawn("npm", ["run", "--silent", "verify:headers"], {
+          cwd: ROOT,
+          stdio: "pipe",
+          env: { ...process.env, NGWS_ORIGIN: `http://localhost:${port}` },
+        });
+        child.on("close", (c) => resolve(c ?? 1));
+        child.on("error", () => resolve(1));
       });
       verdict = code === 0 ? "GREEN" : code === 1 ? "RED" : "?";
     } catch (e) {
@@ -268,7 +279,17 @@ async function runOriginCases() {
     const mark = verdict === "?" ? "?" : ok ? "✓" : "✗";
     console.log(`${mark} ${verdict.padEnd(5)} verify:headers      ${describe}`);
     console.log(`         served a controlled origin on an ephemeral port; expected ${expect}${note ? " — " + note : ""}`);
-    out.push({ gate: "headers", verdict: ok ? "RED" : verdict === "?" ? "?" : "GREEN", describe, note });
+    // Tally by whether the case met its EXPECTATION, not by colour. One case
+    // deliberately expects GREEN — the gate's pass path — and folding it into
+    // the RED bucket made the summary read "6 RED" when one of them was a
+    // correct GREEN. A summary that misstates its own cases is the small
+    // version of everything else this runner exists to catch.
+    out.push({
+      gate: "headers",
+      verdict: verdict === "?" ? "?" : ok ? "AS EXPECTED" : "UNEXPECTED",
+      describe,
+      note: note || `expected ${expect}, got ${verdict}`,
+    });
   }
   return out;
 }
@@ -345,16 +366,16 @@ run("npm run build"); // restore the export the mutated builds overwrote
 
 if (!only || only === "headers") results.push(...(await runOriginCases()));
 
-const red = results.filter((r) => r.verdict === "RED");
-const blind = results.filter((r) => r.verdict === "GREEN");
+const red = results.filter((r) => r.verdict === "RED" || r.verdict === "AS EXPECTED");
+const blind = results.filter((r) => r.verdict === "GREEN" || r.verdict === "UNEXPECTED");
 const unevaluated = results.filter((r) => r.verdict === "?");
 
 console.log(
-  `\n${results.length} cases — ${red.length} RED, ${blind.length} GREEN, ${unevaluated.length} unevaluated`
+  `\n${results.length} cases — ${red.length} as expected, ${blind.length} NOT as expected, ${unevaluated.length} unevaluated`
 );
 if (blind.length)
   console.log(
-    `GREEN UNDER FAULT: ${blind.map((r) => r.gate).join(", ")} — read the byte count above ` +
+    `DID NOT BEHAVE AS EXPECTED: ${blind.map((r) => r.gate).join(", ")} — read the change size above ` +
       `before concluding the gate is blind; an inert fault looks identical from the exit code.`
   );
 if (unevaluated.length)
