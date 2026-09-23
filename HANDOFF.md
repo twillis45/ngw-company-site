@@ -5,13 +5,14 @@
 | | |
 |---|---|
 | Repo | `twillis45/ngw-company-site` (**public**) |
-| HEAD at write | `790b2064` |
+| HEAD at write | `37cdb69` |
 | Live at | https://noguessworksystems.com — Cloudflare proxy in front of a **Render** origin |
 | Stack | Next.js 16.2.1 static export (`output: "export"`), React 19, Tailwind 4, TypeScript 6 |
 | Node | **≥ 20.9 required.** Pinned in `engines` + `.nvmrc`. The build fails hard below it and nothing said so before. |
-| Gates | 8, all reachable from `verify:all` **and from CI** (both asserted, not eyeballed). 7 PASS, 1 FAIL |
-| CI | `.github/workflows/verify.yml` — **green**. `gates (code)` and `red-proof` block; `live origin` is continue-on-error and RED by design until the edge rule lands, re-read daily by cron |
-| Red-proofs | 14, **all watched going red** — 0 green, 0 unevaluated, and they run **in CI**, so each fault is reintroduced on a clean runner rather than only on this machine |
+| Gates | **12**, all reachable from `verify:all` **and from CI** (both asserted, not eyeballed). **11 PASS, 1 FAIL** — the one red is `verify:headers`, owner-held |
+| CI | `.github/workflows/verify.yml` — **green on `d5762c1`** (run 35872315248), the last commit that changed code. `gates (code)` and `red-proof` block; `live origin` is continue-on-error and RED by design until the edge rule lands, re-read daily by cron. **While one gate is permanently non-blocking, a green CI does not mean what it appears to** — the owner ruling on that is open |
+| Red-proofs | **34 cases, 34 as expected, 0 NOT as expected, 0 unevaluated** — 28 file-mutation cases in `redproof.mjs` plus 6 generated origin cases. They run **in CI**, so each fault is reintroduced on a clean runner rather than only on this machine. Two of the newest first scored `?`: they broke the BUILD, so the gate never ran, and **an unevaluated case is not a result** — both were rewritten to compile and still be wrong |
+| Newest gates | `verify:identity` (the site names who is behind it, and the JSON-LD agrees), `verify:hero` (exactly one hero *action* per route — counts destinations, not elements) |
 
 ## Spine position
 
@@ -99,6 +100,23 @@ Every item below was a live falsehood on the company's public face before this.
   absence. Any gate here that reports "N checked, 0 failing" should be asked
   whether it found its subject at all.
 
+- **The three "established" Reddit access facts in this repo's research were
+  all wrong**, and relaying them as facts cost two dispatched agents most of
+  their budget. Verified corrections: `-A 'Mozilla/5.0'` returns **403**, a full
+  Chrome UA returns 200; `search.rss` and `comments/<id>.rss` return 200 **only
+  in bare form** — attaching `limit`/`sort`/`t` triggers 429 (`top.rss`
+  tolerates them); `old.reddit.com/comments/<id>/.json` returns **200 with a
+  "Welcome to Reddit" HTML interstitial**, which is a soft block, not a route.
+  The sustained ceiling is **~1 request per 3–5 min per IP and it is global
+  across concurrent agents** — running three in parallel poisoned it for all
+  three. Serialize.
+- **A gate that checks visible copy must use `visibleText()` from
+  `scripts/gates/lib.mjs`**, never a bare tag strip. Three gates were caught
+  passing on markup no reader sees: the firm voice in `<meta>` (a meta tag has
+  no text content), and then `verify:copy` satisfied by `streetAddress` inside
+  the Organization JSON-LD after that block was added. A naive `/<[^>]+>/`
+  strip turns every `<script>` into body text.
+
 ## Open — owner items
 
 | # | Item | Why it is yours |
@@ -108,6 +126,56 @@ Every item below was a live falsehood on the company's public face before this.
 | 3 | **Whether to contact anyone who wrote in** during the outage. | There is no list. See `docs/ADMIN-CONSOLE.md`. |
 | 4 | **Analytics: adopt one or keep none.** | Keeping none is free and the policy now says so truthfully. Adding one acquires a consent obligation. |
 | 5 | **Positioning.** The demand scan returned NO-GO on the current category language as a converting asset. | Strategy, not code. |
+| 6 | **The two worked problems aim at territory that is solved or empty.** Two open-discovery passes (600 Reddit posts, 440 HN comments, 843 Ramp reviews, 100 Expensify reviews). Expense reconciliation: the incumbent **structurally excludes your segment** — Ramp's own docs require a corporation/LLC/LP, **$25,000 in a business bank account**, and no free email, and refuse sole proprietors outright; its unhappy reviewers are 14 *forced* users against 6 owners, two of whom were bounced at signup. Cross-tool governance: **no buyer-side footprint at all**. | Under PORTFOLIO this does **not** make the page dishonest — the worked problems prove real work with real checks, not a market. It changes what to *build*. Your call whether to act. |
+| 7 | **Run the open-discovery unlock, or accept PORTFOLIO on the record.** | The board: *an unlock nobody intends to run is a decayed BLOCKED wearing a better label.* Either answer is legitimate; silence is not. |
+| 8 | **May `verify:headers` stay `continue-on-error`?** | While one gate is permanently non-blocking, a green CI does not mean what it appears to. |
+| 9 | **Which of the two contact paths is the hero** — `/contact` or the raw `mailto:`. | Shipped as a stated assumption (`/contact`), undo recorded in `src/app/page.tsx`. Two-token edit. |
+
+### Demand findings worth keeping, measured
+
+| Finding | Number | Source |
+|---|---|---|
+| What solo operators actually pay for accounting | **$300–$1,500 per YEAR** | Three separate HN buyers, self-reported |
+| What vendors quote for the same | **$300–800 per MONTH** | Vendor-published; a 10–20× gap, not a negotiation |
+| Invoice **creation** apps, iOS ratings | 122,755 / 105,762 / 92,966 — all free | App Store |
+| Apps that **chase** payment, iOS ratings | **0, 0, 0 and 2** | Four launched in 2026; five orders of magnitude |
+| Revenue a solo operator loses to non-payment | **~3–5%** | An 18-year freelancer, HN 34401740 |
+| SOP/documentation **product** supply | Trainual 50 ratings / **0 written**; Process Street 26; Waybook 0 | The one struggle with money and no product — but buyers **buy a person, not a tool** (1,000+ EOS implementers at $36–53k/client-yr) |
+| Reddit absence claims, discount factor | r/smallbusiness AutoModerator **removes market-research posts** by policy | Quiet there may be moderation, not absent pain |
+
+**RESOLVED 2026-09-23.** `reddit.com/comments/1r9x049.rss` was fetched on a
+cooled IP after ~20 failed attempts across two agents — HTTP 200, 137,958
+bytes, **146 entries**. The kill condition was registered *before* the fetch:
+name Trainual, SweetProcess or Scribe and the wedge is dead.
+
+| Across 126 substantive replies | count |
+|---|---|
+| documentation language | 22 |
+| hire a person / second-in-command | 16 |
+| **named software products** | **0** |
+
+Both apparent product hits were inspected by hand and are false positives — the
+English word "notion", and the **book** *Traction*, recommended by a commenter
+who sells this as consulting. **The wedge is open, not saturated.**
+
+What operators recommend is nearer this company's own thesis than any tool:
+not a document but a **measurement** — *"write down everything you do, every
+call on your time, in a given day. That'll tell you what you're being called on
+most often for."* And: *"leave again — that's a method for discovering where the
+cracks are."*
+
+**Four limits, and they matter.** (1) One thread is one source, however many
+commenters. (2) The classification is a regex over *mentions*, not a reading of
+recommendations — only the zero is exact, because every hit was inspected. (3)
+Absence of product mentions fits two stories, and the supply side favours the
+second: the money here buys a **person** (1,000+ EOS implementers at $36–53k per
+client-year, against Trainual's 50 iOS ratings and 0 written reviews). (4)
+r/smallbusiness removes market-research posts by policy — that discounts every
+*other* absence claim from that sub, though not this thread, which is an owner
+posting his own experience.
+
+**This is not a GO.** It clears the kill condition and nothing more; the shape
+it points at is services, not product, and the owner has not ruled.
 
 ## Standing assumptions
 
