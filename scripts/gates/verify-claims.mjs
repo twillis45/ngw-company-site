@@ -21,7 +21,9 @@
 //      which verify:copy already did once, passing on every page after React
 //      began emitting the year as separate text nodes.
 
-import { shippedFiles, requireExport, report, stripComments } from "./lib.mjs";
+import { readFileSync, existsSync } from "node:fs";
+import { join } from "node:path";
+import { ROOT, shippedFiles, sourceFiles, requireExport, report, stripComments } from "./lib.mjs";
 
 requireExport();
 
@@ -48,6 +50,12 @@ const FIRM_VOICE = [
 // The honest anchor. Present tense describing INTENT, not delivery.
 const ANCHOR = "was created to help";
 const MIN_PAGES = 5;
+
+// Card titles that ship must each carry a row in docs/CAPABILITY-BACKING.md,
+// which cites the claim ledger. This is the LEDGER LINK the board asked for,
+// and it is a different check from the phrase list above: a card can be worded
+// impeccably and still name a capability nothing backs.
+const BACKING_DOC = "docs/CAPABILITY-BACKING.md";
 
 const failures = [];
 const pages = shippedFiles().filter((f) => f.rel.endsWith(".html"));
@@ -87,6 +95,51 @@ if (!home) {
       `section was rewritten, or its markup changed shape and this gate can no ` +
       `longer see it. Both mean this gate stopped measuring.`
   );
+}
+
+// 4. THE LEDGER LINK. Every capability title that ships carries a backing row.
+checked++;
+const backingPath = join(ROOT, BACKING_DOC);
+if (!existsSync(backingPath)) {
+  failures.push(
+    `${BACKING_DOC} is missing — nothing maps the shipped capability titles to ` +
+      `the claim ledger, so a card can name anything`
+  );
+} else {
+  const backing = readFileSync(backingPath, "utf8");
+  // Titles are read from SOURCE, where they are structured data. In the export
+  // they are prose among prose and cannot be told apart from a heading.
+  // Scoped to the CAPABILITY arrays only. A first cut matched every `title:` in
+  // source and flagged "Contact", "Privacy Policy", "Solutions" and "Terms of
+  // Service" — page metadata, not claims about what this company can do. A gate
+  // that cries wolf on four rows out of five gets switched off within a week,
+  // and it was hiding one true finding among them.
+  const titles = new Set();
+  for (const f of sourceFiles().filter((f) => f.rel.endsWith(".tsx"))) {
+    const code = stripComments(f.text);
+    for (const decl of ["services", "solutions"]) {
+      const i = code.indexOf(`const ${decl} = [`);
+      if (i === -1) continue;
+      const block = code.slice(i, code.indexOf("];", i));
+      for (const m of block.matchAll(/title:\s*"([^"]+)"/g)) titles.add(m[1]);
+    }
+  }
+  if (titles.size === 0) {
+    failures.push(
+      "no capability titles found in source — either they moved, or this check " +
+        "can no longer see them. Not a pass either way."
+    );
+  }
+  for (const t of titles) {
+    checked++;
+    // A row, not a mere mention: the removed-cards table names them too.
+    if (!backing.includes(`\`${t}\``)) {
+      failures.push(
+        `"${t}" ships with no backing row in ${BACKING_DOC} — the ledger does ` +
+          `not support it, or nobody wrote down that it does`
+      );
+    }
+  }
 }
 
 report("every shipped claim survives the claim ledger", failures, checked);

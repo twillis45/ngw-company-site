@@ -72,6 +72,20 @@ const CASES = [
       s.replace("© {site.year} {site.legalName}. All rights reserved.", "All rights reserved."),
   },
   {
+    gate: "claims",
+    file: "docs/CAPABILITY-BACKING.md",
+    needsBuild: false,
+    deleteFile: true,
+    describe: "delete the backing doc — a card could then name any capability at all",
+  },
+  {
+    gate: "claims",
+    file: "docs/CAPABILITY-BACKING.md",
+    needsBuild: false,
+    describe: "remove one backing row while its card still ships — the LEDGER LINK, not the wording",
+    mutate: (s) => s.replace("| `Workflow Automation` |", "| `Workflow Automation (removed)` |"),
+  },
+  {
     gate: "coverage",
     file: ".github/workflows/verify.yml",
     needsBuild: false,
