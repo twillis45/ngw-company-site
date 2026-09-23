@@ -443,6 +443,17 @@ const CASES = [
   },
   {
     gate: "contrast",
+    file: "src/components/ContactForm.tsx",
+    needsBuild: true,
+    // Placeholders are a PSEUDO-element, so the element sweep cannot see them —
+    // it looks for own text nodes and a ::placeholder has none. They are also
+    // the classic offender, because "grey enough to read as a hint" and "grey
+    // enough to be unreadable" are the same colour.
+    describe: "fade the form placeholders below the 1.4.3 bar",
+    mutate: (s) => s.replace("placeholder:text-faint", "placeholder:text-ink/20"),
+  },
+  {
+    gate: "contrast",
     file: "src/app/page.tsx",
     needsBuild: true,
     // An ALPHA form. The 17-pair token table has no entry for it and is

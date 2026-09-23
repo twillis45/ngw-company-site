@@ -206,6 +206,27 @@ for (const f of sourceFiles().filter((f) => f.rel.endsWith(".tsx"))) {
             out.push(`<${el.tagName.toLowerCase()}> "${own.slice(0,34)}" ${got.toFixed(2)}:1 (needs ${min}, ${Math.round(px)}px${bold?" bold":""}) colour ${cs.color}`);
           }
         }
+        // Placeholders are a PSEUDO-ELEMENT, so nothing above sees them: the
+        // sweep looks for elements with their own text nodes and a
+        // ::placeholder has none. They are also the classic low-contrast
+        // offender, because "grey enough to look like a hint" and "grey enough
+        // to be unreadable" are the same colour. Named as unmeasured by the
+        // audit that found the oklab blindness; closed here rather than left.
+        for (const el of document.querySelectorAll("input[placeholder], textarea[placeholder]")) {
+          const cs = getComputedStyle(el);
+          if (cs.display === "none" || cs.visibility === "hidden") continue;
+          const ph = getComputedStyle(el, "::placeholder");
+          const fg = parse(ph.color);
+          if (!fg) { out.push(`UNREADABLE ::placeholder colour on #${el.id || el.name}: ${ph.color}`); continue; }
+          els++;
+          const bg = bgOf(el);
+          const got = ratio(over(fg, bg), bg);
+          // Placeholder text is body-size here; 4.5 is the 1.4.3 bar.
+          if (got < 4.5) {
+            out.push(`::placeholder on #${el.id || el.name || el.tagName.toLowerCase()} "${el.placeholder.slice(0,26)}" ${got.toFixed(2)}:1 (needs 4.5) colour ${ph.color}`);
+          }
+        }
+
         return { out, els };
       });
       // Count ELEMENTS, not routes. "24 checked" was 24 routes while zero
