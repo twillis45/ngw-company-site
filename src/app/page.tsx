@@ -24,7 +24,7 @@ const supportingPoints = [
   "Every claim carries where it came from",
   "Where the source is unknown, that is stated rather than dressed up",
   "A confident tone is never a substitute for a check",
-  "Hints are labelled hints; a measured 0.6% is reported as 0.6%",
+  "Hints are labeled hints; a measured 0.6% is reported as 0.6%",
   "Every system ends on an action, not a report",
 ];
 

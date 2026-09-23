@@ -74,9 +74,18 @@ const routes = walk(OUT)
   .filter((r) => !r.startsWith("_") && r !== "404")
   .map((r) => "/" + r.replace(/^\/+/, ""))
   .sort();
-// Plus one static asset: a rule scoped to documents leaves assets bare.
-const asset = walk(OUT).find((p) => p.endsWith(".css"));
-const targets = [...new Set(routes)].concat(asset ? ["/" + relative(OUT, asset)] : []);
+// Plus static assets, because a rule scoped to documents would leave every
+// asset bare while the gate stayed green.
+//
+// These are deliberately the STABLE names. A first version picked the built
+// CSS chunk, whose filename carries a content hash — so the moment the local
+// build ran ahead of the deployed one, the gate asked production for a file
+// that did not exist there and correctly reported CANNOT CHECK. Right refusal,
+// wrong target: a gate should not go blind simply because someone rebuilt.
+const ASSETS = ["/robots.txt", "/sitemap.xml", "/icon.svg"];
+const targets = [...new Set(routes)].concat(
+  ASSETS.filter((a) => existsSync(join(OUT, a.slice(1))))
+);
 
 if (targets.length < 2) {
   console.error(`CANNOT CHECK — only ${targets.length} target(s) derived from out/. Build first.`);

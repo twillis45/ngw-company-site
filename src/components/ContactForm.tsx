@@ -1,6 +1,6 @@
 "use client";
 
-import { useState } from "react";
+import { useRef, useState } from "react";
 import { site } from "@/site";
 
 // Composes the inquiry into the visitor's own mail client. There is no
@@ -26,6 +26,8 @@ import { site } from "@/site";
 
 export function ContactForm() {
   const [handedOff, setHandedOff] = useState(false);
+  const [mailtoHref, setMailtoHref] = useState("");
+  const statusRef = useRef<HTMLDivElement>(null);
 
   function handleSubmit(e: React.FormEvent<HTMLFormElement>) {
     e.preventDefault();
@@ -46,43 +48,66 @@ export function ContactForm() {
       .filter((line) => line !== null)
       .join("\n");
 
-    window.location.href =
+    const href =
       `mailto:${site.email}` +
       `?subject=${encodeURIComponent(subject)}` +
       `&body=${encodeURIComponent(body)}`;
 
+    // Keep it. The fallback link below re-uses this exact href rather than a
+    // bare address — a first version offered `mailto:info@…` with no subject
+    // and no body as the recovery path, which handed the visitor an empty
+    // window at the one moment their message had just failed to send.
+    setMailtoHref(href);
+    window.location.href = href;
     setHandedOff(true);
-  }
-
-  if (handedOff) {
-    return (
-      <div className="rounded-2xl border border-hair bg-surface-2 p-10 text-center">
-        <p className="text-xl font-semibold text-ink mb-2">
-          Your email app should be opening
-        </p>
-        <p className="text-muted">
-          Your message is drafted and ready to send — it is not sent until you
-          send it. If nothing opened, email{" "}
-          <a
-            href={`mailto:${site.email}`}
-            className="text-steel hover:underline"
-          >
-            {site.email}
-          </a>{" "}
-          directly.
-        </p>
-      </div>
-    );
+    // Move focus to the status panel. Without this, focus stays where it was
+    // and the next Tab restarts at the top of the page.
+    window.setTimeout(() => statusRef.current?.focus(), 0);
   }
 
   const inputClass =
     "w-full rounded-lg border border-hair bg-surface px-4 py-3.5 text-ink placeholder:text-faint focus:border-steel focus:outline-none transition-colors";
 
   return (
-    <form
-      onSubmit={handleSubmit}
-      className="rounded-2xl border border-hair bg-surface-2 p-10"
-    >
+    <>
+      {/* Announced, focusable, and rendered ABOVE a form that stays mounted.
+          The first version unmounted the form on submit, which threw away
+          everything the visitor had typed: if the mail client did not open,
+          they retyped from scratch. It was also silent to assistive tech —
+          no live region anywhere on the page, and focus dumped to <body>. */}
+      {handedOff && (
+        <div
+          ref={statusRef}
+          tabIndex={-1}
+          role="status"
+          aria-live="polite"
+          className="mb-6 rounded-2xl border border-hair bg-surface-2 p-8"
+        >
+          <p className="text-xl font-semibold text-ink mb-2">
+            Your email app should be opening
+          </p>
+          <p className="text-muted">
+            The message is drafted and <b className="text-ink">not sent until you
+            send it</b>. Nothing was submitted to this site.
+          </p>
+          <p className="text-muted mt-3">
+            If nothing opened,{" "}
+            <a href={mailtoHref} className="text-steel underline">
+              open it again
+            </a>
+            , or email{" "}
+            <a href={`mailto:${site.email}`} className="text-steel underline">
+              {site.email}
+            </a>{" "}
+            and paste the message below — it is still in the form, exactly as
+            you wrote it.
+          </p>
+        </div>
+      )}
+      <form
+        onSubmit={handleSubmit}
+        className="rounded-2xl border border-hair bg-surface-2 p-10"
+      >
       <div className="space-y-5">
         <div>
           <label htmlFor="cf-name" className="mb-1.5 block text-sm font-medium text-muted">
@@ -110,6 +135,7 @@ export function ContactForm() {
             id="cf-message"
             name="message"
             required
+            maxLength={1400}
             rows={4}
             className={inputClass + " resize-none"}
             placeholder="Tell us about your project or inquiry"
@@ -124,11 +150,12 @@ export function ContactForm() {
       </button>
       <p className="mt-4 text-center text-[13px] text-muted">
         Opens in your email app. Or write to{" "}
-        <a href={`mailto:${site.email}`} className="text-steel hover:underline">
+        <a href={`mailto:${site.email}`} className="text-steel underline">
           {site.email}
         </a>
         .
       </p>
-    </form>
+      </form>
+    </>
   );
 }

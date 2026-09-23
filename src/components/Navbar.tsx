@@ -36,6 +36,7 @@ export function Navbar() {
   }, [menuOpen]);
 
   return (
+    <>
     <nav
       className={`fixed top-0 left-0 right-0 z-50 h-[72px] transition-colors duration-300 ${
         scrolled ? "bg-carbon/95 backdrop-blur-md" : "bg-transparent"
@@ -105,7 +106,16 @@ export function Navbar() {
         </button>
       </div>
 
-      {/* Mobile overlay */}
+    </nav>
+
+      {/* The overlay is a SIBLING of <nav>, not a child, and that is load-bearing.
+          As a child it inherited the nav as its containing block the moment the
+          nav gained `backdrop-blur` on scroll — backdrop-filter establishes a
+          containing block for fixed-position descendants — so `inset-0 top-72px`
+          resolved against the nav's own 72px box and the overlay computed to
+          ZERO height. Measured: 740px at scrollY 0, 0px at scrollY 1200, on
+          every page at 375px. It screenshots perfectly at the top of the page,
+          which is exactly why looking at it did not find this. */}
       {menuOpen && (
         <div
           id="mobile-menu"
@@ -141,6 +151,6 @@ export function Navbar() {
           </Link>
         </div>
       )}
-    </nav>
+    </>
   );
 }

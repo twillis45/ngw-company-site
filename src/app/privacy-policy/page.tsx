@@ -65,9 +65,9 @@ export default function PrivacyPolicy() {
           <p>
             This site sets no cookies and runs no analytics. There is no
             tracking script, no tag manager, and no advertising pixel on any
-            page. You can confirm this yourself: the site sends no
-            <code className="px-1 text-muted">Set-Cookie</code> header on
-            any page, and its scripts contain no analytics code.
+            page. You can confirm this yourself: the site sends no{" "}
+            <code className="px-1 text-ink">Set-Cookie</code> header on any
+            page, and its scripts contain no analytics code.
           </p>
 
           <h2 className="text-[18px] font-semibold text-muted pt-2">
