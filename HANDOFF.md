@@ -247,6 +247,32 @@ call on your time, in a given day. That'll tell you what you're being called on
 most often for."* And: *"leave again — that's a method for discovering where the
 cracks are."*
 
+**CORROBORATION ATTEMPTED 2026-09-23 AND NOT ACHIEVED — and the attempt
+produced evidence against the headline.** Three searches returned only four
+candidate threads in business subs. One (`16fb77p`) is off topic — software
+escrow, not operating decisions. The other (`1puxho7`) is exactly on topic but
+has **two** substantive replies, which is not a reply profile. **The finding
+still rests on one thread.**
+
+And that small on-topic thread cuts the other way: of its two substantive
+replies, **one names Scribe by name** — a product with *zero* mentions across
+the decisive thread's 145 replies.
+
+**The confound, which I should have excluded before reporting the contrast as
+clean.** The control was *"I thought I could handle it manually with a shared
+Google Sheet, but as soon as we hit six employees it started spiraling"* — a
+**how-do-you-handle-this** question, which draws tools. The decisive thread was
+a **confession** (*"I am the process… if I got hit by a bus"*), and ~96 of its
+122 commenters replied with sympathy rather than any answer. **The 34%-vs-1.6%
+contrast may be measuring question shape, not market saturation.**
+
+**What would settle it, cheaply:** three to five *how-to* questions about
+documenting a business — not confessions — run through the same classifier. If
+they draw product names near 34%, the absence finding is an artifact and the
+wedge is not open. If they still come in near zero, it survives a real attempt
+to break it. Corpus for the one thread obtained is committed at
+`docs/research/2026-09-23-documentation-howto-thread.rss`.
+
 **Four limits, and they matter.** (1) One thread is one source, however many
 commenters. (2) The classification is a regex over *mentions*, not a reading of
 recommendations — only the zero is exact, because every hit was inspected. (3)
