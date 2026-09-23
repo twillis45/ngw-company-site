@@ -1,9 +1,11 @@
 "use client";
 
 import Link from "next/link";
+import { usePathname } from "next/navigation";
 import { useState, useEffect, useRef } from "react";
 
 export function Navbar() {
+  const pathname = usePathname();
   const [scrolled, setScrolled] = useState(false);
   const [menuOpen, setMenuOpen] = useState(false);
   const triggerRef = useRef<HTMLButtonElement>(null);
@@ -54,19 +56,22 @@ export function Navbar() {
         <div className="hidden items-center gap-8 md:flex">
           <Link
             href="/"
-            className="text-[15px] text-muted hover:text-ink transition-colors"
+            aria-current={pathname === "/" ? "page" : undefined}
+            className="text-[15px] text-ink/85 hover:text-ink underline-offset-4 aria-[current=page]:underline transition-colors"
           >
             Home
           </Link>
           <Link
             href="/solutions"
-            className="text-[15px] text-muted hover:text-ink transition-colors"
+            aria-current={pathname === "/solutions" ? "page" : undefined}
+            className="text-[15px] text-ink/85 hover:text-ink underline-offset-4 aria-[current=page]:underline transition-colors"
           >
             Solutions
           </Link>
           <Link
             href="/contact"
-            className="text-[15px] text-muted hover:text-ink transition-colors"
+            aria-current={pathname === "/contact" ? "page" : undefined}
+            className="text-[15px] text-ink/85 hover:text-ink underline-offset-4 aria-[current=page]:underline transition-colors"
           >
             Contact
           </Link>
@@ -124,21 +129,24 @@ export function Navbar() {
           <Link
             href="/"
             onClick={() => setMenuOpen(false)}
-            className="text-2xl text-muted hover:text-ink"
+            aria-current={pathname === "/" ? "page" : undefined}
+            className="text-2xl text-ink/85 hover:text-ink"
           >
             Home
           </Link>
           <Link
             href="/solutions"
             onClick={() => setMenuOpen(false)}
-            className="text-2xl text-muted hover:text-ink"
+            aria-current={pathname === "/" ? "page" : undefined}
+            className="text-2xl text-ink/85 hover:text-ink"
           >
             Solutions
           </Link>
           <Link
             href="/contact"
             onClick={() => setMenuOpen(false)}
-            className="text-2xl text-muted hover:text-ink"
+            aria-current={pathname === "/" ? "page" : undefined}
+            className="text-2xl text-ink/85 hover:text-ink"
           >
             Contact
           </Link>

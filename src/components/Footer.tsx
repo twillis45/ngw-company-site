@@ -13,7 +13,7 @@ export function Footer() {
             </p>
             <a
               href={`mailto:${site.email}`}
-              className="block text-[15px] text-muted hover:text-ink transition-colors"
+              className="block text-[15px] text-ink/85 underline underline-offset-4 hover:text-ink transition-colors"
             >
               {site.email}
             </a>
@@ -28,31 +28,31 @@ export function Footer() {
           <div className="flex flex-col gap-3">
             <Link
               href="/"
-              className="text-[15px] text-muted hover:text-ink transition-colors"
+              className="text-[15px] text-ink/85 hover:text-ink underline-offset-4 hover:underline transition-colors"
             >
               Home
             </Link>
             <Link
               href="/solutions"
-              className="text-[15px] text-muted hover:text-ink transition-colors"
+              className="text-[15px] text-ink/85 hover:text-ink underline-offset-4 hover:underline transition-colors"
             >
               Solutions
             </Link>
             <Link
               href="/contact"
-              className="text-[15px] text-muted hover:text-ink transition-colors"
+              className="text-[15px] text-ink/85 hover:text-ink underline-offset-4 hover:underline transition-colors"
             >
               Contact
             </Link>
             <Link
               href="/privacy-policy"
-              className="text-[15px] text-muted hover:text-ink transition-colors"
+              className="text-[15px] text-ink/85 hover:text-ink underline-offset-4 hover:underline transition-colors"
             >
               Privacy Policy
             </Link>
             <Link
               href="/terms-of-service"
-              className="text-[15px] text-muted hover:text-ink transition-colors"
+              className="text-[15px] text-ink/85 hover:text-ink underline-offset-4 hover:underline transition-colors"
             >
               Terms of Service
             </Link>

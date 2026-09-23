@@ -12,10 +12,11 @@
     "verify:assets": "node scripts/gates/verify-assets.mjs",
     "verify:headers": "node scripts/gates/verify-headers.mjs",
     "verify:coverage": "node scripts/gates/verify-coverage.mjs",
-    "verify:all": "npm run build && npm run verify:coverage && npm run verify:placeholders && npm run verify:contact && npm run verify:copy && npm run verify:claims && npm run verify:assets && npm run verify:contrast && npm run verify:headers",
+    "verify:all": "npm run build && npm run verify:coverage && npm run verify:placeholders && npm run verify:contact && npm run verify:copy && npm run verify:claims && npm run verify:assets && npm run verify:affordance && npm run verify:contrast && npm run verify:headers",
     "redproof": "node scripts/gates/redproof.mjs",
     "verify:contrast": "node scripts/gates/verify-contrast.mjs",
-    "verify:claims": "node scripts/gates/verify-claims.mjs"
+    "verify:claims": "node scripts/gates/verify-claims.mjs",
+    "verify:affordance": "node scripts/gates/verify-affordance.mjs"
   },
   "dependencies": {
     "next": "^16.2.1",

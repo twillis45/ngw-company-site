@@ -30,10 +30,10 @@ export default function Contact() {
 
             <div className="space-y-3">
               <a
-                href="mailto:info@noguessworksystems.com"
-                className="block text-[17px] text-muted hover:text-ink transition-colors"
+                href={`mailto:${site.email}`}
+                className="block text-[17px] text-ink/85 underline underline-offset-4 hover:text-ink transition-colors"
               >
-                info@noguessworksystems.com
+                {site.email}
               </a>
               <p className="text-[15px] text-muted">
                 {site.address.street}

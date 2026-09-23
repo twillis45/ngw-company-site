@@ -72,6 +72,22 @@ const CASES = [
       s.replace("© {site.year} {site.legalName}. All rights reserved.", "All rights reserved."),
   },
   {
+    gate: "affordance",
+    file: "src/components/Footer.tsx",
+    needsBuild: false,
+    describe: "drop a link back to the body tier — indistinguishable from the text beside it",
+    mutate: (s) =>
+      s.replace("text-ink/85 underline underline-offset-4 hover:text-ink",
+                "text-muted hover:text-ink"),
+  },
+  {
+    gate: "affordance",
+    file: "src/components/Navbar.tsx",
+    needsBuild: false,
+    describe: "remove aria-current — nothing marks the current page",
+    mutate: (s) => s.replace(/aria-current=\{pathname === "[^"]*" \? "page" : undefined\}/g, ""),
+  },
+  {
     gate: "claims",
     file: "docs/CAPABILITY-BACKING.md",
     needsBuild: false,
