@@ -213,11 +213,19 @@ export default function Home() {
             out to No Guesswork Systems LLC.
           </p>
           <div className="flex flex-col gap-3 sm:flex-row sm:justify-center sm:gap-4">
-            <Button href="mailto:info@noguessworksystems.com" external>
-              Email Us
-            </Button>
-            <Button href="/contact" variant="secondary">
-              Contact Page →
+            {/* ASSUMPTION (owner-held, undo = swap these two variants): the
+                hero action is the contact form at /contact, not the raw
+                mailto:. The form composes the same message and is the
+                destination the nav already points at; the mailto stays
+                reachable as the secondary. Ruling this the other way is a
+                two-token edit. */}
+            <Button href="/contact">Contact Us</Button>
+            <Button
+              href="mailto:info@noguessworksystems.com"
+              variant="secondary"
+              external
+            >
+              Email Us Directly →
             </Button>
           </div>
         </div>

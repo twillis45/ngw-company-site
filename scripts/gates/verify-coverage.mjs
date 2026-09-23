@@ -62,7 +62,11 @@ if (!ciPresent) {
       "and never on the commit that deploys"
   );
 } else if (ciMissed.length) {
-  failures.push(`IN verify:all BUT NOT IN CI: ${ciMissed.join(", ")}`);
+  // Labelled from what is COMPUTED. This read "IN verify:all BUT NOT IN
+  // CI", but ciMissed is derived from onDisk — so a gate absent from both
+  // was reported as though verify:all already had it, pointing the fix at
+  // CI alone. Caught when verify:hero, in neither, was described that way.
+  failures.push(`NOT RUN IN CI: ${ciMissed.join(", ")}`);
 }
 
 if (failures.length) {

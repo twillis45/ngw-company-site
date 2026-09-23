@@ -278,6 +278,47 @@ const CASES = [
     mutate: (s) => s.replace("was created to help", "exists to serve"),
   },
   {
+    gate: "hero",
+    file: "src/app/page.tsx",
+    needsBuild: true,
+    // The case that holds the criterion honest. verify:hero counts DISTINCT
+    // primary DESTINATIONS, not primary elements, because one action repeated
+    // at the top and bottom of a long page is still one action. Loosening a
+    // criterion is how a gate gets paraphrased into something easier to
+    // satisfy — so this proves the looser rule still catches the real defect
+    // it was loosened around: two DIFFERENT actions both wearing the hero.
+    describe: "re-promote the raw mailto to primary — two competing destinations, which is no hero",
+    mutate: (s) => s.replace('              variant="secondary"\n', ""),
+  },
+  {
+    gate: "hero",
+    file: "src/app/privacy-policy/page.tsx",
+    needsBuild: true,
+    describe: "demote the forward action on a legal page — the gate must go RED on ZERO, not pass",
+    // Demotion, not deletion. The first draft replaced the tag with an
+    // unbalanced <span> and the BUILD failed, so the gate never ran and the
+    // case scored '?' — unevaluated, which the spine says is not a result.
+    // A fault must compile and still be wrong, or it proves nothing.
+    mutate: (s) =>
+      s.replace('<Button href="/contact">', '<Button variant="secondary" href="/contact">'),
+  },
+  {
+    gate: "hero",
+    file: "src/components/Button.tsx",
+    needsBuild: true,
+    // The gate DERIVES the primary signature from this component rather than
+    // restating it. If that derivation silently failed, the gate would find
+    // zero heroes everywhere — and must still refuse to pass. "Cannot check"
+    // is not a pass; this proves the refusal fires.
+    describe: "break the derivation source — a gate that cannot locate what it checks must NOT pass",
+    // Swaps the quoted string for a template literal: valid TypeScript, builds
+    // clean, same rendered class — and invisible to the gate's `primary: "..."`
+    // match. Renaming the key instead was a type error, so the build failed and
+    // the case proved nothing. This one leaves the gate genuinely unable to
+    // locate its signature, which must produce a refusal, never a PASS.
+    mutate: (s) => s.replace(/primary: "([^"]+)"/, "primary: `$1`"),
+  },
+  {
     gate: "contrast",
     file: "src/app/page.tsx",
     needsBuild: false,

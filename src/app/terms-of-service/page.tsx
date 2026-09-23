@@ -1,4 +1,5 @@
 import type { Metadata } from "next";
+import { Button } from "@/components/Button";
 
 export const metadata: Metadata = {
   title: "Terms of Service",
@@ -68,6 +69,13 @@ export default function TermsOfService() {
             </a>
             .
           </p>
+
+          {/* A reader reaches these two pages holding a QUESTION more often
+              than any other page on the site, and until now neither offered
+              anything to do with it beyond an inline mailto in the body. */}
+          <div className="pt-8">
+            <Button href="/contact">Ask about these terms</Button>
+          </div>
         </div>
       </div>
     </section>

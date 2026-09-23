@@ -1,4 +1,5 @@
 import type { Metadata } from "next";
+import { Button } from "@/components/Button";
 
 export const metadata: Metadata = {
   title: "Privacy Policy",
@@ -88,6 +89,13 @@ export default function PrivacyPolicy() {
             This policy may be updated periodically. Changes will be reflected on
             this page with an updated date.
           </p>
+
+          {/* A reader reaches these two pages holding a QUESTION more often
+              than any other page on the site, and until now neither offered
+              anything to do with it beyond an inline mailto in the body. */}
+          <div className="pt-8">
+            <Button href="/contact">Ask a privacy question</Button>
+          </div>
         </div>
       </div>
     </section>
