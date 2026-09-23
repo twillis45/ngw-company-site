@@ -1,4 +1,5 @@
 import type { Metadata } from "next";
+import { site } from "@/site";
 import { Button } from "@/components/Button";
 
 export const metadata: Metadata = {
@@ -14,7 +15,7 @@ export default function TermsOfService() {
           Terms of Service
         </h1>
         <p className="mb-10 text-[13px] text-muted">
-          Last updated: September 2026
+          Last updated: {site.lastPolicyUpdate}
         </p>
 
         <div className="space-y-6 text-[17px] leading-7 text-muted">
@@ -23,7 +24,7 @@ export default function TermsOfService() {
             No Guesswork Systems LLC.
           </p>
 
-          <h2 className="text-[18px] font-semibold text-muted pt-2">
+          <h2 className="text-[18px] font-semibold text-ink pt-2">
             1. Use of This Site
           </h2>
           <p>
@@ -32,7 +33,7 @@ export default function TermsOfService() {
             otherwise stated.
           </p>
 
-          <h2 className="text-[18px] font-semibold text-muted pt-2">
+          <h2 className="text-[18px] font-semibold text-ink pt-2">
             2. No Guarantees
           </h2>
           <p>
@@ -41,7 +42,7 @@ export default function TermsOfService() {
             purpose.
           </p>
 
-          <h2 className="text-[18px] font-semibold text-muted pt-2">
+          <h2 className="text-[18px] font-semibold text-ink pt-2">
             3. Limitation of Liability
           </h2>
           <p>
@@ -49,14 +50,14 @@ export default function TermsOfService() {
             from the use of this website or its content.
           </p>
 
-          <h2 className="text-[18px] font-semibold text-muted pt-2">
+          <h2 className="text-[18px] font-semibold text-ink pt-2">
             4. Governing Law
           </h2>
           <p>
             These terms are governed by the laws of the State of Maryland.
           </p>
 
-          <h2 className="text-[18px] font-semibold text-muted pt-2">
+          <h2 className="text-[18px] font-semibold text-ink pt-2">
             5. Contact
           </h2>
           <p>

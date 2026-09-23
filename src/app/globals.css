@@ -67,3 +67,17 @@ body {
   -webkit-font-smoothing: antialiased;
   -moz-osx-font-smoothing: grayscale;
 }
+
+/* Typography and touch rules an audit found absent site-wide.
+   - balance on headings: the h1s here run long and widow on a phone.
+   - pretty on prose: avoids a single-word last line.
+   - touch-action: manipulation removes the 300ms double-tap-zoom delay on
+     every control, which is felt on exactly the device where the tap targets
+     were already the problem.
+   - scroll-margin-top on the skip-link target: without it #main lands under
+     the fixed 72px nav, so the skip link "works" and puts the heading
+     off-screen — a bypass that bypasses into nothing. */
+h1, h2, h3 { text-wrap: balance; }
+p, li { text-wrap: pretty; }
+a, button, summary, [role="button"] { touch-action: manipulation; }
+#main { scroll-margin-top: 88px; }

@@ -115,8 +115,35 @@ if (!street || !cityStateZip) {
   }
 }
 
+// The policy pages carry a "Last updated" date. It was hardcoded twice, in
+// prose, on two pages — two copies of a date are two chances to disagree, and a
+// stale date on a privacy policy is a claim that decays in silence. It now
+// comes from site.ts, and this asserts the shipped pages actually carry it.
+//
+// visibleText, not raw: React renders `{site.lastPolicyUpdate}` as
+// `Last updated: <!-- -->September 2026`, which is the exact text-node split
+// that made this gate go blind once before.
+let policyChecked = 0;
+{
+  const m = readFileSync(join(ROOT, "src/site.ts"), "utf8").match(/lastPolicyUpdate:\s*"([^"]+)"/);
+  if (!m) {
+    failures.push("src/site.ts declares no lastPolicyUpdate — this gate cannot pass on a constant it did not find");
+  } else {
+    for (const f of files.filter((f) => /(privacy-policy|terms-of-service)\.html$/.test(f.rel))) {
+      policyChecked++;
+      const v = visibleText(f.text);
+      if (!v.includes(`Last updated: ${m[1]}`)) {
+        failures.push(
+          `${f.rel} — does not carry "Last updated: ${m[1]}" in visible text. Either the ` +
+            `date stopped rendering, or the two pages have drifted apart again.`
+        );
+      }
+    }
+  }
+}
+
 report(
   `copyright year is current (${YEAR}) and the address of record ships`,
   failures,
-  files.length + 2
+  files.length + 2 + policyChecked
 );

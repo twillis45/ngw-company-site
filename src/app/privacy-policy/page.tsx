@@ -1,4 +1,5 @@
 import type { Metadata } from "next";
+import { site } from "@/site";
 import { Button } from "@/components/Button";
 
 export const metadata: Metadata = {
@@ -14,7 +15,7 @@ export default function PrivacyPolicy() {
           Privacy Policy
         </h1>
         <p className="mb-10 text-[13px] text-muted">
-          Last updated: September 2026
+          Last updated: {site.lastPolicyUpdate}
         </p>
 
         <div className="space-y-6 text-[17px] leading-7 text-muted">
@@ -24,7 +25,7 @@ export default function PrivacyPolicy() {
             handle information collected through noguessworksystems.com.
           </p>
 
-          <h2 className="text-[18px] font-semibold text-muted pt-2">
+          <h2 className="text-[18px] font-semibold text-ink pt-2">
             1. Information We Collect
           </h2>
           <p>
@@ -35,7 +36,7 @@ export default function PrivacyPolicy() {
             choose to send or discard.
           </p>
 
-          <h2 className="text-[18px] font-semibold text-muted pt-2">
+          <h2 className="text-[18px] font-semibold text-ink pt-2">
             2. How We Use Information
           </h2>
           <p>
@@ -48,7 +49,7 @@ export default function PrivacyPolicy() {
             below and we will respond within 30 days.
           </p>
 
-          <h2 className="text-[18px] font-semibold text-muted pt-2">
+          <h2 className="text-[18px] font-semibold text-ink pt-2">
             3. Third Parties
           </h2>
           <p>
@@ -60,7 +61,7 @@ export default function PrivacyPolicy() {
             metadata, including your IP address, in order to serve the page.
           </p>
 
-          <h2 className="text-[18px] font-semibold text-muted pt-2">
+          <h2 className="text-[18px] font-semibold text-ink pt-2">
             4. Cookies
           </h2>
           <p>
@@ -71,7 +72,7 @@ export default function PrivacyPolicy() {
             page, and its scripts contain no analytics code.
           </p>
 
-          <h2 className="text-[18px] font-semibold text-muted pt-2">
+          <h2 className="text-[18px] font-semibold text-ink pt-2">
             5. Contact
           </h2>
           <p>

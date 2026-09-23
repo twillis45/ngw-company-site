@@ -27,6 +27,10 @@ export const site = {
     name: "Todd Willis",
     role: "Principal",
   },
+  // Both policy pages hardcoded "September 2026" in prose — two copies of a
+  // date is two chances for them to disagree, and a stale date on a policy
+  // page is a claim that decays silently.
+  lastPolicyUpdate: "September 2026",
   address: {
     street: "306 W Redwood St, STE 201",
     cityStateZip: "Baltimore, MD 21201",

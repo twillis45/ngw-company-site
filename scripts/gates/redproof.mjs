@@ -133,6 +133,16 @@ const CASES = [
   },
   {
     gate: "copy",
+    file: "src/app/privacy-policy/page.tsx",
+    needsBuild: true,
+    // The date was hardcoded in prose on both policy pages. Two copies of a
+    // date are two chances to disagree, and a stale date on a privacy policy
+    // is a claim that decays in silence with nothing watching it.
+    describe: "drift one policy page's Last-updated date away from the constant",
+    mutate: (s) => s.replace("{site.lastPolicyUpdate}", "March 2025"),
+  },
+  {
+    gate: "copy",
     file: "src/site.ts",
     needsBuild: true,
     describe: "restore the SUPERSEDED Oakland address — the D&B value, not the record",
