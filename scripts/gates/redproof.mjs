@@ -181,6 +181,14 @@ const CASES = [
   },
   {
     gate: "claims",
+    file: "src/app/page.tsx",
+    needsBuild: true,
+    describe: "reintroduce the RETIRED second name for an offering that now has one",
+    mutate: (s) =>
+      s.replace('title: "Custom Business Systems",', 'title: "Custom Systems Design",'),
+  },
+  {
+    gate: "claims",
     file: "docs/CAPABILITY-BACKING.md",
     needsBuild: false,
     deleteFile: true,

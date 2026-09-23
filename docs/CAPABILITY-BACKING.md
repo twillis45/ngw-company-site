@@ -20,8 +20,21 @@ purpose is to be checked — which is the point.
 | Card title (as it ships) | Backing in the claim ledger | Constraint the ledger puts on the wording |
 |---|---|---|
 | `Workflow Automation` | The Asana governance-cycle work and the expense-reconciler build are both real, executed, and recorded. | **No external party has received either.** The ledger prohibits "client", "engagement" and "delivered to" for both. Describe the mechanism, never a delivered outcome. |
-| `Custom Systems Design` | The same two bodies of work, plus the shipped product surfaces in this portfolio. | Same prohibition. "Fit-for-purpose systems for the places off-the-shelf tools do not fit" describes what is built; it does not assert someone bought it. |
-| `Custom Business Systems` | **The same capability under a second name** — this is what the Solutions page calls it while the home page says `Custom Systems Design`. Found by this gate on its first run, 2026-09-23. | Same prohibition. **And the two names should be reconciled:** one capability with two public names is a small claim-integrity problem of its own, since a reader cannot tell whether they are one offering or two. Recorded rather than silently renamed, because which name survives is the owner's call. |
+| `Custom Business Systems` | The Asana governance-cycle work and the expense-reconciler build, plus the shipped product surfaces in this portfolio. | Same prohibition as above: no external party has received either, so describe what is built and never assert someone bought it. |
+
+## One capability, one name
+
+This offering shipped under **two** public names — `Custom Systems Design` on the
+home page and `Custom Business Systems` on Solutions — so a reader could not tell
+whether it was one offering or two. Found by `verify:claims` on its first run with
+the ledger link enforced, and ranked by the stage-1 re-score board as the highest
+remaining item after the severity-3s.
+
+**`Custom Business Systems` survives**, on the demand scan's evidence rather than
+taste: `custom systems design` returns closets, windows and solar in Google
+Suggest with no consulting sense at all, while the surviving name at least carries
+category signal. Assumption stated 2026-09-23; **undo** is one string in
+`src/app/page.tsx` and one row here.
 
 ## Removed 2026-09-23, and why
 

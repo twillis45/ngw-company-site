@@ -11,7 +11,7 @@ const services = [
     body: "Repeatable work automated to fit the operation already running — not automation that needs a rebuild before it can be adopted.",
   },
   {
-    title: "Custom Systems Design",
+    title: "Custom Business Systems",
     body: "Fit-for-purpose systems for the places off-the-shelf tools do not fit.",
   },
 ];

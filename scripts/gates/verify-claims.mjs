@@ -113,8 +113,22 @@ if (!existsSync(backingPath)) {
   // gate passed, because the removed-cards table names it in backticks too.
   // The gate's own comment claimed "a row, not a mere mention"; the code did
   // not implement the distinction it described.
+  // A ROW, not a mention anywhere above the Removed heading. Slicing on the
+  // heading alone was still too loose, and I proved it by defeating my own
+  // fix: prose added between the table and that heading — "this offering
+  // shipped under two public names — `Custom Systems Design`" — sat inside the
+  // live slice and credited a title that had just been retired. That is the
+  // same bypass a re-score board had already proved once, reintroduced in the
+  // commit fixing it.
+  //
+  // So: table rows only. A backing row is a `| \`Title\` | ... |` line, and
+  // nothing else counts, whatever it says or wherever it sits.
   const removedAt = backingRaw.search(/^##\s+Removed\b/m);
-  const backing = removedAt === -1 ? backingRaw : backingRaw.slice(0, removedAt);
+  const liveSlice = removedAt === -1 ? backingRaw : backingRaw.slice(0, removedAt);
+  const backingRows = liveSlice
+    .split("\n")
+    .filter((l) => /^\s*\|\s*`[^`]+`\s*\|/.test(l))
+    .join("\n");
 
   // ENUMERATE EVERY RENDERED TITLE, not two array names. The same board shipped
   // "Guaranteed ROI Analytics" and "Enterprise AI Transformation" in an array
@@ -138,7 +152,7 @@ if (!existsSync(backingPath)) {
   }
   for (const t of titles) {
     checked++;
-    if (!backing.includes(`\`${t}\``)) {
+    if (!backingRows.includes(`\`${t}\``)) {
       failures.push(
         `"${t}" ships with no backing row in ${BACKING_DOC} — the ledger does ` +
           `not support it, or nobody wrote down that it does`
