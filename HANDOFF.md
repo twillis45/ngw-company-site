@@ -150,15 +150,42 @@ cooled IP after ~20 failed attempts across two agents — HTTP 200, 137,958
 bytes, **146 entries**. The kill condition was registered *before* the fetch:
 name Trainual, SweetProcess or Scribe and the wedge is dead.
 
-| Across 126 substantive replies | count |
+| Across 122 distinct commenters | count |
 |---|---|
-| documentation language | 22 |
-| hire a person / second-in-command | 16 |
-| **named software products** | **0** |
+| named a product | **2 (1.6%)** |
+| hire / delegate to a person | 7 |
+| document it yourself, by hand | 17 |
+| agreement with no answer at all | ~96 |
 
-Both apparent product hits were inspected by hand and are false positives — the
-English word "notion", and the **book** *Traction*, recommended by a commenter
-who sells this as consulting. **The wedge is open, not saturated.**
+**Every funded category leader scores zero** — Trainual, SweetProcess, Scribe,
+Tango, Process Street, Whale, Waybook, Guru, Confluence, Loom, Document360,
+Tettra, Nuclino, ClickUp, Asana, Trello, Airtable. Two independent passes agree
+on that. What *is* named: Google Docs once, inside a reply flagged as a vendor
+plug, and a self-built GPT twice. The two remedies actually offered are two
+**books**. **The wedge is open, not saturated.**
+
+**Correction to this file's own earlier claim.** It read *"zero software
+products across 126 replies"* — too strong. "Notion" in this thread is the
+English word (*"resigned myself to the notion of"*) and **both** passes counted
+it as the product; Google Docs is real and I had missed it. The verdict held;
+the phrasing did not. Re-derivable because the corpus is committed at
+`docs/research/2026-09-23-owner-in-the-head-thread.rss`.
+
+### The control — the one number here with something behind it
+
+The obvious objection to any absence finding is that the classifier is broken.
+It was tested against a positive control: **same subreddit, same year, same
+"how do you handle X without losing your mind" question shape, same
+classifier** — employee expense management, **61 distinct commenters, 21
+naming a product** (Ramp 13, Expensify 4, Concur 2, Divvy, Dext, QuickBooks,
+QBO, Zoho Expense, Rippling).
+
+**34% product-naming in the control against 1.6% in the test.** The instrument
+discriminates; the silence is a property of that market, not of the parsing.
+
+**What it does not settle:** either those products have a distribution problem
+so severe they are unknown to their exact buyer, or they do not solve what this
+person has. Both are wedge-shaped, and they imply **different products**.
 
 What operators recommend is nearer this company's own thesis than any tool:
 not a document but a **measurement** — *"write down everything you do, every

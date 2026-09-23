@@ -158,7 +158,7 @@ code{font-family:"IBM Plex Mono",monospace;font-size:.86em;background:var(--surf
     and no mechanism existed by which anyone could have found out.</p>
 
   <div class="stamp">
-    <span><b>Recorded</b> <span data-recorded="2026-09-23T14:38:18.299Z">2026-09-23</span></span>
+    <span><b>Recorded</b> <span data-recorded="2026-09-23T14:44:58.056Z">2026-09-23</span></span>
     <span><b>Gates</b> 0–7 · all passed-with-conditions</span>
     <span><b>HEAD</b> d7c9f3ed</span>
     <span><b>Live</b> noguessworksystems.com</span>
@@ -208,6 +208,38 @@ code{font-family:"IBM Plex Mono",monospace;font-size:.86em;background:var(--surf
   <section class="sec">
     <h2>Corrections</h2>
     <p>What was believed, what replaced it, and the evidence. The original stays visible.</p>
+
+    <div class="corr">
+      <p class="was">Across 126 replies, zero software products &mdash; so the wedge is open.</p>
+      <p class="now"><b>The verdict holds and my phrasing of it did not.</b> An independent
+        pass returned 2 rather than 0, so I re-checked against the committed corpus. Three
+        facts: &ldquo;Notion&rdquo; here is the <b>English word</b> (<em>&ldquo;resigned
+        myself to the notion of&rdquo;</em>) and <b>both passes counted it as the
+        product</b>; <b>Google Docs is real, once</b>, and I missed it because it was not in
+        my list &mdash; it sits in the same sentence as &ldquo;tools like Runable&rdquo;, the
+        reply the other pass flagged as a vendor plug and deliberately left in; and two
+        replies name a self-built GPT, which is software as a do-it-yourself scheme, not a
+        recommendation. <b>The defensible claim is narrower and stronger than the one I
+        made:</b> every funded category leader scores zero, and both passes agree on that
+        independently.</p>
+      <p class="src">2026-09-23 &middot; re-derived from the corpus committed at
+        <code>docs/research/</code>, which is why it could be re-derived at all</p>
+    </div>
+
+    <div class="corr">
+      <p class="was">An absence finding cannot be trusted &mdash; the classifier might simply be broken.</p>
+      <p class="now"><b>It was tested against a positive control, and it discriminates.</b>
+        Same subreddit, same year, same &ldquo;how do you handle X without losing your
+        mind&rdquo; question shape, same classifier &mdash; employee expense management:
+        <b>61 distinct commenters, 21 naming a product</b> (Ramp 13, Expensify 4, Concur 2,
+        Divvy, Dext, QuickBooks, QBO, Zoho Expense, Rippling). <b>34% product-naming in the
+        control against 1.6% in the test.</b> The silence is a property of that market, not
+        an artifact of parsing. <b>What it does not settle:</b> either those products have a
+        distribution problem so severe they are unknown to their exact buyer, or they do not
+        solve what this person has &mdash; and those are wedge-shaped in different
+        directions, implying different products.</p>
+      <p class="src">2026-09-23 &middot; the one number here with a control behind it</p>
+    </div>
 
     <div class="corr">
       <p class="was">The geometry was measured in a real browser, so it is measured.</p>
@@ -599,7 +631,7 @@ const STAGES = [
       ["h","<code>demand-scan</code>","RAN per Step 1c, which requires it for every project. Verdict <b>NO-GO</b> on the current positioning as a converting asset, 6 independent sources"],
       ["h","Open-discovery demand pass","<b>RAN 2026-09-23</b> — the board's named unlock, and its finding is larger than the question it was asked. <b>The previous pass was wrong about the ROUTE, not the pacing:</b> reddit.com <code>.json</code> endpoints are 403, but <code>top.rss</code>, <code>comments/&lt;id&gt;/.rss</code> and <code>search.rss</code> all return 200. Corpus: 600 top-of-year posts across 6 subreddits, ~300 comments, 440 HN comments, 100 store reviews. Real struggles exist and are named in operators' own words — <em>&ldquo;it all lives in my head&rdquo;</em>, <em>&ldquo;I am the process&rdquo;</em>, <em>&ldquo;coded as misc&rdquo;</em>. <b>But neither shipped worked problem touches them.</b> The expense-reconciler's territory is SOLVED by name (Ramp ×5 advocates, Expensify, Dext, Concur, Zoho, Divvy, Rippling) and reframed by operators as capture-at-point-of-sale, not post-hoc classification; &ldquo;chasing receipts&rdquo; was <b>1 post in 200</b>. The Asana governance cycle has <b>no buyer-side footprint at all</b> across 600 posts and 440 HN comments. The instrument could return <em>nobody says this</em>, and did: Google Suggest returned zero completions for three phrasings"],
       ["m","<b>NOT SCORED AGAINST THE PRE-REGISTERED THRESHOLD HERE.</b> The session that dispatched the scan does not score it — the builder never scores its own work. The threshold (≥8 distinct operators describing an act of guessing unprompted, AND ≥3 who searched for or paid for help) was registered by the board before the pass ran, and the board holds the scoring.",""],
-      ["h","Read the decisive reply tree","<b>FETCHED 2026-09-23 on a cooled IP</b> after ~20 failed attempts across two agents — HTTP 200, 137,958 bytes, 146 entries. The kill condition was registered <em>before</em> the fetch: if the replies named Trainual, SweetProcess or Scribe, the wedge was saturated and dead. Across <b>126 substantive replies: documentation language 22, hire-a-person 16, and NAMED SOFTWARE PRODUCTS — zero.</b> Both apparent hits were inspected by hand and are false positives: one is the English word &ldquo;notion&rdquo;, the other is the <em>book</em> Traction, recommended by a commenter who sells this as consulting. <b>The wedge is OPEN, not saturated.</b> And what operators recommend is nearer this company&rsquo;s own thesis than any tool: not a document but a measurement &mdash; <em>&ldquo;write down everything you do, every call on your time, in a given day. That&rsquo;ll tell you what you&rsquo;re being called on most often for.&rdquo;</em>"],
+      ["h","Read the decisive reply tree","<b>FETCHED 2026-09-23 on a cooled IP</b> after ~20 failed attempts across two agents — HTTP 200, 137,958 bytes, 146 entries. The kill condition was registered <em>before</em> the fetch: if the replies named Trainual, SweetProcess or Scribe, the wedge was saturated and dead. Across <b>122 distinct commenters: named a product 2, hire-a-person 7, document-it-yourself 17, and roughly 96 offering agreement with no answer at all.</b> <b>Every funded category leader scores zero</b> &mdash; Trainual, SweetProcess, Scribe, Tango, Process Street, Whale, Waybook, Guru, Confluence, Loom, Document360, Tettra, Nuclino, ClickUp, Asana, Trello, Airtable. What IS named: Google Docs once, inside a reply independently flagged as a vendor plug, and a self-built GPT twice. The two remedies actually offered are two <em>books</em>. <em>(This record first said &ldquo;zero software products&rdquo; across 126 replies &mdash; too strong, corrected below.)</em> Both apparent hits were inspected by hand and are false positives: one is the English word &ldquo;notion&rdquo;, the other is the <em>book</em> Traction, recommended by a commenter who sells this as consulting. <b>The wedge is OPEN, not saturated.</b> And what operators recommend is nearer this company&rsquo;s own thesis than any tool: not a document but a measurement &mdash; <em>&ldquo;write down everything you do, every call on your time, in a given day. That&rsquo;ll tell you what you&rsquo;re being called on most often for.&rdquo;</em>"],
       ["m","<b>Four limits the count does not remove.</b> ONE THREAD IS ONE SOURCE, however many commenters. The classification is a regex over MENTIONS, not a reading of recommendations &mdash; only the zero is exact, because every product hit was inspected by hand. Absence of product mentions is consistent with two stories: nobody built it, or products do not fit this job &mdash; and the supply measurement favours the second, since the money here goes to PEOPLE (1,000+ EOS implementers at $36&ndash;53k per client-year against Trainual&rsquo;s 50 iOS ratings and 0 written reviews). And r/smallbusiness removes market-research posts by policy, which discounts every OTHER absence claim drawn from that sub.",""],
       ["n","Read Ramp's own users' complaints","The one gap the pass named itself. Wrong iOS app id returned 0 entries; g2, capterra and trustpilot all 403 behind Cloudflare. So <em>the incumbent satisfies them</em> currently rests on Reddit advocacy plus a <b>competitor's</b> poor reviews. A second pass is running against exactly this"],
       ["h","<code>claim-verification</code>","~34 buyer-facing claims ledgered against executed checks"],
