@@ -225,7 +225,41 @@ it as the product; Google Docs is real and I had missed it. The verdict held;
 the phrasing did not. Re-derivable because the corpus is committed at
 `docs/research/2026-09-23-owner-in-the-head-thread.rss`.
 
-### The control — the one number here with something behind it
+### CORRECTED 2026-09-23 — the confound was real, and the headline was overstated
+
+The pre-registered test ran: three **how-to** questions about documenting a
+business, same subreddit as both the control and the confession, 89 substantive
+replies.
+
+| thread type | replies | naming a product |
+|---|---|---|
+| documentation **how-tos** | 89 | **10%** |
+| expense control (a how-to) | 61 | 34% |
+| the confession | 122 | 1.6% |
+
+**Both factors are real and only one was reported.** Question shape is a
+**sixfold** effect on the same topic in the same sub — so the 20× gap below was
+confounded. Like-for-like it is **10% vs 34%**: about a third the mindshare.
+Real, but not a desert.
+
+**And the strong claim is false.** When someone *asks how*, the leaders do get
+named — **Tango, Whale, Scribe, Notion, Loom** all appear, and Tango, Whale and
+Scribe scored exactly zero across the confession's 145 replies. They are not
+absent from the market. **They are absent from confessions.**
+
+**What survives:** the services-shaped reading, on the supply facts — Trainual
+50 iOS ratings / 0 written reviews, Waybook 0, against 1,000+ EOS implementers
+at $36–53k per client-year. **What does not survive:** "a product category is
+missing," as written.
+
+One of the three how-tos opens *"I've been talking to a lot of small business
+owners lately"* — vendor-shaped market research, the post type that sub says it
+removes. Excluding it gives 9% and changes nothing.
+
+Corpora committed at `docs/research/2026-09-23-howto-h{1,2,3}.rss`, which is
+the only reason the original count could be corrected.
+
+### The control — the number that turned out to be confounded
 
 The obvious objection to any absence finding is that the classifier is broken.
 It was tested against a positive control: **same subreddit, same year, same
