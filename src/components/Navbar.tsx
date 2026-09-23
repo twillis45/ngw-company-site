@@ -147,29 +147,32 @@ export function Navbar() {
       {menuOpen && (
         <div
           id="mobile-menu"
-          className="fixed inset-0 top-[72px] bg-carbon z-40 flex flex-col items-center justify-center gap-12 md:hidden"
+          role="dialog"
+          aria-modal="true"
+          aria-label="Site menu"
+          className="fixed inset-0 top-[72px] bg-carbon z-40 flex flex-col items-center justify-center gap-12 md:hidden overscroll-contain"
         >
           <Link
             href="/"
             onClick={() => setMenuOpen(false)}
             aria-current={pathname === "/" ? "page" : undefined}
-            className="text-2xl text-ink/85 hover:text-ink"
+            className="inline-flex min-h-[44px] items-center px-4 text-2xl text-ink/85 hover:text-ink"
           >
             Home
           </Link>
           <Link
             href="/solutions"
             onClick={() => setMenuOpen(false)}
-            aria-current={pathname === "/" ? "page" : undefined}
-            className="text-2xl text-ink/85 hover:text-ink"
+            aria-current={pathname === "/solutions" ? "page" : undefined}
+            className="inline-flex min-h-[44px] items-center px-4 text-2xl text-ink/85 hover:text-ink"
           >
             Solutions
           </Link>
           <Link
             href="/contact"
             onClick={() => setMenuOpen(false)}
-            aria-current={pathname === "/" ? "page" : undefined}
-            className="text-2xl text-ink/85 hover:text-ink"
+            aria-current={pathname === "/contact" ? "page" : undefined}
+            className="inline-flex min-h-[44px] items-center px-4 text-2xl text-ink/85 hover:text-ink"
           >
             Contact
           </Link>

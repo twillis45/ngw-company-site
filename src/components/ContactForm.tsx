@@ -113,19 +113,19 @@ export function ContactForm() {
           <label htmlFor="cf-name" className="mb-1.5 block text-sm font-medium text-muted">
             Name
           </label>
-          <input id="cf-name" type="text" name="name" required className={inputClass} placeholder="Your name" />
+          <input id="cf-name" type="text" name="name" autoComplete="name" required className={inputClass} placeholder="Your name" />
         </div>
         <div>
           <label htmlFor="cf-email" className="mb-1.5 block text-sm font-medium text-muted">
             Email
           </label>
-          <input id="cf-email" type="email" name="email" required className={inputClass} placeholder="you@company.com" />
+          <input id="cf-email" type="email" name="email" autoComplete="email" inputMode="email" spellCheck={false} required className={inputClass} placeholder="you@company.com" />
         </div>
         <div>
           <label htmlFor="cf-company" className="mb-1.5 block text-sm font-medium text-muted">
             Company <span className="text-muted font-normal">(optional)</span>
           </label>
-          <input id="cf-company" type="text" name="company" className={inputClass} placeholder="Company name" />
+          <input id="cf-company" type="text" name="company" autoComplete="organization" className={inputClass} placeholder="Company name" />
         </div>
         <div>
           <label htmlFor="cf-message" className="mb-1.5 block text-sm font-medium text-muted">

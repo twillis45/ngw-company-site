@@ -278,6 +278,65 @@ const CASES = [
     mutate: (s) => s.replace("was created to help", "exists to serve"),
   },
   {
+    gate: "affordance",
+    file: "src/components/Navbar.tsx",
+    needsBuild: false,
+    // The defect a dispatched audit found while verify:affordance was GREEN.
+    // Three mobile links were copy-pasted and every one read pathname === "/",
+    // so on /solutions and /contact a screen-reader user was told they were on
+    // Home. The old assertion was a substring test for `aria-current=`, which
+    // this passes trivially — presence is not correctness.
+    describe: "copy-paste the mobile nav's aria-current back to pathname === '/'",
+    mutate: (s) =>
+      s.replace('aria-current={pathname === "/solutions" ? "page" : undefined}',
+                'aria-current={pathname === "/" ? "page" : undefined}'),
+  },
+  {
+    gate: "hero",
+    file: "src/app/page.tsx",
+    needsBuild: true,
+    // Bypass executed against this gate by an audit: two DIFFERENT asks sharing
+    // one destination passed, because the gate counted destinations only. The
+    // first fix for it was INERT — it used text.indexOf(tag), which returns the
+    // first match every time, and two identical tags are exactly this shape.
+    describe: "two different primary ASKS at the same destination",
+    mutate: (s) =>
+      s.replace('<Button href="/contact">Contact Us</Button>\n            <Button',
+                '<Button href="/contact">Get the Free Audit</Button>\n            <Button'),
+  },
+  {
+    gate: "geometry",
+    file: "src/components/Navbar.tsx",
+    needsBuild: true,
+    // The open phone menu measured 67x32, 105x32, 89x32 while verify:geometry
+    // was green — it only ever rendered first paint and never clicked the
+    // hamburger. First paint is not the only state a phone user sees.
+    describe: "shrink the OPEN phone menu's links back to 32px",
+    mutate: (s) =>
+      s.replace(/inline-flex min-h-\[44px\] items-center px-4 text-2xl/g, "text-2xl"),
+  },
+  {
+    gate: "geometry",
+    file: "src/app/layout.tsx",
+    needsBuild: true,
+    // WCAG 2.4.1 Bypass Blocks, Level A — the one Level A failure the audit
+    // found. Six Tab presses to reach main content, on every route.
+    describe: "remove the skip link — Level A, and it must go RED on ABSENCE",
+    mutate: (s) => s.replace('href="#main"', 'data-was-skip-link="#main"'),
+  },
+  {
+    gate: "geometry",
+    file: "src/app/layout.tsx",
+    needsBuild: true,
+    // Protects the exemption from becoming a loophole. verify:geometry exempts
+    // VISUALLY HIDDEN controls from the 44px rule, because 2.5.5 sizes pointer
+    // targets and a clipped element is not presented to a pointer. The
+    // exemption keys on the CLIP IDIOM, never on being small — so an element
+    // that is small and NOT clipped must still fail.
+    describe: "make the skip link small but NOT clipped — the exemption must not cover it",
+    mutate: (s) => s.replace("sr-only focus:not-sr-only", "inline-block h-2 w-2 overflow-hidden"),
+  },
+  {
     gate: "geometry",
     file: "src/components/Footer.tsx",
     needsBuild: true,

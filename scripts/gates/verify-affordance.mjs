@@ -56,6 +56,38 @@ if (!nav) {
     "Navbar.tsx sets no aria-current — nothing marks the current page, and every " +
       "nav item computed identically before this gate existed"
   );
+} else {
+  // PRESENCE IS NOT CORRECTNESS. This gate asserted only that the string
+  // `aria-current=` appeared somewhere in the source, and passed while the
+  // phone menu reported Home as the current page on ALL THREE routes: the
+  // three mobile links were copy-pasted and every one read `pathname === "/"`.
+  // So on /solutions and /contact, a screen-reader user was told they were on
+  // Home — which is worse than the "nothing marks the current page" this gate
+  // was written to prevent. Found by a dispatched audit that drove the open
+  // menu; no substring test could have caught it.
+  //
+  // Each link's predicate must name that link's OWN href.
+  const src = stripComments(nav.text);
+  const links = [
+    ...src.matchAll(/href="([^"]+)"[\s\S]{0,240}?aria-current=\{pathname === "([^"]+)"/g),
+  ];
+  if (links.length === 0) {
+    failures.push(
+      "Navbar.tsx has aria-current but this gate could not pair a single one with an " +
+        "href — the markup changed shape and the check can no longer see its subject. " +
+        "That is not a pass."
+    );
+  }
+  for (const [, href, tested] of links) {
+    checked++;
+    if (href !== tested) {
+      failures.push(
+        `Navbar.tsx — the link to "${href}" marks itself current when pathname is ` +
+          `"${tested}". A nav item that claims to be a different page tells a ` +
+          `screen-reader user they are somewhere they are not.`
+      );
+    }
+  }
 }
 
 report("links are distinguishable and the current page is marked", failures, checked);

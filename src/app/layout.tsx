@@ -1,4 +1,4 @@
-import type { Metadata } from "next";
+import type { Metadata, Viewport } from "next";
 import { Inter } from "next/font/google";
 import "./globals.css";
 import { Navbar } from "@/components/Navbar";
@@ -9,6 +9,10 @@ const inter = Inter({
   subsets: ["latin"],
   variable: "--font-sans",
 });
+
+export const viewport: Viewport = {
+  themeColor: "#0B0B0C",
+};
 
 export const metadata: Metadata = {
   // Required for absolute URLs in the sitemap, canonical and OG tags. Without
@@ -40,7 +44,7 @@ export default function RootLayout({
   children: React.ReactNode;
 }) {
   return (
-    <html lang="en" className={inter.variable}>
+    <html lang="en" className={inter.variable} style={{ colorScheme: "dark" }}>
       <body className="bg-carbon text-muted">
         {/* Structured data, built from the SAME source as the visible block.
             The fault that matters is not a missing name — it is a name that
@@ -68,8 +72,16 @@ export default function RootLayout({
             }),
           }}
         />
+        <a
+          href="#main"
+          className="sr-only focus:not-sr-only focus:fixed focus:left-4 focus:top-4 focus:z-50 focus:inline-flex focus:min-h-[44px] focus:items-center focus:rounded-lg focus:bg-steel focus:px-5 focus:text-carbon"
+        >
+          Skip to content
+        </a>
         <Navbar />
-        <main>{children}</main>
+        <main id="main" tabIndex={-1}>
+          {children}
+        </main>
         <Footer />
       </body>
     </html>
