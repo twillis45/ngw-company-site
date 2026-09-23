@@ -158,7 +158,7 @@ code{font-family:"IBM Plex Mono",monospace;font-size:.86em;background:var(--surf
     and no mechanism existed by which anyone could have found out.</p>
 
   <div class="stamp">
-    <span><b>Recorded</b> <span data-recorded="2026-09-23T14:49:38.920Z">2026-09-23</span></span>
+    <span><b>Recorded</b> <span data-recorded="2026-09-23T15:10:49.819Z">2026-09-23</span></span>
     <span><b>Gates</b> 0–7 · all passed-with-conditions</span>
     <span><b>HEAD</b> d7c9f3ed</span>
     <span><b>Live</b> noguessworksystems.com</span>
@@ -208,6 +208,41 @@ code{font-family:"IBM Plex Mono",monospace;font-size:.86em;background:var(--surf
   <section class="sec">
     <h2>Corrections</h2>
     <p>What was believed, what replaced it, and the evidence. The original stays visible.</p>
+
+    <div class="corr">
+      <p class="was">The gates are hardened now &mdash; four bypasses closed, three blind gates
+        fixed, everything red-proofed.</p>
+      <p class="now"><b>A dispatched audit found a defect I had written hours earlier and
+        defeated two more gates by executing the bypass.</b> Navbar&rsquo;s three mobile links
+        were copy-pasted and every one read <code>pathname === "/"</code>, so on
+        <code>/solutions</code> and <code>/contact</code> a screen-reader user was told they
+        were on Home &mdash; <b>worse than the &ldquo;nothing marks the current page&rdquo;
+        that <code>verify:affordance</code> exists to prevent</b>. That gate was GREEN: its
+        assertion was a substring test for <code>aria-current=</code>, and the attribute was
+        present. <b>Presence is not correctness.</b> <code>verify:hero</code> passed two
+        different asks at one destination and two form submits that collapsed to a single
+        literal; <code>verify:geometry</code> rendered first paint only, so the open phone
+        menu&rsquo;s 32px links were never measured. And the site had <b>no skip link at all
+        &mdash; six Tab presses to content, WCAG 2.4.1, Level A</b>.</p>
+      <p class="src">2026-09-23 &middot; <code>web-design-guidelines</code>, dispatched
+        &middot; the author checking the author finds nothing, which is the whole argument
+        for the instrument</p>
+    </div>
+
+    <div class="corr">
+      <p class="was">The fix for the hero bypass closes it.</p>
+      <p class="now"><b>It was INERT, and it passed the very probe it was written against.</b>
+        It located each control&rsquo;s label with <code>text.indexOf(tag)</code> &mdash; which
+        returns the FIRST match every time, and <b>two identical tags are exactly the shape of
+        this bypass</b>, so both labels resolved to the same string and the count stayed at
+        one. Caught only by re-running the audit&rsquo;s probe instead of trusting the fix.
+        Third inert fix this session. Also corrected: <code>verify:hero</code>&rsquo;s own
+        header comment claimed <em>&ldquo;the looser rule STILL FAILS the home page as it
+        stands today&rdquo;</em> &mdash; true when written, and the home page was fixed in the
+        same commit. <b>A gate that states something untrue about the code is the same defect
+        class as one that measures nothing.</b></p>
+      <p class="src">2026-09-23 &middot; both bypasses now RED &middot; redproof 41/41, 0 unevaluated</p>
+    </div>
 
     <div class="corr">
       <p class="was">&ldquo;NO GUESSWORK&rdquo; is a live class-9 mark held by No Guess Work LLC,
@@ -686,7 +721,7 @@ const STAGES = [
     items:[
       ["m","The spine defines no gate at this stage. Inventing a checkbox here would invent an obligation that can never be discharged.",""],
       ["h","<code>test-driven-development</code>","Gates were written and watched failing <b>before</b> the fixes. The commit order preserves it: the suite commit is red on its own commit, deliberately"],
-      ["n","<span class='tag pub'>public</span> <code>web-design-guidelines</code> on UI code that ships",""],
+      ["h","<span class='tag pub'>public</span> <code>web-design-guidelines</code> on UI code that ships","<b>RAN 2026-09-23 as its own dispatch</b>, closing a public gate carried as NOT RUN since the retrofit began &mdash; and stage 9 re-runs every public gate retroactively, so it was owed. It drove the built export in real Chromium and was briefed to <b>attack</b> the existing gates rather than duplicate them. <b>It found a defect the author had written hours earlier, and defeated two of the author&rsquo;s gates by executing the bypass.</b> Findings at stage 4"],
       ["h","<code>karpathy-guidelines</code> on the diff","Every changed line traces to a named falsehood. Three real defects were found and deliberately left out of this pass to keep the diff traceable"],
       ["h","Admin / ops console created here, not deferred to stage 6","<code>docs/ADMIN-CONSOLE.md</code> — and its most important row is the one that says the lost submissions are not recoverable"],
       ["h","Run it on the real target","Dev server driven in the browser pane; the deployed site smoke-tested against the live origin"]]},

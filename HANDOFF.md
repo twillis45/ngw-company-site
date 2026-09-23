@@ -11,7 +11,7 @@
 | Node | **≥ 20.9 required.** Pinned in `engines` + `.nvmrc`. The build fails hard below it and nothing said so before. |
 | Gates | **13**, all reachable from `verify:all` **and from CI** (both asserted, not eyeballed). **12 PASS, 1 FAIL** — the one red is `verify:headers`, owner-held |
 | CI | `.github/workflows/verify.yml` — **green on `d5762c1`** (run 35872315248), the last commit that changed code. `gates (code)` and `red-proof` block; `live origin` is continue-on-error and RED by design until the edge rule lands, re-read daily by cron. **While one gate is permanently non-blocking, a green CI does not mean what it appears to** — the owner ruling on that is open |
-| Red-proofs | **36 cases, 36 as expected, 0 NOT as expected, 0 unevaluated** — 28 file-mutation cases in `redproof.mjs` plus 6 generated origin cases. They run **in CI**, so each fault is reintroduced on a clean runner rather than only on this machine. Two of the newest first scored `?`: they broke the BUILD, so the gate never ran, and **an unevaluated case is not a result** — both were rewritten to compile and still be wrong |
+| Red-proofs | **41 cases, 41 as expected, 0 NOT as expected, 0 unevaluated** — 28 file-mutation cases in `redproof.mjs` plus 6 generated origin cases. They run **in CI**, so each fault is reintroduced on a clean runner rather than only on this machine. Two of the newest first scored `?`: they broke the BUILD, so the gate never ran, and **an unevaluated case is not a result** — both were rewritten to compile and still be wrong |
 | Newest gates | `verify:identity` (the site names who is behind it, and the JSON-LD agrees), `verify:hero` (exactly one hero *action* per route — counts destinations, not elements), `verify:geometry` (real Chromium at 375/768/1280 — tap targets and document overflow) |
 | Browser dep | `playwright@1.58.0` **devDependency**, added for `verify:geometry`. CI installs chromium. The gate cannot exist without a real layout engine, and it must run in CI or `verify:coverage` refuses it. |
 
@@ -95,6 +95,21 @@ Every item below was a live falsehood on the company's public face before this.
   `.vercel/project.json`. Production is Render, not Vercel — confirmed by
   `rndr-id` on a cache MISS and the absence of `x-vercel-id`. Do not treat that
   file as evidence about production.
+- **Presence is not correctness, and a gate can be green on a defect worse
+  than the one it prevents.** `verify:affordance` asserted that the substring
+  `aria-current=` appeared in `Navbar.tsx`. It was there — on three mobile
+  links all copy-pasted to `pathname === "/"`, so on `/solutions` and
+  `/contact` a screen-reader user was told they were on Home. Found by a
+  dispatched audit that drove the open menu; no substring test could have
+  caught it.
+- **A fix can pass the very probe it was written against.** The first fix for
+  the `verify:hero` bypass used `text.indexOf(tag)` to find each control's
+  label — and `indexOf` returns the first match every time, while two identical
+  tags are exactly the shape of that bypass. Third inert fix this session. Run
+  the probe; never trust the fix.
+- **Gates render first paint unless you make them do otherwise.**
+  `verify:geometry` was green while the open phone menu carried 32px targets,
+  because it never clicked the hamburger. It drives interactive states now.
 - **`verify:copy` went blind once already.** When the year became
   `© {site.year}`, React emitted `© <!-- -->2026` and the old regex matched
   nothing — passing on every page while measuring nothing. It now fails on
