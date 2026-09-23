@@ -22,6 +22,22 @@ purpose is to be checked — which is the point.
 | `Workflow Automation` | The Asana governance-cycle work and the expense-reconciler build are both real, executed, and recorded. | **No external party has received either.** The ledger prohibits "client", "engagement" and "delivered to" for both. Describe the mechanism, never a delivered outcome. |
 | `Custom Business Systems` | The Asana governance-cycle work and the expense-reconciler build, plus the shipped product surfaces in this portfolio. | Same prohibition as above: no external party has received either, so describe what is built and never assert someone bought it. |
 
+## Worked problems
+
+These are not capabilities. They are two problems worked end to end, published
+under the claim ledger's own framing — *"worked problems, not client
+engagements"* — because no outside party has received either. Every figure on
+the page names its check, and every entry states where its evidence stops.
+
+| Title (as it ships) | Backing in the claim ledger | Constraint the ledger puts on the wording |
+|---|---|---|
+| `Reconciling a corporate card against an expense system` | PROVEN rows 1, 2, 3, 4, 5, and 11 of `ngw-consulting/case-studies/CLAIM-LEDGER.md`: 211 assertions; the 118 → 80/25/17 split; the $1,802 short; the to-the-cent assertion at `engine.test.js:22`; zero network requests at `render.test.js:102`; and 19% calendar corroboration. | The corpus is a **fixture**, and row 2 is FALSE if presented as a forecast. The $1,802 is **synthetic and labeled**. Row 11 is proven **as a limit** — it is disclosed, never relied on. All three qualifiers ship with their figures. |
+| `A governance cycle that spans several tools` | PROVEN rows 8, 9, 12 and 13, plus row 10 as PARTIAL: multi-homing on a free workspace; Starter $10.99 / Advanced $24.99; seven projects in a personal workspace; and the self-disclaimer that it was designed from a verbal description. | Row 10's arithmetic is exact and its **headcount is illustrative** — it may never be stated as anyone's actual saving. Row 13 is the anti-claim and the ledger says leave it in; it ships verbatim in the entry's limit. |
+
+**Removing a qualifier turns a proven row into a false one.** That is the only
+way to break these two entries, and it does not look like vandalism — it looks
+like tightening the copy.
+
 ## One capability, one name
 
 This offering shipped under **two** public names — `Custom Systems Design` on the

@@ -161,4 +161,55 @@ if (!existsSync(backingPath)) {
   }
 }
 
+// 5. THE QUALIFIERS ON THE WORKED PROBLEMS.
+//
+// The claim ledger marks these rows PROVEN *with conditions attached*: the
+// corpus is a fixture and row 2 is FALSE if presented as a forecast; the
+// $1,802 is synthetic; the twenty-person headcount is illustrative and may
+// never be stated as anyone's actual saving. Removing a qualifier turns a
+// proven row into a false one — and that edit does not look like vandalism,
+// it looks like tightening the copy, which is exactly why it needs a gate
+// rather than a note.
+//
+// Also asserted: every worked problem states where its evidence STOPS. The
+// ledger lists the anti-claims and says to leave them in; a page whose promise
+// is "evidence you can check" has to show the reader the edge of it.
+// Each entry is the QUALIFYING PHRASE, not a bare word. A first version
+// checked for "fixture" and stayed green when the qualifier was stripped from
+// the prose, because the filename `fixtures/STATEMENT-TOTAL.txt` still matched
+// — an incidental occurrence satisfying a check about meaning. It was the most
+// important row of the four: the ledger records row 2 as FALSE if the split is
+// presented as a forecast rather than as a property of the fixture corpus.
+const QUALIFIERS = [
+  ["fixture corpus", "the corpus is a fixture; row 2 is FALSE presented as a forecast"],
+  ["not a forecast", "row 2's figures are properties of the corpus, not a prediction"],
+  ["synthetic", "the $1,802 is synthetic and must be labeled"],
+  ["illustrative", "the twenty-person headcount is illustrative, never anyone's actual saving"],
+  ["never connected", "the anti-claim the ledger says to leave in"],
+];
+
+const homePage = pages.find((f) => /out\/index\.html$/.test(f.rel));
+if (homePage) {
+  const text = stripComments(homePage.text).replace(/<[^>]+>/g, " ");
+  if (text.includes("Worked problems")) {
+    for (const [q, why] of QUALIFIERS) {
+      checked++;
+      if (!new RegExp(q, "i").test(text)) {
+        failures.push(`the worked problems ship without the qualifier "${q}" — ${why}`);
+      }
+    }
+    checked++;
+    const limits = (text.match(/What it does not show/g) || []).length;
+    const entries = (text.match(/The guessing removed:/g) || []).length;
+    if (entries === 0) {
+      failures.push("a Worked problems section with no entries — this gate cannot pass on an empty one");
+    } else if (limits < entries) {
+      failures.push(
+        `${entries} worked problem(s) but only ${limits} state where the evidence stops. ` +
+          `The ledger lists the anti-claims and says to leave them in.`
+      );
+    }
+  }
+}
+
 report("every shipped claim survives the claim ledger", failures, checked);

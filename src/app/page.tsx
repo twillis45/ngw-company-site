@@ -1,5 +1,6 @@
 import { Button } from "@/components/Button";
 import { ServiceCard } from "@/components/ServiceCard";
+import { WorkedProblem } from "@/components/WorkedProblem";
 
 // Two cards were removed on 2026-09-23. Neither had a backing artifact in
 // ngw-consulting/case-studies/CLAIM-LEDGER.md, and one of the two is also the
@@ -26,6 +27,52 @@ const supportingPoints = [
   "A confident tone is never a substitute for a check",
   "Hints are labeled hints; a measured 0.6% is reported as 0.6%",
   "Every system ends on an action, not a report",
+];
+
+// Sourced line by line from the PROVEN rows of
+// ngw-consulting/case-studies/CLAIM-LEDGER.md. Nothing here is written from
+// memory, and every qualifier the ledger attaches to a figure is carried with
+// it — "fixture corpus", "synthetic", "illustrative headcount". Removing a
+// qualifier turns a proven row into a false one, and verify:claims refuses it.
+const workedProblems = [
+  {
+    number: "01",
+    title: "Reconciling a corporate card against an expense system",
+    removed:
+      "The guessing removed: which of a month's charges are actually unexplained, and which only look that way because two systems disagree about the same transaction.",
+    evidence: [
+      { claim: "118 charges split into 80 cleared, 25 assistant tasks, 17 questions for the CEO",
+        check: "engine.test.js, on the fixture corpus" },
+      { claim: "Reports the account short by $1,802.00",
+        check: "fixtures/STATEMENT-TOTAL.txt — synthetic, and labeled" },
+      { claim: "A test asserts the collapsed total matches the export to the cent",
+        check: "engine.test.js:22" },
+      { claim: "Zero network requests; the data never leaves the page",
+        check: "render.test.js:102, verifiable in DevTools" },
+      { claim: "211 assertions pass",
+        check: "./test/run.sh" },
+    ],
+    limit:
+      "The corpus is a fixture, not a real month — the 118, the 80/25/17 split and the $1,802 are properties of that corpus and not a forecast. Calendar corroboration sits at 19%, 23 of 118, and that is the model's weakest joint; it is disclosed rather than relied on.",
+  },
+  {
+    number: "02",
+    title: "A governance cycle that spans several tools",
+    removed:
+      "The guessing removed: whether one item tracked in several places can stay one item, and what the tooling actually costs to do it.",
+    evidence: [
+      { claim: "Multi-homing works, and needs no paid plan",
+        check: "Executed against the API on a free workspace, 6 Aug 2026" },
+      { claim: "Starter $10.99, Advanced $24.99 — and Advanced adds nothing this design uses",
+        check: "asana.com/pricing, re-fetched" },
+      { claim: "$3,360 a year on a twenty-person staff",
+        check: "($24.99 − $10.99) × 20 × 12 — headcount illustrative" },
+      { claim: "Seven projects stood up, four before and three after",
+        check: "GID table, 6 Aug 2026 — a personal workspace" },
+    ],
+    limit:
+      "Designed from a verbal description. The company workspace was never connected, six assumptions in the plan are flagged and uncorrected, and the twenty-person figure is arithmetic on an illustrative headcount — never anyone's actual saving.",
+  },
 ];
 
 export default function Home() {
@@ -134,6 +181,28 @@ export default function Home() {
       </section>
 
       {/* Contact CTA */}
+      {/* Worked problems */}
+      <section className="bg-carbon py-24 md:py-28 border-y border-hair">
+        <div className="mx-auto max-w-[760px] px-6 md:px-12">
+          <p className="mb-4 text-[13px] font-medium uppercase tracking-[0.08em] text-faint">
+            Worked problems
+          </p>
+          <h2 className="mb-5 text-[28px] font-semibold leading-tight text-ink md:text-[40px] md:leading-[48px]">
+            Two of them, with the checks
+          </h2>
+          <p className="mb-12 max-w-[62ch] text-[17px] leading-7 text-muted">
+            These are problems worked through end to end, not accounts of work
+            done for someone else — no outside party has received either. Every
+            figure below names the check behind it, and every one says where the
+            evidence stops.
+          </p>
+          <div className="space-y-14">
+            {workedProblems.map((w) => (
+              <WorkedProblem key={w.number} {...w} />
+            ))}
+          </div>
+        </div>
+      </section>
       <section className="bg-surface py-20 md:py-24">
         <div className="mx-auto max-w-[520px] px-6 md:px-12 text-center">
           <h2 className="mb-5 text-[28px] font-semibold leading-tight text-ink md:text-[40px] md:leading-[48px]">
