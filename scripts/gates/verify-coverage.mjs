@@ -21,10 +21,40 @@ const entry = pkg.scripts?.["verify:all"] || "";
 const reached = onDisk.filter((n) => entry.includes(`verify:${n}`));
 const missed = onDisk.filter((n) => !reached.includes(n));
 
-console.log(`\ngates on disk:       ${onDisk.length}  (${onDisk.join(", ")})`);
+// A gate in verify:all but absent from CI is exercised by whoever remembers to
+// run it locally, and never by the push that deploys. That is the same blind
+// spot as an entry point missing a suite, one level up — so it is asserted, not
+// assumed. Both jobs count: a gate may be split into its own job (the live
+// origin one is), but it may not vanish.
+let inCi = [];
+let ciPresent = false;
+try {
+  const wf = readFileSync(join(ROOT, ".github/workflows/verify.yml"), "utf8");
+  ciPresent = true;
+  inCi = onDisk.filter((n) => wf.includes(`verify:${n}`));
+} catch {
+  /* no workflow — reported below, not silently treated as covered */
+}
+const ciMissed = ciPresent ? onDisk.filter((n) => !inCi.includes(n)) : onDisk;
+
+console.log(`\ngates on disk:         ${onDisk.length}  (${onDisk.join(", ")})`);
 console.log(`reached by verify:all: ${reached.length}`);
-if (missed.length) {
-  console.log(`\nFAIL  NEVER RUN AS PART OF THE SET: ${missed.join(", ")}`);
+console.log(`reached by CI:         ${ciPresent ? inCi.length : "NO WORKFLOW"}`);
+
+const failures = [];
+if (missed.length) failures.push(`NEVER RUN AS PART OF THE SET: ${missed.join(", ")}`);
+if (!ciPresent) {
+  failures.push(
+    "no .github/workflows/verify.yml — the gates run only when a person runs them, " +
+      "and never on the commit that deploys"
+  );
+} else if (ciMissed.length) {
+  failures.push(`IN verify:all BUT NOT IN CI: ${ciMissed.join(", ")}`);
+}
+
+if (failures.length) {
+  console.log("");
+  for (const f of failures) console.log(`FAIL  ${f}`);
   process.exit(1);
 }
-console.log(`\nPASS  every gate on disk is reachable from verify:all`);
+console.log(`\nPASS  every gate on disk is reachable from verify:all AND from CI`);

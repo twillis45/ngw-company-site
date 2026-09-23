@@ -1,0 +1,87 @@
+name: verify
+
+# This repo auto-deploys to a public company site on every push to main, and
+# until now nothing ran the gates on the commit that deploys — so they
+# protected whoever remembered to run them locally, and nothing else.
+#
+# TWO JOBS ON PURPOSE, and the split is the honest part.
+#
+#   `gates`  — everything that is a property of THIS CODE. Blocking. A failure
+#              here is a regression somebody just introduced.
+#   `origin` — verify:headers, which reads the LIVE origin. It is RED today and
+#              will stay red until an edge rule is added, which cannot be done
+#              from this repo at all. It is `continue-on-error` so it does not
+#              mask a real regression in `gates` — NOT because the finding is
+#              optional. It is a standing flag, and the day it turns green
+#              somebody should notice.
+#
+# The alternative — one job that is permanently red — is the failure mode the
+# doctrine names: a check that always fails is trained away rather than obeyed.
+# The alternative in the other direction, deleting the headers gate until it can
+# pass, is worse: it removes the only thing that would report the fix landing.
+
+on:
+  push:
+    branches: [main]
+  pull_request:
+  workflow_dispatch:
+  schedule:
+    # Re-read the live origin daily, so the headers gate flipping green is
+    # noticed without anyone running it by hand.
+    - cron: "17 13 * * *"
+
+jobs:
+  gates:
+    name: gates (code)
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with:
+          node-version-file: .nvmrc
+          cache: npm
+      - run: npm ci
+      # Build first: every gate but one reads out/, and a gate with nothing to
+      # read exits 2 rather than passing.
+      - run: npm run build
+      - run: npm run verify:coverage
+      - run: npm run verify:placeholders
+      - run: npm run verify:contact
+      - run: npm run verify:copy
+      - run: npm run verify:claims
+      - run: npm run verify:assets
+      - run: npm run verify:contrast
+
+
+  redproof:
+    name: red-proof (every gate watched failing)
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with:
+          node-version-file: .nvmrc
+          cache: npm
+      - run: npm ci
+      # A gate that has only ever been observed passing is a claim, not a check.
+      # This reintroduces all ten faults and asserts each gate notices; it exits
+      # non-zero on a GREEN-under-fault and on an unevaluated case alike,
+      # because the absence of a signal is not the presence of the opposite one.
+      - run: npm run redproof
+
+  origin:
+    name: live origin (expected RED until the edge rule lands)
+    runs-on: ubuntu-latest
+    continue-on-error: true
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with:
+          node-version-file: .nvmrc
+          cache: npm
+      - run: npm ci
+      - name: security headers on the live origin
+        run: |
+          npm run verify:headers
+          echo "verify:headers is GREEN — the edge rule has landed."
+          echo "Remove continue-on-error from this job and fold it into 'gates'."

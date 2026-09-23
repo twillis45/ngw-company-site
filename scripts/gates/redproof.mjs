@@ -72,6 +72,20 @@ const CASES = [
       s.replace("© {site.year} {site.legalName}. All rights reserved.", "All rights reserved."),
   },
   {
+    gate: "coverage",
+    file: ".github/workflows/verify.yml",
+    needsBuild: false,
+    deleteFile: true,
+    describe: "delete the CI workflow — the gates would run only when a person remembers",
+  },
+  {
+    gate: "coverage",
+    file: ".github/workflows/verify.yml",
+    needsBuild: false,
+    describe: "drop one gate from CI while leaving it in verify:all",
+    mutate: (s) => s.replace("      - run: npm run verify:contrast\n", ""),
+  },
+  {
     gate: "assets",
     file: "src/app/icon.svg",
     needsBuild: true,
