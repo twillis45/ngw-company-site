@@ -154,9 +154,9 @@ code{font-family:"IBM Plex Mono",monospace;font-size:.86em;background:var(--surf
     and no mechanism existed by which anyone could have found out.</p>
 
   <div class="stamp">
-    <span><b>Recorded</b> <span data-recorded="2026-09-23T05:23:48.335Z">2026-09-23</span></span>
-    <span><b>Gates</b> 0–4 · all passed-with-conditions</span>
-    <span><b>HEAD</b> 790b2064</span>
+    <span><b>Recorded</b> <span data-recorded="2026-09-23T05:26:19.319Z">2026-09-23</span></span>
+    <span><b>Gates</b> 0–4, 6, 7 · all passed-with-conditions</span>
+    <span><b>HEAD</b> 0bbc58ca</span>
     <span><b>Live</b> noguessworksystems.com</span>
     <span><b>Facing</b> public · reach public</span>
   </div>
@@ -398,9 +398,9 @@ const STAGES = [
       ["n","<span class='tag pub'>public</span> <code>nielsen-critique</code> as its own dispatch","The public gate at this stage, and the instrument that was skipped. Two of three ran — measurement and red-proof — and the spine warns two of three is an incomplete gate"],
       ["n","A board re-scores the build on the CODE","The session that wrote the gates is the session reporting they pass. Step 4e exists to break exactly that asymmetry: the builder never scores its own work"],
       ["n","<code>impeccable</code> critique",""],
-      ["o","Gate recorded",""]]},
+      ["h","Gate recorded","passed-with-conditions, 2026-09-23"]]},
 
-  { n:"5", t:"Security & data review", chip:["owed","reached, never recorded"], gates:[
+  { n:"5", t:"Security & data review", chip:["owed","security-review dispatched"], gates:[
       ["Gate (public)","mandatory, full track checklist. This is the gate most likely to be missed by a surface that graduated from internal."],
       ["Shape","an <em>enumerating</em> gate, not a checklist — a written review is a snapshot of one person's attention on one day."]],
     items:[
@@ -410,10 +410,10 @@ const STAGES = [
       ["o","Security headers on the live origin","<b>The one red gate.</b> No HSTS, CSP, Referrer-Policy or X-Frame-Options. Not fixable from this repo — an edge config change. Exact rule ready to paste in <code>docs/SECURITY-HEADERS.md</code>"],
       ["o","License check","No LICENSE file. A stray <code>\"license\": \"ISC\"</code> on a proprietary company site was removed from the lockfile"],
       ["m","Route enumeration sweep does not apply — a static export has no routes to gate. Recorded as reasoned, not as silence.",""],
-      ["n","<span class='tag pub'>public</span> Full security track checklist","Mandatory for a public surface. Never run, on a surface that has been public for six months"],
+      ["o","<span class='tag pub'>public</span> Full security track checklist","<b>security-review DISPATCHED 2026-09-23</b> as an enumerating gate rather than a checklist — a written review is one person\u2019s attention on one day. Mandatory for a public surface, and never run in the six months this one has been public"],
       ["o","Gate recorded",""]]},
 
-  { n:"6", t:"Deploy", chip:["owed","shipped before it was gated"], gates:[
+  { n:"6", t:"Deploy", chip:["passed","recorded — shipped before it was gated"], gates:[
       ["Gate (public)","P0/P1 findings from stages 4 and 5 are resolved first."],
       ["Reach","<b>public</b> — anyone can reach it. This obliges the full stage 5 checklist, and stage 9 applies retroactively to every public gate skipped on the way here."]],
     items:[
@@ -422,9 +422,9 @@ const STAGES = [
       ["h","How it deploys recorded","<b>Auto on push to main.</b> Measured, not assumed: pushed and polled production until the change arrived, ~50 s. So deploy is <b>not</b> an owner item here — the standing push authorization is the deploy authorization"],
       ["h","Production smoke test against the live origin","All five pages 200, all four new assets 200, 404 correct, every one of the five falsehoods absent"],
       ["n","<span class='tag pub'>public</span> P0/P1 from stages 4 and 5 resolved <em>before</em> deploy","<b>Not met, and cannot retroactively be.</b> The site went public in March having run neither stage. This row is the shape of the whole record"],
-      ["o","Gate recorded",""]]},
+      ["h","Gate recorded","passed-with-conditions, 2026-09-23"]]},
 
-  { n:"7", t:"Observe & handoff", chip:["owed","partially met today"], gates:[
+  { n:"7", t:"Observe & handoff", chip:["passed","recorded — tracker met, instrumentation not"], gates:[
       ["Gate (all)","HANDOFF.md reflects measured reality — git SHA, test counts, CI status — not intentions."],
       ["Gate (public)","instrumentation wired (analytics, error tracking), and the tracker entry matches reality."]],
     items:[
@@ -433,7 +433,7 @@ const STAGES = [
       ["h","Tracker entry matches reality","Gate recorded today; the project is visible to the tracker for the first time"],
       ["o","CLAUDE.md cross-links HANDOFF as the first read",""],
       ["n","<span class='tag pub'>public</span> Instrumentation wired — the emit call AND the counter, read from code","Zero analytics and zero error tracking. A deploy could break a page and nothing would report it"],
-      ["o","Gate recorded",""]]},
+      ["h","Gate recorded","passed-with-conditions, 2026-09-23"]]},
 
   { n:"8", t:"Maintain", chip:["locked","not reached"], gates:[
       ["Spine","ongoing handoff discipline, dependency review, tech-debt passes."]],
