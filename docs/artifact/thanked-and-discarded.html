@@ -158,9 +158,9 @@ code{font-family:"IBM Plex Mono",monospace;font-size:.86em;background:var(--surf
     and no mechanism existed by which anyone could have found out.</p>
 
   <div class="stamp">
-    <span><b>Recorded</b> <span data-recorded="2026-09-23T05:58:52.349Z">2026-09-23</span></span>
+    <span><b>Recorded</b> <span data-recorded="2026-09-23T06:36:20.381Z">2026-09-23</span></span>
     <span><b>Gates</b> 0–7 · all passed-with-conditions</span>
-    <span><b>HEAD</b> be4cb1b3</span>
+    <span><b>HEAD</b> 2847ab5f</span>
     <span><b>Live</b> noguessworksystems.com</span>
     <span><b>Facing</b> public · reach public</span>
   </div>
@@ -208,6 +208,43 @@ code{font-family:"IBM Plex Mono",monospace;font-size:.86em;background:var(--surf
   <section class="sec">
     <h2>Corrections</h2>
     <p>What was believed, what replaced it, and the evidence. The original stays visible.</p>
+
+    <div class="corr">
+      <p class="was">Eight gates, coverage asserted rather than eyeballed. Fourteen red-proofs, all RED. Zero neon teal.</p>
+      <p class="now"><b>A re-score board defeated four of them by executing the bypass.</b>
+        <code>verify:coverage</code> was satisfied by a <em>comment</em> — delete the entire
+        CI job that runs <code>verify:headers</code>, leave the comment naming it, and the
+        gate printed PASS. <code>verify:headers</code> had <b>no <code>script-src</code>
+        assertion at all</b>, so <code>script-src * 'unsafe-inline' https://evil.example</code>
+        passed. <code>verify:claims</code> credited a retired card because the
+        <em>removed</em>-cards table names it, and never looked at cards in a
+        differently-named array. And <b>the favicon shipped <code>#2DD4BF</code></b> — the
+        neon teal the spec bans by name — on every page, in the most-repeated mark on the
+        site, while every token and className was migrated off it.</p>
+      <p class="src">2026-09-23 · all four closed, each bypass reproduced against the fix ·
+        <code>verify:brand</code> added, which the board noted did not exist at all</p>
+    </div>
+
+    <div class="corr">
+      <p class="was">The red-proof runner prints what each fault changed, so an inert fault is visible as inert.</p>
+      <p class="now"><b>Wrong twice, on the one instrument whose job is telling an inert
+        fault from a blind gate.</b> First a length <em>delta</em>, so an equal-length
+        substitution printed 0 and read exactly like a fault that never fired. Then a
+        position-by-position count, which reported <b>5306 changed characters for a
+        one-character insertion</b> — every character after it shifts. Now it trims the
+        common prefix and suffix: the board's own 5306 probe reports 1.</p>
+      <p class="src">Second correction found by the re-score board, 2026-09-23</p>
+    </div>
+
+    <div class="corr">
+      <p class="was">The board was convened to score a finished build.</p>
+      <p class="now"><b>I shipped five commits to <code>main</code> — which auto-deploys —
+        while it was scoring</b>, including fixes to three of the five findings it had been
+        asked to rank. It refused to score a moving tree and extracted a clean one. Step 4e
+        requires the builder not to write the score; it also requires the builder to hold
+        still, and this one did not.</p>
+      <p class="src">Recorded against the process, not the board · 2026-09-23</p>
+    </div>
 
     <div class="corr">
       <p class="was">Zero verdict words on the site — measured with <code>curl</code> piped through a tag-stripping <code>sed</code>.</p>
@@ -337,6 +374,9 @@ code{font-family:"IBM Plex Mono",monospace;font-size:.86em;background:var(--surf
         <tr><td>Red-proofs passing</td><td class="num">6 of 6 RED</td><td><code>npm run redproof</code></td><td>every run</td></tr>
         <tr><td>Gates green</td><td class="num">7 of 8</td><td><code>npm run verify:all</code></td><td>every run</td></tr>
         <tr><td>Deploy propagation</td><td class="num">~50 s</td><td>Polled production until <code>robots.txt</code> returned 200</td><td>re-measure if the host changes</td></tr>
+        <tr><td>Re-score, overall</td><td class="num">5.3 / cap 7.6</td><td>Re-score board, on the code and the live origin. Brand conformance 4.5, security posture 3.8 were the lowest</td><td>on the next build round</td></tr>
+        <tr><td>Gate bypasses proven</td><td class="num">4</td><td>Each demonstrated by execution, not argued. All four closed and re-proved</td><td>every <code>redproof</code> run</td></tr>
+        <tr><td>Gates</td><td class="num">10, 9 green</td><td><code>verify:brand</code> and <code>verify:affordance</code> added after the board</td><td>every run</td></tr>
         <tr><td>Header assertions</td><td class="num">40 over 8 targets</td><td><code>verify:headers</code> — was 5 over 1, and asserted presence rather than value</td><td>every run</td></tr>
         <tr><td>Mobile overlay height</td><td class="num">0 px scrolled</td><td>Measured at 375×812; 740px at the top of the same page. Fixed, re-measured 740/740 on production</td><td>fixed 2026-09-23</td></tr>
         <tr><td>Severity-3 findings</td><td class="num">5</td><td>Nielsen gate. Four were defects introduced earlier the same day</td><td>4 fixed, 1 owner</td></tr>
@@ -348,7 +388,7 @@ code{font-family:"IBM Plex Mono",monospace;font-size:.86em;background:var(--surf
         <tr><td>Accent on off-white, before</td><td class="num">1.78 : 1</td><td>Computed; WCAG 1.4.3 needs 4.5</td><td>fixed 2026-09-23</td></tr>
         <tr><td>Accent on paper, after</td><td class="num">5.55 : 1</td><td>Computed. Chosen with margin rather than scraping the 4.5 bar</td><td>re-run every <code>verify:contrast</code></td></tr>
         <tr><td>Contrast pairs verified</td><td class="num">18</td><td><code>verify:contrast</code>, values read from <code>globals.css</code> rather than restated</td><td>every run</td></tr>
-        <tr><td>Red-proofs passing</td><td class="num">14 of 14 RED</td><td><code>npm run redproof</code> — 0 green, 0 unevaluated</td><td>every run</td></tr>
+        <tr><td>Red-proofs passing</td><td class="num">16 file + 6 origin</td><td><code>npm run redproof</code> — 0 green, 0 unevaluated</td><td>every run</td></tr>
         <tr><td>Trademark, class 9</td><td class="num">UNVERIFIED</td><td>&ldquo;NO GUESSWORK&rdquo; held by No Guess Work LLC for downloadable software. Primary record returned <b>HTTP 403</b>; this is reconnaissance, <b>not a clearance</b></td><td>before any app ships under the mark</td></tr>
         <tr><td>Rebuild estimate</td><td class="num">8–12 h</td><td>Dispatched <code>adopt-project</code> audit, against a 6–9 h adopt backlog</td><td>stale once the backlog is worked</td></tr>
         <tr><td>Demand-scan sources</td><td class="num">6 (5 load-bearing)</td><td>Google Suggest, HN 47822940, Consulting Success, Hinge, amazingcto.com, SBE Council. <b>Reddit coverage failed</b> — rate-limited through three paced retries, so the SMB buyer voice is untested</td><td>re-run with open discovery</td></tr>
@@ -447,7 +487,7 @@ const STAGES = [
       ["h","<code>red-proof</code> — every gate watched failing","<b>10 of 10 RED</b>, 0 green, 0 unevaluated. The first sweep reported 3 green under fault, which the spine warns is TWO hypotheses: it decomposed into ONE genuinely blind gate and TWO inert faults. The runner own change metric was also wrong — a length delta, so a same-length substitution printed 0 bytes and read exactly like an inert fault"],
       ["o","Measurement pass committed as a script","<b>Half done.</b> <code>verify:contrast</code> now computes 18 pairs on every run, so the colour half is permanently gated. The geometry half — tap targets, 375px overflow — was measured in a real browser but lives in a transcript, not in <code>scripts/</code>, so nothing re-runs it"],
       ["h","<span class='tag pub'>public</span> <code>nielsen-critique</code> as its own dispatch","<b>RUN, driven in a browser.</b> Five severity-3 findings, <b>four of them defects this session had introduced</b> — which is the argument for the instrument, not against it. All five addressed; four fixed and re-verified <em>on production</em>"],
-      ["o","A board re-scores the build on the CODE","Still owed. But the three dispatched instruments broke the asymmetry in practice: the security review proved <code>verify:headers</code> could not fail in the way that mattered, and the Nielsen gate found four defects in work written hours earlier"],
+      ["h","A board re-scores the build on the CODE","<b>RUN.</b> Overall <b>5.3</b> against a code-alone cap of <b>7.6</b>. It rejected two of nine claims and narrowed six — and it did not argue, it <b>defeated four gates by executing the bypass</b>. Every (a) item is now closed and every bypass reproduced against the fix"],
       ["n","<code>impeccable</code> critique",""],
       ["h","Gate recorded","passed-with-conditions, 2026-09-23"]]},
 

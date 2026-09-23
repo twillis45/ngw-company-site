@@ -163,6 +163,27 @@ nothing has audited this site for verdict tone, and nothing has checked that
 every state says what is next. The contact form's handoff panel is the one
 surface that now does.
 
+## Re-score board, 2026-09-23 — scores and what holds each cap
+
+Overall **5.3**, cap by code alone **7.6**. The cap column is the useful half:
+a dimension at its cap is **finished for the builder**, and grinding at it is
+the expensive mistake.
+
+| Dimension | Score | Cap | What holds the cap |
+|---|---|---|---|
+| Gate correctness | 7.3 | 9.5 | **Owner ruling** — may `verify:headers` stay `continue-on-error`? While one gate is permanently non-blocking, a green CI does not mean what it appears to. |
+| Claim integrity | 5.4 | 8.2 | **Owner ruling ×2** — which offering name survives; whether the five ✓ sentences and "Every AI agency sells more" may be asserted at all. A gate can enforce a ledger; it cannot decide what the ledger supports. |
+| Accessibility | 5.6 | 9.0 | **Real users** — VoiceOver and NVDA on the status panel and the open menu. Whether an injected live region announces is an empirical fact about assistive tech, not a property of the source. |
+| Brand conformance | 4.5 | 5.5 | **Owner ruling ×2** — what mark replaces the old one (an identity decision, not a code fix); which of the two home CTAs is the hero. |
+| Security posture | 3.8 | 6.0 | **Owner action outside this repo** — no file in this tree can set a response header. |
+
+**A process finding against this session, and it is fair:** five commits were
+pushed to `main` — which auto-deploys — *while the board was scoring*,
+including fixes to three of the five findings it had been asked to rank. It
+refused to score a moving tree and extracted a clean one. Step 4e requires the
+builder not to write the score; it also requires the builder to hold still.
+**Do not ship to `main` while a board is sitting.**
+
 ## Owner items the board named, in its ranked order
 
 1. **Transfer-lock, renew and DNSSEC-sign `noguessworksystems.com`.** Verified
