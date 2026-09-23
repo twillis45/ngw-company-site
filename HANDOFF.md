@@ -9,8 +9,9 @@
 | Live at | https://noguessworksystems.com — Cloudflare proxy in front of a **Render** origin |
 | Stack | Next.js 16.2.1 static export (`output: "export"`), React 19, Tailwind 4, TypeScript 6 |
 | Node | **≥ 20.9 required.** Pinned in `engines` + `.nvmrc`. The build fails hard below it and nothing said so before. |
-| Gates | 8, all reachable from `verify:all` (coverage asserted, not eyeballed). 7 PASS, 1 FAIL |
-| Red-proofs | 10, **all watched going red** — 0 green, 0 unevaluated |
+| Gates | 8, all reachable from `verify:all` **and from CI** (both asserted, not eyeballed). 7 PASS, 1 FAIL |
+| CI | `.github/workflows/verify.yml` — **green**. `gates (code)` and `red-proof` block; `live origin` is continue-on-error and RED by design until the edge rule lands, re-read daily by cron |
+| Red-proofs | 12, **all watched going red** — 0 green, 0 unevaluated, and they run **in CI**, so each fault is reintroduced on a clean runner rather than only on this machine |
 
 ## Spine position
 

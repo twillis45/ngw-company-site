@@ -154,9 +154,9 @@ code{font-family:"IBM Plex Mono",monospace;font-size:.86em;background:var(--surf
     and no mechanism existed by which anyone could have found out.</p>
 
   <div class="stamp">
-    <span><b>Recorded</b> <span data-recorded="2026-09-23T05:26:19.319Z">2026-09-23</span></span>
+    <span><b>Recorded</b> <span data-recorded="2026-09-23T05:33:11.436Z">2026-09-23</span></span>
     <span><b>Gates</b> 0–4, 6, 7 · all passed-with-conditions</span>
-    <span><b>HEAD</b> 0bbc58ca</span>
+    <span><b>HEAD</b> 383e3dc5</span>
     <span><b>Live</b> noguessworksystems.com</span>
     <span><b>Facing</b> public · reach public</span>
   </div>
@@ -298,7 +298,7 @@ code{font-family:"IBM Plex Mono",monospace;font-size:.86em;background:var(--surf
         <tr><td>Accent on off-white, before</td><td class="num">1.78 : 1</td><td>Computed; WCAG 1.4.3 needs 4.5</td><td>fixed 2026-09-23</td></tr>
         <tr><td>Accent on paper, after</td><td class="num">5.55 : 1</td><td>Computed. Chosen with margin rather than scraping the 4.5 bar</td><td>re-run every <code>verify:contrast</code></td></tr>
         <tr><td>Contrast pairs verified</td><td class="num">18</td><td><code>verify:contrast</code>, values read from <code>globals.css</code> rather than restated</td><td>every run</td></tr>
-        <tr><td>Red-proofs passing</td><td class="num">10 of 10 RED</td><td><code>npm run redproof</code> — 0 green, 0 unevaluated</td><td>every run</td></tr>
+        <tr><td>Red-proofs passing</td><td class="num">12 of 12 RED</td><td><code>npm run redproof</code> — 0 green, 0 unevaluated</td><td>every run</td></tr>
         <tr><td>Trademark, class 9</td><td class="num">UNVERIFIED</td><td>&ldquo;NO GUESSWORK&rdquo; held by No Guess Work LLC for downloadable software. Primary record returned <b>HTTP 403</b>; this is reconnaissance, <b>not a clearance</b></td><td>before any app ships under the mark</td></tr>
         <tr><td>Rebuild estimate</td><td class="num">8–12 h</td><td>Dispatched <code>adopt-project</code> audit, against a 6–9 h adopt backlog</td><td>stale once the backlog is worked</td></tr>
         <tr><td>Demand-scan sources</td><td class="num">6 (5 load-bearing)</td><td>Google Suggest, HN 47822940, Consulting Success, Hinge, amazingcto.com, SBE Council. <b>Reddit coverage failed</b> — rate-limited through three paced retries, so the SMB buyer voice is untested</td><td>re-run with open discovery</td></tr>
@@ -432,6 +432,7 @@ const STAGES = [
       ["h","The SHA is a real recent ancestor of HEAD","Not equal to HEAD — writing the SHA changes HEAD, so demanding equality makes the check unsatisfiable"],
       ["h","Tracker entry matches reality","Gate recorded today; the project is visible to the tracker for the first time"],
       ["o","CLAUDE.md cross-links HANDOFF as the first read",""],
+      ["h","CI runs the gates on the commit that DEPLOYS","<b>Added and verified this session.</b> Until now eight gates protected whoever remembered to run them locally, and nothing ran on the push that deploys to a live public site. Run 35822738649 on 383e3dc5: gates SUCCESS, red-proof SUCCESS, live origin FAILURE by design. <b>red-proof passing in CI</b> means all twelve faults are reintroduced on a clean runner, not only on one machine"],
       ["n","<span class='tag pub'>public</span> Instrumentation wired — the emit call AND the counter, read from code","Zero analytics and zero error tracking. A deploy could break a page and nothing would report it"],
       ["h","Gate recorded","passed-with-conditions, 2026-09-23"]]},
 
