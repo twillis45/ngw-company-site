@@ -80,21 +80,22 @@ export default function Home() {
         </div>
       </section>
 
-      {/* Why No Guesswork Systems */}
+      {/* Operating rules */}
       <section className="bg-paper py-24 md:py-28">
         <div className="mx-auto max-w-[1200px] px-6 md:px-12">
           <div className="flex flex-col gap-10 md:flex-row md:gap-16">
             <div className="md:w-1/2">
               <p className="mb-4 text-[13px] font-medium uppercase tracking-[0.08em] text-ink-support">
-                Our Approach
+                Operating rules
               </p>
               <h2 className="mb-5 text-[28px] font-semibold leading-tight text-carbon md:text-[40px] md:leading-[48px]">
-                Why No Guesswork Systems
+                How the work is done
               </h2>
               <p className="max-w-[480px] text-[17px] leading-7 text-ink-support">
-                The promise is narrow on purpose: less doubt, not more output. Every
-                AI agency sells more — more leads, more reach, bigger numbers on
-                a screenshot. This sells fewer things you have to take on faith.
+                The promise is narrow on purpose: less doubt, not more
+                output. These are the rules the work follows, not results it
+                has produced for someone — and they are checkable, which is the
+                whole point of stating them.
               </p>
             </div>
             <div className="md:w-1/2">
