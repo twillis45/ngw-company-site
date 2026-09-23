@@ -444,6 +444,43 @@ const CASES = [
   {
     gate: "contrast",
     file: "src/app/page.tsx",
+    needsBuild: true,
+    // An ALPHA form. The 17-pair token table has no entry for it and is
+    // structurally unable to compute it; only compositing what renders can.
+    describe: "an alpha text colour the token table cannot see",
+    mutate: (s) => s.replace('className="text-[17px] leading-7 text-muted"',
+                             'className="text-[17px] leading-7 text-ink/25"'),
+  },
+  {
+    gate: "contrast",
+    file: "src/app/solutions/page.tsx",
+    needsBuild: true,
+    // Protects the exemption from becoming a loophole. The gate exempts
+    // aria-hidden text because WCAG 1.4.3 exempts INCIDENTAL text and an
+    // aria-hidden element conveys nothing. It keys on the DECLARATION, never
+    // on being faint — so the same faintness without aria-hidden must fail.
+    describe: "the same faint numerals WITHOUT aria-hidden — the exemption must not cover them",
+    mutate: (s) => s.replace('<span aria-hidden="true" className="block text-[64px]',
+                             '<span className="block text-[64px]'),
+  },
+  {
+    gate: "contrast",
+    file: "scripts/gates/verify-contrast.mjs",
+    needsBuild: false,
+    // The regression this assertion actually suffered, made permanent. Reading
+    // fillStyle back returns oklab() UNCHANGED in Chrome, so every colour on a
+    // Tailwind 4 site failed to parse, every element was skipped, and the
+    // assertion examined ZERO elements while reporting "24 checked" — it was
+    // counting routes. It passed under a paragraph at 25% alpha. Rasterising
+    // is what makes it work; this proves the broken form cannot pass.
+    describe: "read fillStyle back instead of rasterising — the oklab blindness that shipped",
+    mutate: (s) =>
+      s.replace("          cv.fillRect(0, 0, 1, 1);\n          const d = cv.getImageData(0, 0, 1, 1).data;",
+                "          const v = cv.fillStyle;\n          const d = v.startsWith('#') ? [parseInt(v.slice(1,3),16),parseInt(v.slice(3,5),16),parseInt(v.slice(5,7),16),255] : [0,0,0,0];"),
+  },
+  {
+    gate: "contrast",
+    file: "src/app/page.tsx",
     needsBuild: false,
     describe: "put the bright accent back on the light section (1.78:1)",
     mutate: (s) =>

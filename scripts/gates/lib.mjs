@@ -110,3 +110,43 @@ export function visibleText(html) {
     .replace(/<[^>]+>/g, " ")
     .replace(/\s+/g, " ");
 }
+
+/**
+ * Serve the EXPORT on an ephemeral port, for gates that need a real browser.
+ *
+ * One copy, because two gates need it now and two copies of a helper are two
+ * chances for them to drift. Three things it gets right, each earned:
+ *   - A directory passes existsSync but is not a file, and readFileSync throws
+ *     EISDIR rather than serving a 404.
+ *   - An ephemeral port: a fixed one made an earlier runner die EADDRINUSE and
+ *     report exit 0 through a pipe, so a crashed gate read as a passing one.
+ *   - It serves out/, never the dev server — a gate reads what SHIPS.
+ */
+export async function serveExport() {
+  const { createServer } = await import("node:http");
+  const { extname } = await import("node:path");
+  const TYPES = { ".html":"text/html", ".css":"text/css", ".js":"text/javascript",
+    ".svg":"image/svg+xml", ".ico":"image/x-icon", ".png":"image/png",
+    ".woff2":"font/woff2", ".json":"application/json", ".txt":"text/plain", ".xml":"application/xml" };
+  const isFile = (x) => existsSync(x) && statSync(x).isFile();
+  const server = createServer((req, res) => {
+    const p = decodeURIComponent(req.url.split("?")[0]);
+    let f = null;
+    for (const cand of [join(OUT, p), join(OUT, p + ".html"), join(OUT, p, "index.html")]) {
+      if (isFile(cand)) { f = cand; break; }
+    }
+    if (!f) { res.writeHead(404); return res.end("not found"); }
+    res.writeHead(200, { "content-type": TYPES[extname(f)] || "application/octet-stream" });
+    res.end(readFileSync(f));
+  });
+  await new Promise((ok, bad) => { server.once("error", bad); server.listen(0, ok); });
+  return { server, base: `http://127.0.0.1:${server.address().port}` };
+}
+
+/** Every shipped route, as paths, minus the internal not-found. */
+export function shippedRoutes() {
+  return walk(OUT)
+    .filter((p) => p.endsWith(".html"))
+    .map((p) => "/" + p.slice(OUT.length + 1).replace(/index\.html$/, "").replace(/\.html$/, ""))
+    .filter((r) => !r.includes("_not-found"));
+}

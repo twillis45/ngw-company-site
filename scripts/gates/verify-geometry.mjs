@@ -21,41 +21,18 @@
 //    catches is one element wider than the screen, which looks fine at desktop
 //    and pushes the whole page sideways on a phone.
 
-import { readFileSync, existsSync, statSync } from "node:fs";
-import { join, extname } from "node:path";
-import { createServer } from "node:http";
 import { chromium } from "playwright";
-import { OUT, ROOT, report, requireExport, walk } from "./lib.mjs";
+import { report, requireExport, serveExport, shippedRoutes } from "./lib.mjs";
 
 requireExport();
 
-const TYPES = { ".html": "text/html", ".css": "text/css", ".js": "text/javascript",
-  ".svg": "image/svg+xml", ".ico": "image/x-icon", ".png": "image/png",
-  ".woff2": "font/woff2", ".json": "application/json", ".txt": "text/plain", ".xml": "application/xml" };
+// The server and route list come from lib. They were written here first and
+// then needed again by verify:contrast — and two copies of a helper are two
+// chances for them to drift, which is the failure this repo has already
+// recorded for an address and for a policy date.
+const { server, base } = await serveExport();
+const routes = shippedRoutes();
 
-const server = createServer((req, res) => {
-  const p = decodeURIComponent(req.url.split("?")[0]);
-  // A directory passes existsSync but is not a file, and readFileSync throws
-  // EISDIR rather than 404 — so resolve to a real FILE before serving.
-  const isFile = (x) => existsSync(x) && statSync(x).isFile();
-  let f = null;
-  for (const cand of [join(OUT, p), join(OUT, p + ".html"), join(OUT, p, "index.html")]) {
-    if (isFile(cand)) { f = cand; break; }
-  }
-  if (!f) { res.writeHead(404); return res.end("not found"); }
-  res.writeHead(200, { "content-type": TYPES[extname(f)] || "application/octet-stream" });
-  res.end(readFileSync(f));
-});
-
-// Ephemeral port. A fixed port made an earlier runner die EADDRINUSE and, worse,
-// report exit 0 through a pipe — so a crashed gate read as a passing one.
-await new Promise((ok, bad) => { server.once("error", bad); server.listen(0, ok); });
-const base = `http://127.0.0.1:${server.address().port}`;
-
-const routes = walk(OUT)
-  .filter((p) => p.endsWith(".html"))
-  .map((p) => "/" + p.slice(OUT.length + 1).replace(/index\.html$/, "").replace(/\.html$/, ""))
-  .filter((r) => !r.includes("_not-found"));
 
 const WIDTHS = [[375, 812, "phone"], [768, 1024, "tablet"], [1280, 900, "desktop"]];
 const MIN = 44;

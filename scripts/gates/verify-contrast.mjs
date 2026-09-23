@@ -14,10 +14,36 @@
 //   2. The light-surface sections are grepped to prove the failing pair is not
 //      reintroduced. A ratio table proves the tokens are capable of passing;
 //      only this proves they are used that way.
+//
+//   3. Every text run that ACTUALLY RENDERS is composited in a real browser.
+//      Added 2026-09-23 after an audit found the hole: assertions 1 and 2 read
+//      a table of 17 token pairs, and the site ships ALPHA forms — text-ink/85,
+//      text-ink/10 — which that table never composites. Every alpha variant
+//      happened to pass, so the blind spot was harmless on the day it was
+//      found; a future text-ink/40 would have sailed straight through. A gate
+//      that is only accidentally correct is a gate that has not run.
+//
+//      The browser resolves the colour, not this file: Tailwind 4 emits
+//      oklab(), and hand-parsing it here would be a second implementation of
+//      the thing the browser already does exactly.
+//
+//      BUT NOT VIA fillStyle. The first version of this assertion read
+//      `cv.fillStyle = css; return cv.fillStyle` — and Chrome hands the oklab
+//      string straight back, unconverted. The parser then returned null, every
+//      element hit `continue`, and the assertion examined ZERO elements while
+//      reporting "24 checked", because it was counting ROUTES. It passed under
+//      a paragraph rendered at 25% alpha. A check that cannot fail, written
+//      inside the gate whose whole purpose is catching checks that cannot fail.
+//
+//      Two fixes, and the second matters more. Rasterise: fill a pixel and
+//      read it back with getImageData, which forces sRGB. And NEVER `continue`
+//      past a colour that will not parse — an unreadable colour is now a
+//      FAILURE, because silently skipping is exactly how this went blind.
 
 import { readFileSync } from "node:fs";
 import { join } from "node:path";
-import { ROOT, sourceFiles, report } from "./lib.mjs";
+import { ROOT, sourceFiles, report, serveExport, shippedRoutes } from "./lib.mjs";
+import { chromium } from "playwright";
 
 const lin = (c) => { c /= 255; return c <= 0.03928 ? c / 12.92 : Math.pow((c + 0.055) / 1.055, 2.4); };
 const lum = (h) => { const [r,g,b] = [1,3,5].map(i => parseInt(h.slice(i,i+2),16));
@@ -95,6 +121,107 @@ for (const f of sourceFiles().filter((f) => f.rel.endsWith(".tsx"))) {
           `Use text-steel-brand on light surfaces.`
       );
     }
+  }
+}
+
+// 3. Composite what actually renders.
+{
+  const { server, base } = await serveExport();
+  const browser = await chromium.launch();
+  try {
+    const page = await browser.newPage({ viewport: { width: 1280, height: 900 } });
+    for (const route of shippedRoutes()) {
+      const r = await page.goto(base + route, { waitUntil: "networkidle" });
+      if (!r || !r.ok()) {
+        failures.push(`${route} — served HTTP ${r ? r.status() : "nothing"}; contrast could not be composited, which is NOT a pass`);
+        continue;
+      }
+      const bad = await page.evaluate(() => {
+        const cv = document.createElement("canvas").getContext("2d");
+        // The browser parses any CSS colour, including oklab(), and returns
+        // sRGB — so this file never reimplements a colour space.
+        // Rasterise, do not read fillStyle back. Chrome returns oklab()
+        // unchanged from fillStyle; painting a pixel forces sRGB.
+        const parse = (css) => {
+          cv.clearRect(0, 0, 1, 1);
+          cv.fillStyle = "rgba(0,0,0,0)";
+          cv.fillStyle = css;
+          cv.fillRect(0, 0, 1, 1);
+          const d = cv.getImageData(0, 0, 1, 1).data;
+          if (d[3] === 0 && !/transparent|rgba?\([^)]*,\s*0\s*\)/.test(css)) return null;
+          return [d[0], d[1], d[2], d[3] / 255];
+        };
+        const over = (fg, bg) => fg.slice(0,3).map((c,i) => c * fg[3] + bg[i] * (1 - fg[3]));
+        const lin = (c) => { c /= 255; return c <= 0.03928 ? c/12.92 : Math.pow((c+0.055)/1.055, 2.4); };
+        const lum = ([r,g,b]) => 0.2126*lin(r) + 0.7152*lin(g) + 0.0722*lin(b);
+        const ratio = (a,b) => { const l1=lum(a), l2=lum(b); return (Math.max(l1,l2)+0.05)/(Math.min(l1,l2)+0.05); };
+
+        // The effective background: walk up until something is opaque,
+        // compositing each translucent layer on the way.
+        const bgOf = (el) => {
+          let stack = [], n = el;
+          while (n && n !== document.documentElement.parentNode) {
+            const c = parse(getComputedStyle(n).backgroundColor);
+            if (c && c[3] > 0) { stack.push(c); if (c[3] === 1) break; }
+            n = n.parentElement;
+          }
+          let acc = [255,255,255];
+          for (const layer of stack.reverse()) acc = over(layer, acc);
+          return acc;
+        };
+
+        const out = [];
+        let els = 0;
+        for (const el of document.querySelectorAll("p,h1,h2,h3,h4,li,a,button,span,td,th,label,code,strong,em")) {
+          // Only elements with their own visible text.
+          const own = [...el.childNodes].filter((n) => n.nodeType === 3 && n.textContent.trim()).map((n) => n.textContent.trim()).join(" ");
+          if (!own) continue;
+          const cs = getComputedStyle(el);
+          if (cs.display === "none" || cs.visibility === "hidden" || parseFloat(cs.opacity) === 0) continue;
+          // WCAG 1.4.3 exempts INCIDENTAL text — "pure decoration". An element
+          // the author has marked aria-hidden is removed from the
+          // accessibility tree and conveys nothing, which is that exemption
+          // exactly. This keys on the DECLARATION, never on being faint: a
+          // faint element WITHOUT aria-hidden still fails, and a red-proof
+          // case holds that line so the exemption cannot become a loophole.
+          //
+          // If an aria-hidden element were the only carrier of some
+          // information, that is a worse bug than low contrast — and it is not
+          // this gate's to catch.
+          if (el.closest('[aria-hidden="true"]')) continue;
+          const rect = el.getBoundingClientRect();
+          if (rect.width === 0 || rect.height === 0) continue;
+          const fg = parse(cs.color);
+          // NOT `continue`. Skipping an unparseable colour is how this
+          // assertion silently emptied itself.
+          if (!fg) { out.push(`UNREADABLE colour on <${el.tagName.toLowerCase()}> "${own.slice(0,30)}": ${cs.color} — the gate could not composite it, which is not a pass`); continue; }
+          els++;
+          const composited = over(fg, bgOf(el));
+          const px = parseFloat(cs.fontSize);
+          const bold = parseInt(cs.fontWeight, 10) >= 700;
+          const large = px >= 24 || (px >= 18.66 && bold);
+          const min = large ? 3 : 4.5;
+          const got = ratio(composited, bgOf(el));
+          if (got < min) {
+            out.push(`<${el.tagName.toLowerCase()}> "${own.slice(0,34)}" ${got.toFixed(2)}:1 (needs ${min}, ${Math.round(px)}px${bold?" bold":""}) colour ${cs.color}`);
+          }
+        }
+        return { out, els };
+      });
+      // Count ELEMENTS, not routes. "24 checked" was 24 routes while zero
+      // elements were examined, which is how an empty sweep looked healthy.
+      checked += bad.els;
+      if (bad.els === 0) {
+        failures.push(`${route} — composited ZERO text elements. A sweep that examines nothing is not a pass.`);
+      }
+      for (const b of bad.out) {
+        failures.push(`${route} — RENDERED text fails WCAG 1.4.3: ${b}. The token table cannot see this; only compositing what ships can.`);
+      }
+    }
+    await page.close();
+  } finally {
+    await browser.close();
+    server.close();
   }
 }
 
