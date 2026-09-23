@@ -88,7 +88,7 @@ export default function Home() {
         <div className="mx-auto max-w-[1200px] px-6 md:px-12">
           <div className="flex flex-col gap-10 md:flex-row md:gap-16">
             <div className="md:w-1/2">
-              <p className="mb-4 text-[13px] font-medium uppercase tracking-[0.08em] text-accent">
+              <p className="mb-4 text-[13px] font-medium uppercase tracking-[0.08em] text-accent-deep">
                 Our Approach
               </p>
               <h2 className="mb-5 text-[28px] font-semibold leading-tight text-navy md:text-[40px] md:leading-[48px]">
@@ -104,7 +104,7 @@ export default function Home() {
               <ul className="space-y-8">
                 {supportingPoints.map((point) => (
                   <li key={point} className="flex items-start gap-3">
-                    <span className="mt-1 text-accent text-lg">✓</span>
+                    <span aria-hidden="true" className="mt-1 text-accent-deep text-lg">✓</span>
                     <span className="text-[17px] leading-7 text-charcoal">
                       {point}
                     </span>

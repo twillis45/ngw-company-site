@@ -1,17 +1,39 @@
 "use client";
 
 import Link from "next/link";
-import { useState, useEffect } from "react";
+import { useState, useEffect, useRef } from "react";
 
 export function Navbar() {
   const [scrolled, setScrolled] = useState(false);
   const [menuOpen, setMenuOpen] = useState(false);
+  const triggerRef = useRef<HTMLButtonElement>(null);
 
   useEffect(() => {
     const onScroll = () => setScrolled(window.scrollY > 20);
     window.addEventListener("scroll", onScroll);
     return () => window.removeEventListener("scroll", onScroll);
   }, []);
+
+  // An overlay that covers the page must also stop the page behind it from
+  // scrolling, close on Escape, and hand focus back where it came from.
+  // Without these the menu opens, the content scrolls underneath it, and a
+  // keyboard user is left with focus on a body they can no longer see.
+  useEffect(() => {
+    if (!menuOpen) return;
+    const prev = document.body.style.overflow;
+    document.body.style.overflow = "hidden";
+    const onKey = (e: KeyboardEvent) => {
+      if (e.key === "Escape") {
+        setMenuOpen(false);
+        triggerRef.current?.focus();
+      }
+    };
+    document.addEventListener("keydown", onKey);
+    return () => {
+      document.body.style.overflow = prev;
+      document.removeEventListener("keydown", onKey);
+    };
+  }, [menuOpen]);
 
   return (
     <nav
@@ -57,9 +79,13 @@ export function Navbar() {
 
         {/* Mobile hamburger */}
         <button
-          className="flex flex-col gap-[5px] md:hidden"
+          ref={triggerRef}
+          type="button"
+          className="-mr-2.5 flex h-11 w-11 flex-col items-center justify-center gap-[5px] md:hidden"
           onClick={() => setMenuOpen(!menuOpen)}
-          aria-label="Toggle menu"
+          aria-label={menuOpen ? "Close menu" : "Open menu"}
+          aria-expanded={menuOpen}
+          aria-controls="mobile-menu"
         >
           <span
             className={`block h-[2px] w-6 bg-white transition-transform ${
@@ -81,7 +107,10 @@ export function Navbar() {
 
       {/* Mobile overlay */}
       {menuOpen && (
-        <div className="fixed inset-0 top-[72px] bg-navy z-40 flex flex-col items-center justify-center gap-12 md:hidden">
+        <div
+          id="mobile-menu"
+          className="fixed inset-0 top-[72px] bg-navy z-40 flex flex-col items-center justify-center gap-12 md:hidden"
+        >
           <Link
             href="/"
             onClick={() => setMenuOpen(false)}

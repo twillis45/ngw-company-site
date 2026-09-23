@@ -11,6 +11,12 @@
   --color-off-white: #F8FAFC;
   --color-accent: #2DD4BF;
   --color-accent-hover: #14B8A6;
+  /* The bright accent is 10.05:1 on navy and 1.78:1 on off-white — correct in
+     one place, a hard WCAG 1.4.3 failure in the other. This is the same hue
+     carried to a luminance that passes on the light surface: 5.55:1, chosen
+     with margin rather than scraping the 4.5 bar. verify:contrast computes
+     both and refuses text-accent inside a bg-off-white section. */
+  --color-accent-deep: #0B7267;
   --color-accent-muted: rgba(45, 212, 191, 0.10);
 
   --font-sans: "Inter", ui-sans-serif, system-ui, sans-serif;
