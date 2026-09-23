@@ -28,6 +28,29 @@ export function Navbar() {
       if (e.key === "Escape") {
         setMenuOpen(false);
         triggerRef.current?.focus();
+        return;
+      }
+      // Trap Tab inside the overlay. Without this, five Tabs from the close
+      // button land on the hero CTA *behind* the menu — keyboard focus walks
+      // onto content the overlay is covering, and the visible focus ring goes
+      // somewhere the user cannot see.
+      if (e.key !== "Tab") return;
+      const panel = document.getElementById("mobile-menu");
+      if (!panel) return;
+      const stops = [
+        triggerRef.current,
+        ...panel.querySelectorAll<HTMLElement>("a[href], button:not([disabled])"),
+      ].filter(Boolean) as HTMLElement[];
+      if (stops.length === 0) return;
+      const first = stops[0];
+      const last = stops[stops.length - 1];
+      const active = document.activeElement;
+      if (e.shiftKey && (active === first || !stops.includes(active as HTMLElement))) {
+        e.preventDefault();
+        last.focus();
+      } else if (!e.shiftKey && active === last) {
+        e.preventDefault();
+        first.focus();
       }
     };
     document.addEventListener("keydown", onKey);
