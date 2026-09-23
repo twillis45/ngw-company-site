@@ -39,9 +39,17 @@ const OUTCOMES = [
 
 // Firm-voice: asserts a practice that has delivered.
 const FIRM_VOICE = [
-  [/\bwe help (organizations|businesses|companies|teams|clients)\b/i, "asserts delivery to a population"],
+  // First AND third person. The ledger prohibits the FACT ASSERTED, not a
+  // grammatical person — "No Guesswork Systems LLC helps businesses" and "we
+  // help businesses" assert the identical thing. A first version matched only
+  // "we help", so the third-person form shipped in the root description, on
+  // the home page and the 404, and survived a red-proof of the very gate
+  // written to catch it.
+  [/\b(we|[A-Z][\w ]*?(?:LLC|Inc|Systems))\s+helps?\s+(organizations|businesses|companies|teams|clients)\b/i,
+   "asserts delivery to a population"],
   [/\bour (focus|approach) is\b/i, "asserts an established practice"],
-  [/\bwe (build|design|develop|deliver)\b/i, "asserts work performed for someone"],
+  [/\b(we|[A-Z][\w ]*?(?:LLC|Inc|Systems))\s+(builds?|designs?|develops?|delivers?)\b/i,
+   "asserts work performed for someone"],
   [/\bclients?\b/i, "prohibited by the claim ledger"],
   [/\bengagements?\b/i, "prohibited by the claim ledger"],
   [/delivered to/i, "prohibited by the claim ledger"],
@@ -62,7 +70,16 @@ const pages = shippedFiles().filter((f) => f.rel.endsWith(".html"));
 let checked = 0;
 
 for (const f of pages) {
-  const text = stripComments(f.text).replace(/<[^>]+>/g, " ");
+  // Visible text AND meta content. Stripping tags erases <meta content="...">
+  // entirely, and that is what a link preview, a search result and a screen
+  // reader's page description actually show. The root description shipped
+  // "helps businesses reduce uncertainty and improve execution" on the home
+  // page and the 404 for hours after that sentence was removed from the body,
+  // because this gate could not see it.
+  const metaContent = (stripComments(f.text).match(/<meta[^>]+content="([^"]*)"/g) || [])
+    .map((m) => m.replace(/.*content="/, "").replace(/"$/, ""))
+    .join(" \n ");
+  const text = stripComments(f.text).replace(/<[^>]+>/g, " ") + " \n " + metaContent;
   checked++;
 
   for (const claim of OUTCOMES) {

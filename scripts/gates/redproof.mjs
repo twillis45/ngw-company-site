@@ -240,6 +240,36 @@ const CASES = [
       s.replace("Each system targets one specific act of guessing",
                 "We help organizations address inconsistent workflows and unclear"),
   },
+  // Two faults, each isolating ONE of the two holes found 2026-09-23. The
+  // firm-voice sentence shipped live in the root <meta description> for hours
+  // after it was removed from the page body, and survived a red-proof of the
+  // gate written to catch it — because TWO independent things were wrong and
+  // the first fix closed only one. Keep them separate: a single combined case
+  // goes green again the moment either hole reopens alone.
+  {
+    gate: "claims",
+    file: "src/app/layout.tsx",
+    needsBuild: true,
+    // Hole 1: verify:claims stripped tags to get text, and a <meta> tag has no
+    // text content — so the description was invisible to the gate entirely.
+    // FIRST person here, so this case fails only on the visibility hole.
+    describe: "firm-voice in the META DESCRIPTION only — a meta tag has no text content to strip",
+    mutate: (s) =>
+      s.replace("was created to take one act of guessing out of an operation at a time",
+                "We help businesses reduce uncertainty and improve execution"),
+  },
+  {
+    gate: "claims",
+    file: "src/app/page.tsx",
+    needsBuild: true,
+    // Hole 2: the pattern matched "we help businesses" and not "X helps
+    // businesses". Same assertion, different grammatical person. In the BODY,
+    // so this case fails only on the grammar hole.
+    describe: "THIRD-person firm voice in the body — same assertion, different grammar",
+    mutate: (s) =>
+      s.replace("Each system targets one specific act of guessing",
+                "No Guesswork Systems LLC helps businesses with"),
+  },
   {
     gate: "claims",
     file: "src/app/page.tsx",

@@ -19,8 +19,13 @@ export const metadata: Metadata = {
     default: "No Guesswork Systems — AI, Automation & Decision-Support Systems",
     template: "%s — No Guesswork Systems",
   },
+  // This is what a link preview shows, and it outlived every rewrite of the
+  // page body — "helps businesses reduce uncertainty and improve execution" is
+  // the firm-voice the claim ledger prohibits, still shipping on the home page
+  // and the 404 hours after it was removed from the visible copy. It survived
+  // because verify:claims read text content, and a meta tag has none.
   description:
-    "No Guesswork Systems LLC helps businesses reduce uncertainty and improve execution through practical AI, workflow automation, and business systems design.",
+    "No Guesswork Systems LLC was created to take one act of guessing out of an operation at a time, and to show the evidence so you can verify it rather than trust it.",
   openGraph: {
     type: "website",
     locale: "en_US",
