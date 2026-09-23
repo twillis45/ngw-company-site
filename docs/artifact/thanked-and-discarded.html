@@ -91,7 +91,11 @@ button.toggle:focus-visible,input:focus-visible{outline:2px solid var(--accent);
   min-width:2.4em;font-variant-numeric:tabular-nums}
 .stage-h h3{flex:1 1 auto;min-width:0}
 .chip{font-family:"IBM Plex Mono",monospace;font-size:.64rem;letter-spacing:.1em;
-  text-transform:uppercase;padding:3px 9px;border-radius:2px;white-space:nowrap}
+  text-transform:uppercase;padding:3px 9px;border-radius:2px;
+  /* NOT nowrap. A chip that cannot wrap sets the page's minimum width, and
+     these labels grew as the record did — measured at 360px, one rendered
+     341px wide and pushed the document to 384. */
+  max-width:100%;overflow-wrap:anywhere}
 .chip.passed{background:var(--accent-soft);color:var(--accent)}
 .chip.owed{background:var(--warn-soft);color:var(--warn)}
 .chip.locked{background:var(--lock-soft);color:var(--lock)}
@@ -154,9 +158,9 @@ code{font-family:"IBM Plex Mono",monospace;font-size:.86em;background:var(--surf
     and no mechanism existed by which anyone could have found out.</p>
 
   <div class="stamp">
-    <span><b>Recorded</b> <span data-recorded="2026-09-23T05:33:11.436Z">2026-09-23</span></span>
-    <span><b>Gates</b> 0–4, 6, 7 · all passed-with-conditions</span>
-    <span><b>HEAD</b> 383e3dc5</span>
+    <span><b>Recorded</b> <span data-recorded="2026-09-23T05:51:31.585Z">2026-09-23</span></span>
+    <span><b>Gates</b> 0–7 · all passed-with-conditions</span>
+    <span><b>HEAD</b> 2fc6292b</span>
     <span><b>Live</b> noguessworksystems.com</span>
     <span><b>Facing</b> public · reach public</span>
   </div>
@@ -204,6 +208,33 @@ code{font-family:"IBM Plex Mono",monospace;font-size:.86em;background:var(--surf
   <section class="sec">
     <h2>Corrections</h2>
     <p>What was believed, what replaced it, and the evidence. The original stays visible.</p>
+
+    <div class="corr">
+      <p class="was">The security-headers gate is red only because the headers are missing.</p>
+      <p class="now"><b>The gate itself could not fail in the way that mattered.</b> It
+        asserted header PRESENCE, not value — so <code>strict-transport-security:
+        max-age=0</code>, which <em>disables</em> HSTS, passed. So did
+        <code>default-src *</code>, <code>unsafe-url</code> and <code>ALLOWALL</code>.
+        Demonstrated rather than argued: a server returning exactly those was run, and
+        the old check reported zero headers missing. It also fetched one route of seven.
+        Now 40 assertions over 8 targets, each wrong value refused by name.</p>
+      <p class="src">Found 2026-09-23 by the dispatched security review — on the gate
+        standing behind the highest-consequence item in this record</p>
+    </div>
+
+    <div class="corr">
+      <p class="was">The mobile menu was fixed this morning: 44×44 target, Escape, scroll lock, focus return — all verified.</p>
+      <p class="now"><b>All four were true, and the overlay was still transparent whenever
+        the page was scrolled</b>, on every page at phone width. It was a child of the
+        nav, and the nav gains <code>backdrop-blur</code> on scroll;
+        <code>backdrop-filter</code> establishes a containing block for fixed-position
+        descendants, so <code>inset-0 top-72px</code> resolved against the nav's own 72px
+        box and the overlay computed to <b>zero height</b>. Measured 740px at the top of
+        the page, 0px scrolled. It screenshots perfectly at the top, which is exactly why
+        looking at it never found it.</p>
+      <p class="src">Found 2026-09-23 by the Nielsen gate, which DROVE the site rather
+        than reading it · re-measured on production after the fix: 740px at both</p>
+    </div>
 
     <div class="corr">
       <p class="was">The site should be redesigned to align with the brand.</p>
@@ -293,12 +324,18 @@ code{font-family:"IBM Plex Mono",monospace;font-size:.86em;background:var(--surf
         <tr><td>Red-proofs passing</td><td class="num">6 of 6 RED</td><td><code>npm run redproof</code></td><td>every run</td></tr>
         <tr><td>Gates green</td><td class="num">7 of 8</td><td><code>npm run verify:all</code></td><td>every run</td></tr>
         <tr><td>Deploy propagation</td><td class="num">~50 s</td><td>Polled production until <code>robots.txt</code> returned 200</td><td>re-measure if the host changes</td></tr>
+        <tr><td>Header assertions</td><td class="num">40 over 8 targets</td><td><code>verify:headers</code> — was 5 over 1, and asserted presence rather than value</td><td>every run</td></tr>
+        <tr><td>Mobile overlay height</td><td class="num">0 px scrolled</td><td>Measured at 375×812; 740px at the top of the same page. Fixed, re-measured 740/740 on production</td><td>fixed 2026-09-23</td></tr>
+        <tr><td>Severity-3 findings</td><td class="num">5</td><td>Nielsen gate. Four were defects introduced earlier the same day</td><td>4 fixed, 1 owner</td></tr>
+        <tr><td>External origins at runtime</td><td class="num">0</td><td>Security review. Fonts self-hosted by <code>next/font</code> — there is no Google Fonts request</td><td>on any dependency change</td></tr>
+        <tr><td>npm audit reachable</td><td class="num">0 of 5</td><td>Each advisory needs middleware, a server action, <code>next/image</code> or a route handler. This ships none, and has no server</td><td>the moment anything adds a server</td></tr>
+        <tr><td>Packages, single registry</td><td class="num">97 of 97</td><td>No git deps, no tarball URLs, no alternate registry</td><td>every lockfile change</td></tr>
         <tr><td>Entity domain expiry</td><td class="num">2027-02-08</td><td>Verisign RDAP, live. 139 days from this record. Status <code>["active"]</code> — <b>no transfer, delete or update lock</b>; <code>delegationSigned: false</code></td><td><b>hard deadline</b></td></tr>
         <tr><td>Other portfolio domains</td><td class="num">2029</td><td>RDAP: all carry <code>client transfer prohibited</code></td><td>2029</td></tr>
         <tr><td>Accent on off-white, before</td><td class="num">1.78 : 1</td><td>Computed; WCAG 1.4.3 needs 4.5</td><td>fixed 2026-09-23</td></tr>
         <tr><td>Accent on paper, after</td><td class="num">5.55 : 1</td><td>Computed. Chosen with margin rather than scraping the 4.5 bar</td><td>re-run every <code>verify:contrast</code></td></tr>
         <tr><td>Contrast pairs verified</td><td class="num">18</td><td><code>verify:contrast</code>, values read from <code>globals.css</code> rather than restated</td><td>every run</td></tr>
-        <tr><td>Red-proofs passing</td><td class="num">12 of 12 RED</td><td><code>npm run redproof</code> — 0 green, 0 unevaluated</td><td>every run</td></tr>
+        <tr><td>Red-proofs passing</td><td class="num">14 of 14 RED</td><td><code>npm run redproof</code> — 0 green, 0 unevaluated</td><td>every run</td></tr>
         <tr><td>Trademark, class 9</td><td class="num">UNVERIFIED</td><td>&ldquo;NO GUESSWORK&rdquo; held by No Guess Work LLC for downloadable software. Primary record returned <b>HTTP 403</b>; this is reconnaissance, <b>not a clearance</b></td><td>before any app ships under the mark</td></tr>
         <tr><td>Rebuild estimate</td><td class="num">8–12 h</td><td>Dispatched <code>adopt-project</code> audit, against a 6–9 h adopt backlog</td><td>stale once the backlog is worked</td></tr>
         <tr><td>Demand-scan sources</td><td class="num">6 (5 load-bearing)</td><td>Google Suggest, HN 47822940, Consulting Success, Hinge, amazingcto.com, SBE Council. <b>Reddit coverage failed</b> — rate-limited through three paced retries, so the SMB buyer voice is untested</td><td>re-run with open discovery</td></tr>
@@ -358,7 +395,7 @@ const STAGES = [
       ["h","Kill check and threshold","<b>n/a under a PORTFOLIO basis</b>, recorded as such rather than left blank. The failure mode is not nobody-buys but the-entity-loses-its-own-name — and that one has a date"],
       ["h","Gate recorded","passed-with-conditions, 2026-09-23"]]},
 
-  { n:"2", t:"Scope & design", chip:["passed","recorded — re-skinned to Studio Matte"], gates:[
+  { n:"2", t:"Scope & design", chip:["passed","recorded — Studio Matte"], gates:[
       ["Gate (all)","criteria are checkable. \"Add validation\" fails; \"blank and malformed email each show a specific error, both covered by passing tests\" passes."],
       ["Gate (public)","activation/UX doctrine applied <em>here</em>, not bolted on later — Ruthless Host Lens, no-guesswork-advance, the Attention System."]],
     items:[
@@ -375,7 +412,7 @@ const STAGES = [
       ["n","<code>superpowers:writing-plans</code>",""],
       ["h","Gate recorded","passed-with-conditions, 2026-09-23"]]},
 
-  { n:"3", t:"Build", chip:["passed","recorded — spine defines no gate"], gates:[
+  { n:"3", t:"Build", chip:["passed","recorded — no gate defined"], gates:[
       ["Spine","<b>No stage-specific gate.</b> The gate is that the code exists and matches the scope."]],
     items:[
       ["m","The spine defines no gate at this stage. Inventing a checkbox here would invent an obligation that can never be discharged.",""],
@@ -385,7 +422,7 @@ const STAGES = [
       ["h","Admin / ops console created here, not deferred to stage 6","<code>docs/ADMIN-CONSOLE.md</code> — and its most important row is the one that says the lost submissions are not recoverable"],
       ["h","Run it on the real target","Dev server driven in the browser pane; the deployed site smoke-tested against the live origin"]]},
 
-  { n:"4", t:"Verify", chip:["passed","recorded — two instruments of three"], gates:[
+  { n:"4", t:"Verify", chip:["passed","recorded — all three instruments"], gates:[
       ["Gate (all)","the project's own guard script passes. A criterion I have to verify by looking is not a guard."],
       ["Gate (all)","a measurement pass on any surface that renders in more than one layout regime — assert computed geometry in a real browser; do not eyeball it."],
       ["Gate (public)","a structured Nielsen 10-heuristics critique, run as its own dispatch."]],
@@ -395,12 +432,12 @@ const STAGES = [
       ["o","Guard script passes","<b>7 of 8 green</b> at 790b2064. <code>verify:headers</code> is legitimately red and cannot be fixed from this repo — see stage 5"],
       ["h","<code>red-proof</code> — every gate watched failing","<b>10 of 10 RED</b>, 0 green, 0 unevaluated. The first sweep reported 3 green under fault, which the spine warns is TWO hypotheses: it decomposed into ONE genuinely blind gate and TWO inert faults. The runner own change metric was also wrong — a length delta, so a same-length substitution printed 0 bytes and read exactly like an inert fault"],
       ["o","Measurement pass committed as a script","<b>Half done.</b> <code>verify:contrast</code> now computes 18 pairs on every run, so the colour half is permanently gated. The geometry half — tap targets, 375px overflow — was measured in a real browser but lives in a transcript, not in <code>scripts/</code>, so nothing re-runs it"],
-      ["n","<span class='tag pub'>public</span> <code>nielsen-critique</code> as its own dispatch","The public gate at this stage, and the instrument that was skipped. Two of three ran — measurement and red-proof — and the spine warns two of three is an incomplete gate"],
-      ["n","A board re-scores the build on the CODE","The session that wrote the gates is the session reporting they pass. Step 4e exists to break exactly that asymmetry: the builder never scores its own work"],
+      ["h","<span class='tag pub'>public</span> <code>nielsen-critique</code> as its own dispatch","<b>RUN, driven in a browser.</b> Five severity-3 findings, <b>four of them defects this session had introduced</b> — which is the argument for the instrument, not against it. All five addressed; four fixed and re-verified <em>on production</em>"],
+      ["o","A board re-scores the build on the CODE","Still owed. But the three dispatched instruments broke the asymmetry in practice: the security review proved <code>verify:headers</code> could not fail in the way that mattered, and the Nielsen gate found four defects in work written hours earlier"],
       ["n","<code>impeccable</code> critique",""],
       ["h","Gate recorded","passed-with-conditions, 2026-09-23"]]},
 
-  { n:"5", t:"Security & data review", chip:["owed","security-review dispatched"], gates:[
+  { n:"5", t:"Security & data review", chip:["passed","recorded — enumerating gate"], gates:[
       ["Gate (public)","mandatory, full track checklist. This is the gate most likely to be missed by a surface that graduated from internal."],
       ["Shape","an <em>enumerating</em> gate, not a checklist — a written review is a snapshot of one person's attention on one day."]],
     items:[
@@ -410,10 +447,10 @@ const STAGES = [
       ["o","Security headers on the live origin","<b>The one red gate.</b> No HSTS, CSP, Referrer-Policy or X-Frame-Options. Not fixable from this repo — an edge config change. Exact rule ready to paste in <code>docs/SECURITY-HEADERS.md</code>"],
       ["o","License check","No LICENSE file. A stray <code>\"license\": \"ISC\"</code> on a proprietary company site was removed from the lockfile"],
       ["m","Route enumeration sweep does not apply — a static export has no routes to gate. Recorded as reasoned, not as silence.",""],
-      ["o","<span class='tag pub'>public</span> Full security track checklist","<b>security-review DISPATCHED 2026-09-23</b> as an enumerating gate rather than a checklist — a written review is one person\u2019s attention on one day. Mandatory for a public surface, and never run in the six months this one has been public"],
-      ["o","Gate recorded",""]]},
+      ["h","<span class='tag pub'>public</span> Full security track checklist","<b>RUN as an ENUMERATING gate</b>, not a checklist. Zero external origins at runtime, zero env reads, zero secrets, 97 packages from one registry, and all five npm-audit advisories proved <b>unreachable</b> rather than hedged. Every no-op recorded with its reason"],
+      ["h","Gate recorded","passed-with-conditions, 2026-09-23"]]},
 
-  { n:"6", t:"Deploy", chip:["passed","recorded — shipped before it was gated"], gates:[
+  { n:"6", t:"Deploy", chip:["passed","recorded — shipped ungated"], gates:[
       ["Gate (public)","P0/P1 findings from stages 4 and 5 are resolved first."],
       ["Reach","<b>public</b> — anyone can reach it. This obliges the full stage 5 checklist, and stage 9 applies retroactively to every public gate skipped on the way here."]],
     items:[
@@ -424,7 +461,7 @@ const STAGES = [
       ["n","<span class='tag pub'>public</span> P0/P1 from stages 4 and 5 resolved <em>before</em> deploy","<b>Not met, and cannot retroactively be.</b> The site went public in March having run neither stage. This row is the shape of the whole record"],
       ["h","Gate recorded","passed-with-conditions, 2026-09-23"]]},
 
-  { n:"7", t:"Observe & handoff", chip:["passed","recorded — tracker met, instrumentation not"], gates:[
+  { n:"7", t:"Observe & handoff", chip:["passed","recorded — no instrumentation"], gates:[
       ["Gate (all)","HANDOFF.md reflects measured reality — git SHA, test counts, CI status — not intentions."],
       ["Gate (public)","instrumentation wired (analytics, error tracking), and the tracker entry matches reality."]],
     items:[
@@ -444,7 +481,7 @@ const STAGES = [
       ["l","Dependency review cadence",""],
       ["l","Tech-debt pass",""]]},
 
-  { n:"9", t:"Promotion", chip:["owed","applies retroactively — already public"], gates:[
+  { n:"9", t:"Promotion", chip:["owed","retroactive — already public"], gates:[
       ["Gate","all four public gates, explicitly, as a checklist. Nothing goes public having skipped a step merely because it wasn't public when it was built."],
       ["Server","a stage-9 pass is <b>refused</b> without a <code>boardVerdict</code> and <code>boardSeats</code> — the only rule in the spine that hard-fails a write."]],
     items:[

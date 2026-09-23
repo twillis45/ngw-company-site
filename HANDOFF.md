@@ -11,15 +11,15 @@
 | Node | **≥ 20.9 required.** Pinned in `engines` + `.nvmrc`. The build fails hard below it and nothing said so before. |
 | Gates | 8, all reachable from `verify:all` **and from CI** (both asserted, not eyeballed). 7 PASS, 1 FAIL |
 | CI | `.github/workflows/verify.yml` — **green**. `gates (code)` and `red-proof` block; `live origin` is continue-on-error and RED by design until the edge rule lands, re-read daily by cron |
-| Red-proofs | 12, **all watched going red** — 0 green, 0 unevaluated, and they run **in CI**, so each fault is reintroduced on a clean runner rather than only on this machine |
+| Red-proofs | 14, **all watched going red** — 0 green, 0 unevaluated, and they run **in CI**, so each fault is reintroduced on a clean runner rather than only on this machine |
 
 ## Spine position
 
-Gates **0 through 4** recorded 2026-09-23, all `passed-with-conditions`. Before
+Gates **0 through 7** recorded 2026-09-23, all `passed-with-conditions`. Before
 today this project had **zero** gates and was invisible to the tracker, because
 the repo had never been cloned into `~/Code`.
 
-Stages 5, 6 and 7 are reached and owed. Stage 9 applies **retroactively** — the
+Stage 9 applies **retroactively** — the
 surface has been public since 2026-03-27 and has passed none of its four public
 gates. Stages 8 and 10 are unreached.
 
@@ -31,7 +31,7 @@ gates. Stages 8 and 10 are unreached.
 | URL | https://claude.ai/artifact/VHZk1nx6VrNRFmAmxEUuot |
 | Source | `docs/artifact/thanked-and-discarded.html` — edit and republish THIS file so the URL stays stable |
 | Watch | confirmed 2026-09-23T04:56:47.802Z — connected, armed by a publish, auto-replies armed |
-| Measured | 11 stages · 88 rows · 82 checkboxes · 5 markers · 36 handled · 15 open · 28 NOT RUN · 4 unreached · 0 sideways scroll · 0 JS errors |
+| Measured | 11 stages · 89 rows · 82 checkboxes · 5 markers · 43 handled · 12 open · 25 NOT RUN · 4 unreached · 0 sideways scroll · 0 JS errors |
 | Stamp | `data-recorded="2026-09-23T05:23:48.335Z"`, equal to the newest gate record's `recordedAt` |
 
 ## How it deploys
@@ -83,6 +83,9 @@ Every item below was a live falsehood on the company's public face before this.
 - **Node 16 is first on this machine's PATH** (`/opt/local/bin/node`). The build
   dies with a message about the required version. Use
   `export PATH=/usr/local/Cellar/node@22/22.23.2_1/bin:$PATH`.
+- **The browser pane reports `clientWidth: 0` while it is hidden**, so every
+  layout measurement taken then is meaningless — including `sideScroll`. Check
+  `tabs_context` for "pane is hidden" before trusting a geometry number.
 - **`npm run build | tail` reports tail's exit status, not the build's.** A
   failed build reads as `EXIT=0`. Redirect to a file and read `$?` from the
   build itself.
