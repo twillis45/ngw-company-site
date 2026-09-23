@@ -1,33 +1,75 @@
 "use client";
 
 import { useState } from "react";
+import { site } from "@/site";
+
+// Composes the inquiry into the visitor's own mail client. There is no
+// endpoint, no processor and no network call.
+//
+// What it replaced, and why the replacement is shaped like this: this form
+// used to POST to a third-party form relay at an ID that was never filled in
+// — the URL ended in the literal word the scaffold left behind — and then show "Message sent. We'll be in touch soon." The
+// endpoint returned 404 for every submission from 2026-03-27 onward.
+//
+// The reason nobody noticed is worth keeping written down. `await fetch()`
+// RESOLVES on an HTTP 404; it rejects only on a network-layer failure. So the
+// try block ran straight on to setSubmitted(true), and the catch — which also
+// set success — was never even reached. There was no input, no outage and no
+// server response that could have made that form report a failure. Every
+// visitor who wrote in was thanked, and nothing was delivered.
+//
+// Handing off to the mail client removes the failure mode rather than
+// handling it: delivery is now the visitor's own mail app's job, and they can
+// see the message sitting in their outbox. The address is shown in plain text
+// beside the form as well, so the path does not depend on a mail handler
+// being registered at all.
 
 export function ContactForm() {
-  const [submitted, setSubmitted] = useState(false);
+  const [handedOff, setHandedOff] = useState(false);
 
-  async function handleSubmit(e: React.FormEvent<HTMLFormElement>) {
+  function handleSubmit(e: React.FormEvent<HTMLFormElement>) {
     e.preventDefault();
-    const form = e.currentTarget;
-    const data = new FormData(form);
+    const data = new FormData(e.currentTarget);
+    const name = String(data.get("name") || "").trim();
+    const email = String(data.get("email") || "").trim();
+    const company = String(data.get("company") || "").trim();
+    const message = String(data.get("message") || "").trim();
 
-    try {
-      await fetch("https://formspree.io/f/PLACEHOLDER", {
-        method: "POST",
-        body: data,
-        headers: { Accept: "application/json" },
-      });
-      setSubmitted(true);
-    } catch {
-      setSubmitted(true);
-    }
+    const subject = `Website inquiry — ${name || "no name given"}`;
+    const body = [
+      `Name: ${name}`,
+      `Email: ${email}`,
+      company ? `Company: ${company}` : null,
+      "",
+      message,
+    ]
+      .filter((line) => line !== null)
+      .join("\n");
+
+    window.location.href =
+      `mailto:${site.email}` +
+      `?subject=${encodeURIComponent(subject)}` +
+      `&body=${encodeURIComponent(body)}`;
+
+    setHandedOff(true);
   }
 
-  if (submitted) {
+  if (handedOff) {
     return (
       <div className="rounded-2xl border border-border-dark bg-slate-surface p-10 text-center">
-        <p className="text-xl font-semibold text-white mb-2">Message sent</p>
+        <p className="text-xl font-semibold text-white mb-2">
+          Your email app should be opening
+        </p>
         <p className="text-cool-gray">
-          Thank you for reaching out. We&apos;ll be in touch soon.
+          Your message is drafted and ready to send — it is not sent until you
+          send it. If nothing opened, email{" "}
+          <a
+            href={`mailto:${site.email}`}
+            className="text-accent hover:underline"
+          >
+            {site.email}
+          </a>{" "}
+          directly.
         </p>
       </div>
     );
@@ -43,46 +85,29 @@ export function ContactForm() {
     >
       <div className="space-y-5">
         <div>
-          <label className="mb-1.5 block text-sm font-medium text-light-gray">
+          <label htmlFor="cf-name" className="mb-1.5 block text-sm font-medium text-light-gray">
             Name
           </label>
-          <input
-            type="text"
-            name="name"
-            required
-            className={inputClass}
-            placeholder="Your name"
-          />
+          <input id="cf-name" type="text" name="name" required className={inputClass} placeholder="Your name" />
         </div>
         <div>
-          <label className="mb-1.5 block text-sm font-medium text-light-gray">
+          <label htmlFor="cf-email" className="mb-1.5 block text-sm font-medium text-light-gray">
             Email
           </label>
-          <input
-            type="email"
-            name="email"
-            required
-            className={inputClass}
-            placeholder="you@company.com"
-          />
+          <input id="cf-email" type="email" name="email" required className={inputClass} placeholder="you@company.com" />
         </div>
         <div>
-          <label className="mb-1.5 block text-sm font-medium text-light-gray">
-            Company{" "}
-            <span className="text-cool-gray font-normal">(optional)</span>
+          <label htmlFor="cf-company" className="mb-1.5 block text-sm font-medium text-light-gray">
+            Company <span className="text-cool-gray font-normal">(optional)</span>
           </label>
-          <input
-            type="text"
-            name="company"
-            className={inputClass}
-            placeholder="Company name"
-          />
+          <input id="cf-company" type="text" name="company" className={inputClass} placeholder="Company name" />
         </div>
         <div>
-          <label className="mb-1.5 block text-sm font-medium text-light-gray">
+          <label htmlFor="cf-message" className="mb-1.5 block text-sm font-medium text-light-gray">
             Message
           </label>
           <textarea
+            id="cf-message"
             name="message"
             required
             rows={4}
@@ -95,8 +120,15 @@ export function ContactForm() {
         type="submit"
         className="mt-6 w-full rounded-lg bg-accent px-7 py-3.5 text-[15px] font-medium text-navy hover:bg-accent-hover transition-colors"
       >
-        Send Message
+        Compose Message
       </button>
+      <p className="mt-4 text-center text-[13px] text-cool-gray">
+        Opens in your email app. Or write to{" "}
+        <a href={`mailto:${site.email}`} className="text-accent hover:underline">
+          {site.email}
+        </a>
+        .
+      </p>
     </form>
   );
 }

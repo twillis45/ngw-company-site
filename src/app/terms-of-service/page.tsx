@@ -13,7 +13,7 @@ export default function TermsOfService() {
           Terms of Service
         </h1>
         <p className="mb-10 text-[13px] text-cool-gray">
-          Last updated: March 2025
+          Last updated: September 2026
         </p>
 
         <div className="space-y-6 text-[17px] leading-7 text-cool-gray">

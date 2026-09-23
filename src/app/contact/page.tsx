@@ -1,4 +1,5 @@
 import type { Metadata } from "next";
+import { site } from "@/site";
 import { ContactForm } from "@/components/ContactForm";
 
 export const metadata: Metadata = {
@@ -35,9 +36,9 @@ export default function Contact() {
                 info@noguessworksystems.com
               </a>
               <p className="text-[15px] text-cool-gray">
-                5000 Thayer Center, Suite E
+                {site.address.street}
                 <br />
-                Oakland, MD 21550
+                {site.address.cityStateZip}
               </p>
             </div>
           </div>

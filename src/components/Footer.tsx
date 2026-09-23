@@ -1,4 +1,5 @@
 import Link from "next/link";
+import { site } from "@/site";
 
 export function Footer() {
   return (
@@ -11,15 +12,15 @@ export function Footer() {
               No Guesswork Systems
             </p>
             <a
-              href="mailto:info@noguessworksystems.com"
+              href={`mailto:${site.email}`}
               className="block text-[15px] text-light-gray hover:text-white transition-colors"
             >
-              info@noguessworksystems.com
+              {site.email}
             </a>
             <p className="text-[15px] text-cool-gray">
-              5000 Thayer Center, Suite E
+              {site.address.street}
               <br />
-              Oakland, MD 21550
+              {site.address.cityStateZip}
             </p>
           </div>
 
@@ -61,7 +62,7 @@ export function Footer() {
         {/* Bottom bar */}
         <div className="mt-12 border-t border-slate-surface pt-6">
           <p className="text-center text-[13px] text-cool-gray">
-            © 2025 No Guesswork Systems LLC. All rights reserved.
+            © {site.year} {site.legalName}. All rights reserved.
           </p>
         </div>
       </div>
