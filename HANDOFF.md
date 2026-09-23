@@ -137,6 +137,32 @@ Every item below was a live falsehood on the company's public face before this.
   **Undo:** the token block at the top of `src/app/globals.css` is the whole
   surface; reverting it reverts the skin.
 
+## The stage-2 public gate is runnable — here is where its doctrine lives
+
+The spine's stage-2 public gate reads *"activation/UX doctrine applied here, not
+bolted on later — Ruthless Host Lens, no-guesswork-advance, the Attention
+System."* It **names all three and cites none**, and two of them appear nowhere
+else in `ngw-os/docs/`. Found only by grepping every repo — and
+`above-board-spades/HANDOFF.md:771` records "grep for …" as its method too, so
+this has cost someone else the same hour.
+
+They are defined in **`ngw-os/docs/research/2026-08-27-spades-design-scan.md`**:
+
+| Doctrine | What it actually requires |
+|---|---|
+| **Ruthless Host Lens** | Plain language. No verdict words, no ops-console tone. |
+| **No-guesswork advance** | Every state says what is next. |
+| **Attention System** | One hero, three contrast tiers, one accent, motion = change. |
+
+`above-board-spades` is the worked example of running this gate properly and
+filing the result to a design-scan doc rather than asserting it.
+
+**What is already true here, and what is not.** The Attention System's accent
+clause is honored — steel appears only on actions. The other two are **NOT RUN**:
+nothing has audited this site for verdict tone, and nothing has checked that
+every state says what is next. The contact form's handoff panel is the one
+surface that now does.
+
 ## Owner items the board named, in its ranked order
 
 1. **Transfer-lock, renew and DNSSEC-sign `noguessworksystems.com`.** Verified
