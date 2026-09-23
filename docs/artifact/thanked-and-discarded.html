@@ -158,9 +158,9 @@ code{font-family:"IBM Plex Mono",monospace;font-size:.86em;background:var(--surf
     and no mechanism existed by which anyone could have found out.</p>
 
   <div class="stamp">
-    <span><b>Recorded</b> <span data-recorded="2026-09-23T05:51:31.585Z">2026-09-23</span></span>
+    <span><b>Recorded</b> <span data-recorded="2026-09-23T05:58:52.349Z">2026-09-23</span></span>
     <span><b>Gates</b> 0–7 · all passed-with-conditions</span>
-    <span><b>HEAD</b> 2fc6292b</span>
+    <span><b>HEAD</b> be4cb1b3</span>
     <span><b>Live</b> noguessworksystems.com</span>
     <span><b>Facing</b> public · reach public</span>
   </div>
@@ -208,6 +208,19 @@ code{font-family:"IBM Plex Mono",monospace;font-size:.86em;background:var(--surf
   <section class="sec">
     <h2>Corrections</h2>
     <p>What was believed, what replaced it, and the evidence. The original stays visible.</p>
+
+    <div class="corr">
+      <p class="was">Zero verdict words on the site — measured with <code>curl</code> piped through a tag-stripping <code>sed</code>.</p>
+      <p class="now"><b>That measurement reported "error" on every page, including the
+        home page.</b> <code>sed 's/&lt;[^&gt;]*&gt;//g'</code> strips tags but not
+        <code>&lt;script&gt;</code> <em>contents</em>, so it was reading Next's framework
+        error strings out of the inline RSC payload. The real measurement parses the HTML,
+        removes <code>script</code>, <code>style</code> and <code>noscript</code>, and
+        reads <code>textContent</code> — and then the answer really is zero.
+        <b>A tag-stripping regex is not a reader.</b></p>
+      <p class="src">Corrected 2026-09-23 · the same false-positive shape as the earlier
+        sweep here that "found" analytics and had found <code>Symbol.toStringTag</code></p>
+    </div>
 
     <div class="corr">
       <p class="was">The security-headers gate is red only because the headers are missing.</p>
@@ -402,7 +415,8 @@ const STAGES = [
       ["o","<code>reference-scan</code>, before any design work","<b>PARTIAL.</b> Step 1 — own design system — run in full: Studio Matte read end to end. The leaders / Mobbin / structural-properties steps were NOT run and cannot be retrofitted honestly. Recorded as a deviation, not as completion"],
       ["n","Name the leaders' 3–4 structural properties, dated before the first build","Every board thereafter scores against those, never against the previous round"],
       ["h","Success criteria stated so a machine can check them","Eight gates, all reachable from one entry point whose coverage is itself asserted rather than eyeballed. 7 PASS / 1 FAIL at fbe5c70f; redproof 10 of 10 RED"],
-      ["n","<span class='tag pub'>public</span> Activation / UX doctrine applied here","The gate a public surface owes at this stage. Never applied — and the site is already public"],
+      ["o","<span class='tag pub'>public</span> Activation / UX doctrine applied here","<b>SCANNED and filed</b> to <code>docs/research/</code>, as a <b>self-audit</b> — the author scored the author, so it is evidence a board can check, not a pass. Ruthless Host Lens and no-guesswork advance both pass on measurement. The Attention System is partial: <b>one hero is not audited</b>, and the home page carries two adjacent hero CTAs plus a third in the nav — the exact defect above-board-spades found in its own lobby"],
+      ["m","The three doctrines had to be LOCATED before they could be run: the spine names them and cites none, and two appear nowhere else in ngw-os/docs. Found by grepping every repo — which above-board-spades records as its method for the same gate.",""],
       ["n","<code>frontend-design</code>",""],
       ["n","<code>impeccable</code>, on any surface that exists before it reaches Verify",""],
       ["h","<code>measure-dont-look</code> on the style frames","Every colour computed, never judged. The 1.78:1 failure reproduced independently, candidates ranked by ratio, the replacement chosen at 5.55:1 with margin rather than scraping 4.5, and the final set verified across 18 composited pairs"],
