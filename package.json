@@ -5,7 +5,15 @@
   "scripts": {
     "dev": "next dev",
     "build": "next build",
-    "start": "next start"
+    "start": "next start",
+    "verify:placeholders": "node scripts/gates/verify-placeholders.mjs",
+    "verify:contact": "node scripts/gates/verify-contact.mjs",
+    "verify:copy": "node scripts/gates/verify-copy.mjs",
+    "verify:assets": "node scripts/gates/verify-assets.mjs",
+    "verify:headers": "node scripts/gates/verify-headers.mjs",
+    "verify:coverage": "node scripts/gates/verify-coverage.mjs",
+    "verify:all": "npm run build && npm run verify:coverage && npm run verify:placeholders && npm run verify:contact && npm run verify:copy && npm run verify:assets && npm run verify:headers",
+    "redproof": "node scripts/gates/redproof.mjs"
   },
   "dependencies": {
     "next": "^16.2.1",
@@ -19,5 +27,8 @@
     "postcss": "^8.5.8",
     "tailwindcss": "^4.2.2",
     "typescript": "^6.0.2"
+  },
+  "engines": {
+    "node": ">=20.9.0"
   }
 }
