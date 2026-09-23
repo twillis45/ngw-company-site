@@ -158,7 +158,7 @@ code{font-family:"IBM Plex Mono",monospace;font-size:.86em;background:var(--surf
     and no mechanism existed by which anyone could have found out.</p>
 
   <div class="stamp">
-    <span><b>Recorded</b> <span data-recorded="2026-09-23T13:23:26.056Z">2026-09-23</span></span>
+    <span><b>Recorded</b> <span data-recorded="2026-09-23T14:15:03.030Z">2026-09-23</span></span>
     <span><b>Gates</b> 0–7 · all passed-with-conditions</span>
     <span><b>HEAD</b> d7c9f3ed</span>
     <span><b>Live</b> noguessworksystems.com</span>
@@ -208,6 +208,57 @@ code{font-family:"IBM Plex Mono",monospace;font-size:.86em;background:var(--surf
   <section class="sec">
     <h2>Corrections</h2>
     <p>What was believed, what replaced it, and the evidence. The original stays visible.</p>
+
+    <div class="corr">
+      <p class="was">Both worked problems address something buyers want. They are the
+        site&rsquo;s distinguishing content, so they are its strongest asset.</p>
+      <p class="now"><b>Two open-discovery passes say neither touches a struggle buyers
+        describe.</b> The expense-reconciler&rsquo;s territory is not merely crowded &mdash;
+        <b>the people complaining about the incumbent cannot buy from you.</b> Ramp&rsquo;s own
+        support page requires a corporation/LLC/LP, <b>$25,000 in a business bank account</b>,
+        and a non-free email, and explicitly refuses sole proprietors and unregistered
+        businesses. Of Ramp&rsquo;s negative reviewers, 14 are explicitly <em>forced</em> users
+        (&ldquo;I was not a decision maker on this move&rdquo;) against 6 self-identified owners
+        &mdash; two of whom were rejected at signup. The Asana governance cycle has no
+        buyer-side footprint at all across 600 Reddit posts and 440 HN comments.
+        <b>Under the PORTFOLIO basis this does not make the page dishonest</b> &mdash; the
+        worked problems&rsquo; job is to prove real work with real checks, not to name a
+        market. It changes what to <em>build</em> next.</p>
+      <p class="src">2026-09-23 &middot; 600 Reddit posts, ~300 comments, 440 HN comments,
+        843 Ramp reviews (269 iOS + 574 Play), 100 Expensify reviews &middot; Ramp iOS id
+        corrected to 1628197245 &mdash; the first pass&rsquo;s id returned zero entries</p>
+    </div>
+
+    <div class="corr">
+      <p class="was">&ldquo;Getting paid&rdquo; is the largest struggle by distinct posts, so it is
+        the strongest opportunity.</p>
+      <p class="now"><b>Demoted, on three independent measurements that the post count could
+        not see.</b> The automatable part <b>already ships free</b> inside Square Invoices,
+        Wave and QuickBooks Simple Start. The human part costs <b>$10&ndash;15 per account</b>
+        flat, including live collector calls and three-bureau reporting. And the loss it
+        prevents is <b>~3&ndash;5% of revenue</b> &mdash; a $150k solo operator loses about
+        $4,500 a year and will not pay $500 a month to fix it. The market has already voted:
+        invoice <em>creators</em> hold 122,755 / 105,762 / 92,966 iOS ratings, while every app
+        that chases payment holds <b>0, 0, 0 and 2</b>. Five orders of magnitude.</p>
+      <p class="src">2026-09-23 &middot; App Store + Play rating counts, US Chamber and vendor
+        pricing, and a buyer&rsquo;s own 18-year loss figure (HN 34401740)</p>
+    </div>
+
+    <div class="corr">
+      <p class="was">A gate that passes is a gate that works.</p>
+      <p class="now"><b>Three gates passed this session while blind to the thing they
+        existed to check &mdash; all the same shape: satisfied by markup no reader sees.</b>
+        The firm voice shipped in <code>&lt;meta&gt;</code> for hours because
+        <code>verify:claims</code> stripped tags and a meta tag has no text content. Fixing
+        that was not enough: the red-proof still printed no failure, because the pattern
+        matched <em>we help businesses</em> and not <em>&hellip;LLC <b>helps</b> businesses</em>.
+        Then the fix for <em>that</em> introduced the same trap into a third gate &mdash; new
+        JSON-LD carrying <code>streetAddress</code> on every page made an existing red-proof
+        go green. <b>A green check under a fault is two hypotheses, not one</b>, and twice
+        here the answer was &ldquo;a second blind spot behind the first.&rdquo;</p>
+      <p class="src">2026-09-23 &middot; measured under each fault rather than argued &middot;
+        <code>visibleText()</code> now lives in <code>lib.mjs</code> once</p>
+    </div>
 
     <div class="corr">
       <p class="was">The site is finished and truthful, so the work is done.</p>
@@ -497,14 +548,19 @@ const STAGES = [
     items:[
       ["h","Problem statement, one or two sentences","Ruled by the board: the person handed this company name by a referral or an enrollment form, who has about a minute to decide whether it is real and reachable"],
       ["h","Name who hits this today","<b>Split verdict.</b> PASSES for the problem the site itself creates — referral-checkers, the Apple enrollment reviewer, counterparties verifying the address. FAILS for the buyer operational problem, which names nobody and is marked PROVISIONAL"],
-      ["o","Declare the basis at intake","<b>PORTFOLIO — and UNDER RE-RULE as of 2026-09-23.</b> The register calls this domain <em>Entity + all products</em>: it gates Apple enrollment, hosts info@ and admin@, and every product subdomain hangs off it. The trigger is the owner reading the finished site and saying it is not compelling — which under this basis is arguably the correct <b>ceiling rather than a defect</b>, and that is the question the board now holds. An open-discovery demand pass was dispatched in parallel as the named unlock for it"],
+      ["h","Declare the basis at intake","<b>PORTFOLIO — RE-RULED AND AFFIRMED 2026-09-23</b>, by a board reconvened at the owner's request, on register facts re-read rather than recalled. Refined to <b>PORTFOLIO / CREDIBILITY ARTIFACT</b>. The board <b>amended its own ceiling</b> in the process: it had said <em>nothing false and nothing distinguishing</em>, and the worked problems now make the second half untrue — the standing ceiling is <em>nothing false, and whose only distinguishing property is that it discloses its own limits</em>. A conversion basis is <b>BLOCKED, not rejected</b>. The original reasoning follows.<br><br><b>PORTFOLIO — and UNDER RE-RULE as of 2026-09-23.</b> The register calls this domain <em>Entity + all products</em>: it gates Apple enrollment, hosts info@ and admin@, and every product subdomain hangs off it. The trigger is the owner reading the finished site and saying it is not compelling — which under this basis is arguably the correct <b>ceiling rather than a defect</b>, and that is the question the board now holds. An open-discovery demand pass was dispatched in parallel as the named unlock for it"],
       ["h","<code>demand-scan</code>","RAN per Step 1c, which requires it for every project. Verdict <b>NO-GO</b> on the current positioning as a converting asset, 6 independent sources"],
-      ["n","Open-discovery demand pass","The scan that ran was validation-mode only, and its Reddit coverage failed through three paced retries. The SMB buyer's own voice is <b>untested, not answered</b> — the agent reported this rather than papering over it"],
+      ["h","Open-discovery demand pass","<b>RAN 2026-09-23</b> — the board's named unlock, and its finding is larger than the question it was asked. <b>The previous pass was wrong about the ROUTE, not the pacing:</b> reddit.com <code>.json</code> endpoints are 403, but <code>top.rss</code>, <code>comments/&lt;id&gt;/.rss</code> and <code>search.rss</code> all return 200. Corpus: 600 top-of-year posts across 6 subreddits, ~300 comments, 440 HN comments, 100 store reviews. Real struggles exist and are named in operators' own words — <em>&ldquo;it all lives in my head&rdquo;</em>, <em>&ldquo;I am the process&rdquo;</em>, <em>&ldquo;coded as misc&rdquo;</em>. <b>But neither shipped worked problem touches them.</b> The expense-reconciler's territory is SOLVED by name (Ramp ×5 advocates, Expensify, Dext, Concur, Zoho, Divvy, Rippling) and reframed by operators as capture-at-point-of-sale, not post-hoc classification; &ldquo;chasing receipts&rdquo; was <b>1 post in 200</b>. The Asana governance cycle has <b>no buyer-side footprint at all</b> across 600 posts and 440 HN comments. The instrument could return <em>nobody says this</em>, and did: Google Suggest returned zero completions for three phrasings"],
+      ["m","<b>NOT SCORED AGAINST THE PRE-REGISTERED THRESHOLD HERE.</b> The session that dispatched the scan does not score it — the builder never scores its own work. The threshold (≥8 distinct operators describing an act of guessing unprompted, AND ≥3 who searched for or paid for help) was registered by the board before the pass ran, and the board holds the scoring.",""],
+      ["n","Read Ramp's own users' complaints","The one gap the pass named itself. Wrong iOS app id returned 0 entries; g2, capterra and trustpilot all 403 behind Cloudflare. So <em>the incumbent satisfies them</em> currently rests on Reddit advocacy plus a <b>competitor's</b> poor reviews. A second pass is running against exactly this"],
       ["h","<code>claim-verification</code>","~34 buyer-facing claims ledgered against executed checks"],
       ["h","<code>convene-review-board</code> — the project core, once, early","<b>Convened 2026-09-23</b>, seven seats, the first ever seated here. The owner proposed-and-confirmed the seats, satisfying the first-board stop rather than skipping it. It named its own missing seats and its own limits of authority unprompted"],
       ["n","<code>superpowers:brainstorming</code>","Never run on this project"],
       ["h","<code>third-party-content</code>","Recorded as blank, not left empty: the site ingests nothing external"],
-      ["h","Kill check and threshold","<b>n/a under a PORTFOLIO basis</b>, recorded as such rather than left blank. The failure mode is not nobody-buys but the-entity-loses-its-own-name — and that one has a date"],
+      ["h","Kill check and threshold","<b>A GATE EXISTS NOW, pre-registered by the board BEFORE it was run.</b> The 60-second check: a person arriving already holding the name can, inside 60 seconds, state <b>(a)</b> this is a real entity at a real address, <b>(b)</b> who is behind it, <b>(c)</b> one specific thing it has done, with the check attached. <b>Threshold: all three, or RED</b> — conjunctive, because a checker who cannot answer (b) stops and never reaches (c). This supersedes the earlier <em>n/a under a PORTFOLIO basis</em>, which is kept below. The older failure mode still holds and still has a date: the-entity-loses-its-own-name.<br><br><b>n/a under a PORTFOLIO basis</b>, recorded as such rather than left blank"],
+      ["h","<b>Clause (b) — who is behind it — scored RED</b>","The site named <b>no human being anywhere</b>: zero hits in <code>src/</code>, on <code>/</code>, on <code>/solutions</code>, or in the footer. A checker found an LLC, a mailbox and a suite address — which corroborates <b>registration</b>, not <b>accountability</b>. The board's correction to its own previous sitting: facelessness had been filed as a <em>conversion</em> problem and deferred. It is a live <b>PORTFOLIO</b> defect, and it was the only RED clause the basis had"],
+      ["h","Clause (b) closed in code","<b>Owner ruled 2026-09-23: name and role, no photograph.</b> Shipped at <code>d5762c1</code> and verified in visible text on production. <code>verify:identity</code> gates it and is red-proofed three ways, including the fault the board said matters — leave the name in the markup and desync <b>only</b> the JSON-LD founder, so the two disagree. The absent portrait is <b>asserted as absent</b>, because it is a recorded decision, not an omission"],
+      ["n","Clause (b) graded by real people","The code half is done; the real grade is <b>five referral-checkers, 60 seconds, one question — &ldquo;who is behind this company?&rdquo;</b> Fewer than 4 of 5 producing a human name or role is RED. Nobody outside the build has looked at this site"],
       ["h","Gate recorded","passed-with-conditions, 2026-09-23"]]},
 
   { n:"2", t:"Scope & design", chip:["passed","recorded — Studio Matte"], gates:[
@@ -514,7 +570,7 @@ const STAGES = [
       ["o","<code>reference-scan</code>, before any design work","<b>PARTIAL.</b> Step 1 — own design system — run in full: Studio Matte read end to end. The leaders / Mobbin / structural-properties steps were NOT run and cannot be retrofitted honestly. Recorded as a deviation, not as completion"],
       ["n","Name the leaders' 3–4 structural properties, dated before the first build","Every board thereafter scores against those, never against the previous round"],
       ["h","Success criteria stated so a machine can check them","Eight gates, all reachable from one entry point whose coverage is itself asserted rather than eyeballed. 7 PASS / 1 FAIL at fbe5c70f; redproof 10 of 10 RED"],
-      ["o","<span class='tag pub'>public</span> Activation / UX doctrine applied here","<b>SCANNED and filed</b> to <code>docs/research/</code>, as a <b>self-audit</b> — the author scored the author, so it is evidence a board can check, not a pass. Ruthless Host Lens and no-guesswork advance both pass on measurement. The Attention System is partial: <b>one hero is not audited</b>, and the home page carries two adjacent hero CTAs plus a third in the nav — the exact defect above-board-spades found in its own lobby"],
+      ["o","<span class='tag pub'>public</span> Activation / UX doctrine applied here","<b>SCANNED and filed</b> to <code>docs/research/</code>, as a <b>self-audit</b> — the author scored the author, so it is evidence a board can check, not a pass. Ruthless Host Lens and no-guesswork advance both pass on measurement. The Attention System is partial. <b>The one-hero clause is AUDITED as of 2026-09-23</b> — and the audit corrected the description below. Reading the source said the hero was fine (one primary, one secondary, and the nav CTA is an outline link, not a third hero). <b>Measuring the export found the real defect:</b> two primary buttons on the home page pointing at <b>two different destinations</b> — <code>/contact</code> and a raw <code>mailto:</code> — and <b>zero</b> on both legal pages. Fixed, gated by <code>verify:hero</code>, 3 of 3 red-proofed, live. Original text: <em>one hero is not audited, and the home page carries two adjacent hero CTAs plus a third in the nav — the exact defect above-board-spades found in its own lobby</em>"],
       ["m","The three doctrines had to be LOCATED before they could be run: the spine names them and cites none, and two appear nowhere else in ngw-os/docs. Found by grepping every repo — which above-board-spades records as its method for the same gate.",""],
       ["n","<code>frontend-design</code>",""],
       ["n","<code>impeccable</code>, on any surface that exists before it reaches Verify",""],
@@ -542,13 +598,20 @@ const STAGES = [
     items:[
       ["h","<code>verify:all</code> exists and is ONE command","The repo had fifteen-suite-shaped ambitions and zero entry points: no tests, no CI, nothing"],
       ["h","<code>verify:all</code> coverage asserted, not eyeballed","<code>verify:coverage</code> diffs gates on disk against gates the entry point names. \"Does it exist\" and \"does it run everything\" are different questions"],
-      ["o","Guard script passes","<b>7 of 8 green</b> at 790b2064. <code>verify:headers</code> is legitimately red and cannot be fixed from this repo — see stage 5"],
-      ["h","<code>red-proof</code> — every gate watched failing","<b>10 of 10 RED</b>, 0 green, 0 unevaluated. The first sweep reported 3 green under fault, which the spine warns is TWO hypotheses: it decomposed into ONE genuinely blind gate and TWO inert faults. The runner own change metric was also wrong — a length delta, so a same-length substitution printed 0 bytes and read exactly like an inert fault"],
+      ["o","Guard script passes","<b>11 of 12 green</b> at <code>d5762c1</code> — <code>verify:coverage</code>, <code>placeholders</code> (82), <code>contact</code> (64), <code>copy</code> (9), <code>claims</code> (20), <code>assets</code> (12), <code>brand</code> (82), <code>identity</code> (4), <code>hero</code> (7), <code>affordance</code> (21), <code>contrast</code> (18). <code>verify:headers</code> is the one red, legitimately, and cannot be fixed from this repo — see stage 5. It reads PRODUCTION, not a config file: 8 targets × 5 headers = 40 assertions, 32 failing"],
+      ["h","<code>red-proof</code> — every gate watched failing","<b>34 cases, 34 as expected, 0 NOT as expected, 0 unevaluated</b> at <code>d5762c1</code>. Two of the newest faults first scored <code>?</code> — they broke the BUILD, so the gate never ran, and an unevaluated case is not a result; both were rewritten to compile and still be wrong. Earlier: <b>10 of 10 RED</b>, 0 green, 0 unevaluated. The first sweep reported 3 green under fault, which the spine warns is TWO hypotheses: it decomposed into ONE genuinely blind gate and TWO inert faults. The runner own change metric was also wrong — a length delta, so a same-length substitution printed 0 bytes and read exactly like an inert fault"],
       ["o","Measurement pass committed as a script","<b>Half done.</b> <code>verify:contrast</code> now computes 18 pairs on every run, so the colour half is permanently gated. The geometry half — tap targets, 375px overflow — was measured in a real browser but lives in a transcript, not in <code>scripts/</code>, so nothing re-runs it"],
       ["h","<span class='tag pub'>public</span> <code>nielsen-critique</code> as its own dispatch","<b>RUN, driven in a browser.</b> Five severity-3 findings, <b>four of them defects this session had introduced</b> — which is the argument for the instrument, not against it. All five addressed; four fixed and re-verified <em>on production</em>"],
       ["h","A board re-scores the build on the CODE","<b>RUN.</b> Overall <b>5.3</b> against a code-alone cap of <b>7.6</b>. It rejected two of nine claims and narrowed six — and it did not argue, it <b>defeated four gates by executing the bypass</b>. Every (a) item is now closed and every bypass reproduced against the fix"],
+      ["h","Three gates added and red-proofed after the re-score","<code>verify:identity</code> (the site names who is behind it, and the JSON-LD agrees), <code>verify:hero</code> (exactly one hero <em>action</em> per shipped route), and meta-content coverage inside <code>verify:claims</code>"],
+      ["m","<b>THREE BLIND-GATE DEFECTS, ALL THE SAME SHAPE:</b> a gate meant to check what a READER sees, satisfied by markup no reader sees. This is the session\'s most repeated failure and it caught the author three times.",""],
+      ["h","(a) The firm voice shipped in <code>&lt;meta&gt;</code> for hours","The sentence the claim ledger prohibits kept shipping in the root description on <code>index.html</code>, <code>404.html</code> and <code>_not-found.html</code>, hours after it was removed from the visible copy. <code>verify:claims</code> got its text by stripping tags — and <b>a meta tag has no text content</b>"],
+      ["h","(b) Fixing that was not enough — a SECOND hole behind the first","A red-proof putting the sentence back in the metadata printed <b>no failure</b>. The pattern matched <em>we help businesses</em> and not <em>No Guesswork Systems LLC <b>helps</b> businesses</em> — same assertion, different grammatical person. A green under a fault is <b>two hypotheses</b>, a blind gate or an inert fault; here it was a second blind spot behind the first. Both now carry their own red-proof case, deliberately separate, so neither can go green while the other reopens"],
+      ["h","(c) Then the fix introduced the trap into a THIRD gate","The new Organization JSON-LD carries <code>streetAddress</code> on every page, so the <em>existing</em> red-proof that strips the address out of the FOOTER went <b>GREEN</b> — <code>verify:copy</code> searched raw HTML and found it in structured data. <code>visibleText()</code> now lives in <code>lib.mjs</code> once instead of being re-derived a third time. <b>Measured under the exact fault, not argued:</b> a naive tag-strip of the built <code>index.html</code> finds the value because the script block becomes body text; removing <code>&lt;script&gt;</code> first does not"],
+      ["h","A fourth, smaller: a gate that misreported its own finding","<code>verify:coverage</code> said <em>IN verify:all BUT NOT IN CI: hero</em> about a gate that was in <b>neither</b> — the set is computed from gates-on-disk but was labelled as verify:all, pointing the fix at CI alone. Labelled from what it computes now"],
+      ["h","A criterion loosened, and the loosening red-proofed","<code>verify:hero</code> first counted primary <em>elements</em> per route and failed the home page for repeating its single call to action top and bottom — ordinary practice, not a second hero. It counts distinct <b>destinations</b> now. Because loosening a criterion to fit the code is how a gate gets paraphrased into something easier to satisfy, <b>a red-proof case holds the line</b>: the looser rule still fails two competing actions, which is exactly what the home page had"],
       ["n","<code>impeccable</code> critique",""],
-      ["h","Gate recorded","passed-with-conditions, 2026-09-23"]]},
+      ["h","Gate recorded","passed-with-conditions, 2026-09-23 — updated in place, history now 5"]]},
 
   { n:"5", t:"Security & data review", chip:["passed","recorded — enumerating gate"], gates:[
       ["Gate (public)","mandatory, full track checklist. This is the gate most likely to be missed by a surface that graduated from internal."],
