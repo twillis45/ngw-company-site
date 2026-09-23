@@ -118,6 +118,43 @@ Every item below was a live falsehood on the company's public face before this.
   the Organization JSON-LD after that block was added. A naive `/<[^>]+>/`
   strip turns every `<script>` into body text.
 
+## Trademark — the premise on record was wrong
+
+The primary USPTO register had returned **HTTP 403** to every prior attempt, so
+this project's record rested on secondary reconnaissance. Reached 2026-09-23 by
+driving `tmsearch.uspto.gov` in a browser — it is client-rendered, so `curl`
+returns a JS shell with zero matches in the HTML. **55 results for "guesswork".**
+
+**The record said** `NO GUESSWORK` is a live class-9 mark held by No Guess Work
+LLC, and a board built an argument on it. **Serial 88748555, that registrant,
+classes 009/016, is DEAD / ABANDONED.**
+
+The live exposures are different parties:
+
+| Mark | Serial | Status | Classes | Owner |
+|---|---|---|---|---|
+| NO GUESSWORK | 99676351 | **LIVE / PENDING** | 009, 041, 044 | Rameck Hunt (individual) |
+| **NO GUESSWORK. ONLY GROWTH.** | 99184248 | **LIVE / REGISTERED** | **035** marketing services | Scorpion Enterprises, LLC |
+| SKIP THE GUESSWORK | 99582874 | LIVE / PENDING | 009, 035, 041, 042, 045 | MATCHAMINT LLC |
+| MORE CLARITY, LESS GUESSWORK | 99619651 | LIVE / PENDING | 009, 035, 036, 042 | Claritev Corporation |
+
+Class 035 is business and marketing services — arguably **nearer this
+consultancy's actual services than class 009 ever was**. The field is crowded
+(live registrations across classes 003, 033, 035, 037), which cuts both ways:
+weaker individual marks, more parties with standing to oppose.
+
+**Still not a clearance, and recorded PARTIAL against the skill's own bar.** The
+recitations are truncated in the results view rather than read verbatim;
+incontestability, renewal status, field-of-use limits, and *which class this
+entity would file in* are all still open. No common-law or state rights, no
+likelihood-of-confusion analysis. **Needs a trademark attorney before anything
+ships under the mark or any application is filed.**
+
+**Two traps worth keeping.** An early "No results found" was the UI **not having
+run the search**, not an empty register. And the search executes only on the
+button — Return does not submit it. A check that reports nothing may simply not
+have run.
+
 ## Open — owner items
 
 | # | Item | Why it is yours |
