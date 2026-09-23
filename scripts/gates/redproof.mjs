@@ -33,10 +33,29 @@ const TOKEN = "PLACE" + "HOLDER";
 
 const CASES = [
   {
+    // SOURCE half — no build. A re-score board pointed out this case rebuilt
+    // for nothing: it goes RED from source alone, verified, and a case that
+    // needs a build can report `?` when the build dies, which is not a result.
+    gate: "placeholders",
+    file: "src/components/ContactForm.tsx",
+    needsBuild: false,
+    describe: "placeholder literal in SOURCE — must go red without a build",
+    mutate: (s) =>
+      s.replace(
+        "    const subject =",
+        '    const DEAD_SRC = "https://formspree.io/f/' + TOKEN +
+          '";\n    void DEAD_SRC;\n    const subject ='
+      ),
+  },
+  {
+    // EXPORT half — and this one keeps its build on purpose. Dropping the
+    // build from BOTH cases would have left the gate's export half unproven,
+    // and the export is what a visitor actually receives. The board's note was
+    // about a wasted rebuild, not about giving up that coverage.
     gate: "placeholders",
     file: "src/components/ContactForm.tsx",
     needsBuild: true,
-    describe: "put a real placeholder-endpoint literal back into the form",
+    describe: "the same literal reaching the EXPORT — the artifact a visitor receives",
     mutate: (s) =>
       s.replace(
         "    const subject =",
@@ -215,19 +234,41 @@ async function runOriginCases() {
       res.setHeader("content-type", "text/html");
       res.end("<html></html>");
     });
-    await new Promise((r) => srv.listen(3408, r));
+
+    // Port 0 = let the OS pick a free one. A fixed port made two overlapping
+    // runs collide with EADDRINUSE, which threw an unhandled 'error' event and
+    // killed the whole sweep — and because the run was piped, the PIPELINE's
+    // exit code was reported instead of the runner's, so a CRASHED red-proof
+    // sweep reported success. A guard that dies and reports 0 is the failure
+    // this runner exists to catch, happening to the runner itself.
+    let port;
     let verdict = "?";
+    let note = "";
     try {
-      const code = run("npm run verify:headers", { ...process.env, NGWS_ORIGIN: "http://localhost:3408" });
+      await new Promise((resolve, reject) => {
+        srv.once("error", reject);
+        srv.listen(0, () => {
+          port = srv.address().port;
+          resolve();
+        });
+      });
+      const code = run("npm run verify:headers", {
+        ...process.env,
+        NGWS_ORIGIN: `http://localhost:${port}`,
+      });
       verdict = code === 0 ? "GREEN" : code === 1 ? "RED" : "?";
+    } catch (e) {
+      // Cannot evaluate is not a pass and not a failure.
+      verdict = "?";
+      note = `could not stand up a controlled origin: ${e.message}`;
     } finally {
       await new Promise((r) => srv.close(r));
     }
     const ok = verdict === expect;
     const mark = verdict === "?" ? "?" : ok ? "✓" : "✗";
     console.log(`${mark} ${verdict.padEnd(5)} verify:headers      ${describe}`);
-    console.log(`         served a controlled origin; expected ${expect}`);
-    out.push({ gate: "headers", verdict: ok ? "RED" : verdict === "?" ? "?" : "GREEN", describe, note: "" });
+    console.log(`         served a controlled origin on an ephemeral port; expected ${expect}${note ? " — " + note : ""}`);
+    out.push({ gate: "headers", verdict: ok ? "RED" : verdict === "?" ? "?" : "GREEN", describe, note });
   }
   return out;
 }

@@ -123,7 +123,7 @@ export default function Home() {
             Built for practical business use
           </h2>
           <p className="text-[17px] leading-7 text-muted">
-            No Guesswork Systems LLC exists to serve businesses work toward
+            No Guesswork Systems LLC was created to help businesses work toward
             more structure, clarity, and consistency in the way they operate. The
             company focuses on practical AI, automation, decision-support tools,
             and operational systems designed to reduce friction and support
