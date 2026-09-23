@@ -1,0 +1,571 @@
+<title>Thanked and Discarded</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Newsreader:opsz,wght@6..72,400;6..72,500;6..72,600&family=IBM+Plex+Sans:wght@400;500;600&family=IBM+Plex+Mono:wght@400;500&display=swap">
+<style>
+:root{
+  --ground:#F5F6F8; --surface:#FFFFFF; --surface-2:#EDEFF3; --line:#D6DAE2;
+  --ink:#131C2E; --ink-2:#4A5568; --ink-3:#77839A;
+  --accent:#0E8F80; --accent-soft:rgba(14,143,128,.10);
+  --warn:#9A6212; --warn-soft:rgba(154,98,18,.10);
+  --alarm:#B23A2E; --alarm-soft:rgba(178,58,46,.09);
+  --lock:#9AA3B2; --lock-soft:rgba(154,163,178,.10);
+}
+@media (prefers-color-scheme:dark){ :root:not([data-theme="light"]){
+  --ground:#0B1220; --surface:#121C2C; --surface-2:#18243A; --line:#25334C;
+  --ink:#DCE3ED; --ink-2:#9BA9BE; --ink-3:#74839B;
+  --accent:#2DD4BF; --accent-soft:rgba(45,212,191,.12);
+  --warn:#E3A44A; --warn-soft:rgba(227,164,74,.13);
+  --alarm:#E5786B; --alarm-soft:rgba(229,120,107,.13);
+  --lock:#5C6A82; --lock-soft:rgba(92,106,130,.13);
+}}
+:root[data-theme="dark"]{
+  --ground:#0B1220; --surface:#121C2C; --surface-2:#18243A; --line:#25334C;
+  --ink:#DCE3ED; --ink-2:#9BA9BE; --ink-3:#74839B;
+  --accent:#2DD4BF; --accent-soft:rgba(45,212,191,.12);
+  --warn:#E3A44A; --warn-soft:rgba(227,164,74,.13);
+  --alarm:#E5786B; --alarm-soft:rgba(229,120,107,.13);
+  --lock:#5C6A82; --lock-soft:rgba(92,106,130,.13);
+}
+*{box-sizing:border-box}
+body{margin:0;background:var(--ground);color:var(--ink);
+  font-family:"IBM Plex Sans",-apple-system,BlinkMacSystemFont,"Segoe UI",sans-serif;
+  font-size:15.5px;line-height:1.62;-webkit-font-smoothing:antialiased}
+.wrap{max-width:900px;margin:0 auto;padding-inline:20px;padding-block:52px 96px}
+h1,h2,h3{font-family:Newsreader,Georgia,serif;font-weight:500;text-wrap:balance;margin:0}
+h1{font-size:clamp(2.5rem,7vw,4rem);line-height:1.04;letter-spacing:-.02em}
+h2{font-size:1.6rem;line-height:1.2;letter-spacing:-.01em}
+h3{font-size:1.12rem;line-height:1.3}
+p{margin:0}
+a{color:var(--accent)}
+.eyebrow{font-family:"IBM Plex Mono",monospace;font-size:.7rem;letter-spacing:.14em;
+  text-transform:uppercase;color:var(--ink-3);margin-bottom:14px}
+.lede{font-size:1.1rem;color:var(--ink-2);max-width:62ch;margin-top:20px}
+.stamp{font-family:"IBM Plex Mono",monospace;font-size:.72rem;color:var(--ink-3);
+  margin-top:26px;padding-top:16px;border-top:1px solid var(--line);
+  display:flex;flex-wrap:wrap;gap:6px 20px}
+.stamp b{font-weight:500;color:var(--ink-2)}
+
+/* the honest current state, first */
+.state{margin-top:44px;background:var(--surface);border:1px solid var(--line);
+  border-left:3px solid var(--alarm);border-radius:3px;padding:26px 24px}
+.state h2{font-size:1.28rem}
+.state p{margin-top:12px;color:var(--ink-2);max-width:64ch}
+.state .k{color:var(--ink);font-weight:600}
+
+/* the outage — the one bold moment */
+.outage{margin-top:40px;background:var(--surface);border:1px solid var(--line);border-radius:3px;
+  padding:26px 24px;overflow:hidden}
+.outage-n{font-family:Newsreader,Georgia,serif;font-size:clamp(3rem,11vw,5.5rem);line-height:.92;
+  color:var(--alarm);letter-spacing:-.03em;font-variant-numeric:tabular-nums}
+.outage-n small{display:block;font-family:"IBM Plex Mono",monospace;font-size:.72rem;
+  letter-spacing:.14em;text-transform:uppercase;color:var(--ink-3);margin-top:12px}
+.band{margin-top:22px;height:9px;border-radius:2px;background:var(--surface-2);
+  display:flex;overflow:hidden;border:1px solid var(--line)}
+.band i{display:block;height:100%}
+.band .dead{background:var(--alarm);flex:180}
+.band .live{background:var(--accent);flex:1}
+.band-key{display:flex;flex-wrap:wrap;gap:8px 22px;margin-top:10px;
+  font-family:"IBM Plex Mono",monospace;font-size:.68rem;color:var(--ink-3)}
+.band-key b{font-weight:500}
+.sw{display:inline-block;width:9px;height:9px;border-radius:2px;vertical-align:baseline;margin-right:6px}
+
+/* controls */
+.controls{margin-top:52px;display:flex;flex-wrap:wrap;gap:14px;align-items:center;
+  justify-content:space-between;padding-bottom:14px;border-bottom:1px solid var(--line)}
+.tally{font-family:"IBM Plex Mono",monospace;font-size:.76rem;color:var(--ink-2);
+  font-variant-numeric:tabular-nums}
+.tally b{color:var(--ink);font-weight:500}
+button.toggle{font-family:"IBM Plex Mono",monospace;font-size:.72rem;letter-spacing:.06em;
+  text-transform:uppercase;background:var(--surface);color:var(--ink-2);
+  border:1px solid var(--line);border-radius:2px;padding:8px 14px;cursor:pointer}
+button.toggle[aria-pressed="true"]{background:var(--accent-soft);color:var(--accent);
+  border-color:var(--accent)}
+button.toggle:focus-visible,input:focus-visible{outline:2px solid var(--accent);outline-offset:2px}
+
+/* stage cards */
+.stage{margin-top:30px;background:var(--surface);border:1px solid var(--line);border-radius:3px}
+.stage-h{display:flex;flex-wrap:wrap;gap:8px 14px;align-items:baseline;
+  padding:20px 22px 14px;border-bottom:1px solid var(--line)}
+.stage-n{font-family:"IBM Plex Mono",monospace;font-size:.76rem;color:var(--ink-3);
+  min-width:2.4em;font-variant-numeric:tabular-nums}
+.stage-h h3{flex:1 1 auto;min-width:0}
+.chip{font-family:"IBM Plex Mono",monospace;font-size:.64rem;letter-spacing:.1em;
+  text-transform:uppercase;padding:3px 9px;border-radius:2px;white-space:nowrap}
+.chip.passed{background:var(--accent-soft);color:var(--accent)}
+.chip.owed{background:var(--warn-soft);color:var(--warn)}
+.chip.locked{background:var(--lock-soft);color:var(--lock)}
+.chip.nogate{background:var(--surface-2);color:var(--ink-3)}
+.gate{padding:14px 22px;font-size:.88rem;color:var(--ink-2);border-bottom:1px solid var(--line);
+  background:var(--surface-2)}
+.gate b{color:var(--ink);font-weight:600}
+.gate + .gate{border-top:0}
+.ratio{padding:10px 22px;font-family:"IBM Plex Mono",monospace;font-size:.72rem;
+  color:var(--ink-3);border-bottom:1px solid var(--line);font-variant-numeric:tabular-nums}
+ul.items{list-style:none;margin:0;padding:6px 22px 18px}
+li.item{display:flex;gap:12px;align-items:flex-start;padding:9px 0;
+  border-bottom:1px solid color-mix(in srgb,var(--line) 55%,transparent)}
+li.item:last-child{border-bottom:0}
+li.item input{margin:4px 0 0;width:15px;height:15px;flex:0 0 auto;accent-color:var(--accent)}
+li.item .txt{flex:1 1 auto;min-width:0;font-size:.92rem}
+li.item .why{display:block;color:var(--ink-3);font-size:.82rem;margin-top:3px}
+li.item.marker{padding-left:27px}
+/* The publish skeleton ships [hidden]{display:none!important}, but a class
+   selector beats the UA sheet, so the page must not depend on that skeleton to
+   hide anything. Measured standalone: hidden=true with display:flex. */
+li.item[hidden]{display:none}
+.stage[hidden]{display:none}
+li.item.marker .txt{color:var(--ink-3);font-style:italic}
+.tag{font-family:"IBM Plex Mono",monospace;font-size:.6rem;letter-spacing:.09em;
+  text-transform:uppercase;padding:2px 6px;border-radius:2px;margin-left:8px;
+  white-space:nowrap;vertical-align:1px}
+.tag.notrun{background:var(--alarm-soft);color:var(--alarm)}
+.tag.owed{background:var(--warn-soft);color:var(--warn)}
+.tag.pub{background:var(--accent-soft);color:var(--accent)}
+li.item.done .txt{color:var(--ink-3)}
+
+/* tracks + tables */
+.sec{margin-top:64px}
+.sec > p{color:var(--ink-2);max-width:64ch;margin-top:12px}
+table{width:100%;border-collapse:collapse;margin-top:18px;font-size:.86rem}
+th,td{text-align:left;padding:10px 12px;border-bottom:1px solid var(--line);vertical-align:top}
+th{font-family:"IBM Plex Mono",monospace;font-size:.66rem;letter-spacing:.1em;
+  text-transform:uppercase;color:var(--ink-3);font-weight:500}
+td.num{font-family:"IBM Plex Mono",monospace;font-variant-numeric:tabular-nums;white-space:nowrap}
+.scroll{overflow-x:auto}
+code{font-family:"IBM Plex Mono",monospace;font-size:.86em;background:var(--surface-2);
+  padding:1px 5px;border-radius:2px}
+.corr{background:var(--surface);border:1px solid var(--line);border-radius:3px;
+  padding:18px 20px;margin-top:14px}
+.corr .was{color:var(--ink-3);text-decoration:line-through;font-size:.88rem}
+.corr .now{margin-top:7px;font-size:.93rem}
+.corr .src{margin-top:9px;font-family:"IBM Plex Mono",monospace;font-size:.7rem;color:var(--ink-3)}
+@media (prefers-reduced-motion:no-preference){
+  li.item,button.toggle{transition:opacity .16s ease,background .16s ease}
+}
+</style>
+
+<div class="wrap">
+
+  <p class="eyebrow">Path to Production · ngw-company-site · retrofit</p>
+  <h1>Thanked and Discarded</h1>
+  <p class="lede">The public website of No Guesswork Systems LLC told every visitor who wrote in
+    that their message had been sent. For a hundred and eighty days it was not sending anything,
+    and no mechanism existed by which anyone could have found out.</p>
+
+  <div class="stamp">
+    <span><b>Recorded</b> <span data-recorded="2026-09-23T04:47:05.129Z">2026-09-23</span></span>
+    <span><b>Gate</b> stage 0 · passed-with-conditions</span>
+    <span><b>HEAD</b> d85e516a</span>
+    <span><b>Live</b> noguessworksystems.com</span>
+    <span><b>Facing</b> public · reach public</span>
+  </div>
+
+  <section class="state">
+    <h2>Where this actually stands</h2>
+    <p>One gate of eleven has ever been recorded, and it was recorded today. The site has been
+      <span class="k">live and public since 2026-03-27</span> having passed none of the five
+      public gates the spine owes a public surface. That is not a backlog that accumulated —
+      it is a surface that entered the world without the path being run at all, because the
+      repository was never cloned into <code>~/Code</code> and so was invisible to the tracker
+      for six months.</p>
+    <p>The contact path is fixed and deployed. <span class="k">Four falsehoods were removed from
+      the live site today</span> and one gate, security headers, is legitimately red and needs a
+      change nobody can make from the repository.</p>
+  </section>
+
+  <section class="outage">
+    <p class="outage-n">180<small>days the contact form reported success and delivered nothing</small></p>
+    <div class="band" role="img" aria-label="180 days of silent discard, followed by the day it was fixed">
+      <i class="dead"></i><i class="live"></i>
+    </div>
+    <p class="band-key">
+      <span><i class="sw" style="background:var(--alarm)"></i><b>2026-03-27 → 2026-09-23</b> every submission discarded, every sender thanked</span>
+      <span><i class="sw" style="background:var(--accent)"></i><b>2026-09-23</b> fixed and deployed</span>
+    </p>
+    <p style="margin-top:18px;color:var(--ink-2);font-size:.93rem;max-width:64ch">
+      The mechanism is the finding, and it is why nobody noticed. <code>await fetch()</code>
+      <b>resolves</b> on an HTTP 404 — it rejects only on a network-layer failure. So the
+      <code>try</code> block ran straight on to the success call, and the <code>catch</code>,
+      which also set success, was never reached. There was no input, no outage and no server
+      response that could have made that form report a failure.
+    </p>
+  </section>
+
+  <div class="controls">
+    <p class="tally" id="tally">counting…</p>
+    <button class="toggle" id="hide" aria-pressed="false" type="button">Hide completed</button>
+  </div>
+
+  <div id="stages"></div>
+
+  <section class="sec" id="tracks"></section>
+
+  <section class="sec">
+    <h2>Corrections</h2>
+    <p>What was believed, what replaced it, and the evidence. The original stays visible.</p>
+
+    <div class="corr">
+      <p class="was">The site is hosted on Vercel — a <code>.vercel/project.json</code> binding exists in the working copy.</p>
+      <p class="now"><b>Production is Render behind Cloudflare.</b> The live origin returns
+        <code>rndr-id</code> on a cache MISS and no <code>x-vercel-id</code> on any response.
+        The Vercel binding is a stale artifact of an abandoned March deploy target.</p>
+      <p class="src">Corrected 2026-09-23 · a config file is not evidence about production · probed, not inferred</p>
+    </div>
+
+    <div class="corr">
+      <p class="was">The contact form's <code>catch</code> block renders the success state on failure.</p>
+      <p class="now"><b>True but not the fault that fired.</b> The <code>catch</code> was never
+        reached: <code>fetch</code> resolves on a 404, so the success call ran from the
+        <code>try</code> path. A gate written against the <code>catch</code> alone would have gone
+        green the moment someone deleted it, while every message was still discarded.</p>
+      <p class="src">Corrected 2026-09-23 by a dispatched audit, then verified empirically — <code>fetch</code> returned <code>ok=false</code> without throwing</p>
+    </div>
+
+    <div class="corr">
+      <p class="was">Three gates are blind — they passed while their faults were reintroduced.</p>
+      <p class="now"><b>One blind gate and two inert faults.</b> <code>verify:copy</code> had
+        genuinely stopped seeing its subject when React began emitting the year as separate text
+        nodes with HTML-comment separators, so it passed on every page while measuring nothing.
+        The other two faults never fired: one wrote a concatenation expression instead of a
+        literal, the other emptied files the framework still emits. An exit code cannot tell
+        those apart, which is why each fault now prints the bytes it changed.</p>
+      <p class="src">Corrected 2026-09-23 during the red-proof sweep · 6 of 6 now RED</p>
+    </div>
+
+    <div class="corr">
+      <p class="was">The site loads analytics — tracker strings appear in the shipped chunks.</p>
+      <p class="now"><b>Zero analytics, zero cookies.</b> Every match was framework internals:
+        "segment" is Next's App Router route segments, <code>gTag</code> is
+        <code>Symbol.toStringTag</code>. No <code>Set-Cookie</code> on any page.</p>
+      <p class="src">Corrected 2026-09-23 — a context grep, after a first grep counted matches without reading them</p>
+    </div>
+  </section>
+
+  <section class="sec">
+    <h2>Load-bearing numbers</h2>
+    <p>Every figure this record rests on, with where it came from and when it stops being true.</p>
+    <div class="scroll"><table>
+      <thead><tr><th>Figure</th><th>Value</th><th>Source</th><th>Expires</th></tr></thead>
+      <tbody>
+        <tr><td>Outage window</td><td class="num">180 days</td><td>Vendor commit date 2026-03-27 matched to the live <code>last-modified</code> header</td><td>fixed — closed 2026-09-23</td></tr>
+        <tr><td>Form endpoint status</td><td class="num">HTTP 404</td><td>POST to the relay ID, <code>FORM_NOT_FOUND</code></td><td>n/a — endpoint removed</td></tr>
+        <tr><td>Security headers absent</td><td class="num">4 of 5</td><td>Read from the live origin on a cache MISS</td><td>re-read on every <code>verify:headers</code> run</td></tr>
+        <tr><td>Accent on off-white contrast</td><td class="num">1.78 : 1</td><td>Computed from the live DOM; WCAG 1.4.3 needs 4.5</td><td>re-measure when the palette changes</td></tr>
+        <tr><td>Hamburger tap target</td><td class="num">24 × 16 px</td><td>Measured at 375×812 device emulation; 2.5.5 needs 44×44</td><td>re-measure on nav change</td></tr>
+        <tr><td>Red-proofs passing</td><td class="num">6 of 6 RED</td><td><code>npm run redproof</code></td><td>every run</td></tr>
+        <tr><td>Gates green</td><td class="num">4 of 5</td><td><code>npm run verify:all</code></td><td>every run</td></tr>
+        <tr><td>Deploy propagation</td><td class="num">~50 s</td><td>Polled production until <code>robots.txt</code> returned 200</td><td>re-measure if the host changes</td></tr>
+        <tr><td>Rebuild estimate</td><td class="num">8–12 h</td><td>Dispatched <code>adopt-project</code> audit, against a 6–9 h adopt backlog</td><td>stale once the backlog is worked</td></tr>
+        <tr><td>Demand-scan sources</td><td class="num">6 (5 load-bearing)</td><td>Google Suggest, HN 47822940, Consulting Success, Hinge, amazingcto.com, SBE Council. <b>Reddit coverage failed</b> — rate-limited through three paced retries, so the SMB buyer voice is untested</td><td>re-run with open discovery</td></tr>
+        <tr><td>Unsubstantiated capability claims</td><td class="num">13</td><td><code>claim-verification</code> ledger against <code>ngw-consulting/case-studies/CLAIM-LEDGER.md</code></td><td>on any copy change</td></tr>
+      </tbody>
+    </table></div>
+  </section>
+
+  <section class="sec">
+    <h2>Standing assumption</h2>
+    <div class="corr">
+      <p class="now"><b>The contact path is a <code>mailto:</code> composer, not a hosted form.</b>
+        Ruled by the owner 2026-09-23 over the alternative of wiring a real relay account. No
+        endpoint, no processor, no network call.</p>
+      <p class="src">Undo: revert <code>src/components/ContactForm.tsx</code> and wire a real
+        endpoint — but keep the <code>res.ok</code> check, or <code>verify:contact</code> will
+        refuse it, which is the point.</p>
+    </div>
+  </section>
+
+</div>
+
+<script>
+const KEY = "ngw.ngw-company-site.path.v1";
+const load = () => { try { return JSON.parse(localStorage.getItem(KEY) || "{}"); } catch { return {}; } };
+const save = (s) => { try { localStorage.setItem(KEY, JSON.stringify(s)); } catch {} };
+let store = load();
+
+// h = handled (recorded pass: checked + disabled)
+// o = owed    (open work, live checkbox)
+// n = notrun  (recorded failure to run: live checkbox, NOT RUN badge, NEVER hidden)
+// l = locked  (stage not yet reached: disabled, unchecked)
+// m = marker  (no checkbox — only where the spine defines no gate, or it does not apply)
+const STAGES = [
+  { n:"0", t:"Adoption", chip:["passed","recorded"], gates:[
+      ["Gate (all)","a written gap list against my design system and coding rules."]],
+    items:[
+      ["h","Audit architecture, design system, code quality, dependency load","Dispatched <code>adopt-project</code> RAN the repo: stubbed <code>window.fetch</code> to 404 and watched the success banner render, computed contrast from the live DOM, measured tap targets at 375×812, ran <code>npm audit</code>, swept <code>git log -p --all</code> for secrets"],
+      ["h","Re-baselined scope: what stays, what is reverse-engineered, what is deleted","Adopt with surgery — rebuild <code>ContactForm.tsx</code> and both legal pages, keep the frame"],
+      ["h","Rebuild estimate answered BEFORE the verdict","8–12 h rebuild vs 6–9 h adopt backlog. Discard stayed live until the build came back green under Node 22"],
+      ["h","Written gap list","10 ranked items, 3 explicitly deferred and named rather than dropped"],
+      ["h","Gate recorded","passed-with-conditions, 5 conditions, 2026-09-23"],
+      ["h","Path artifact published in the same session as the gate","this page"]]},
+
+  { n:"1", t:"Idea → Problem statement", chip:["owed","reached, never recorded"], gates:[
+      ["Gate (all)","I can name who hits this problem today. If I can't, it's not a problem yet — it's a preference."]],
+    items:[
+      ["o","Problem statement, one or two sentences","What is broken or missing, for whom"],
+      ["o","Name who hits this today","The gate. Not who the company wants as a client — who has the problem"],
+      ["o","Declare the basis at intake","Wedge, execution, distribution, internal, or portfolio. The basis selects which gate applies"],
+      ["h","<code>demand-scan</code>","RAN per Step 1c, which requires it for every project. Verdict <b>NO-GO</b> on the current positioning as a converting asset, 6 independent sources"],
+      ["n","Open-discovery demand pass","The scan that ran was validation-mode only, and its Reddit coverage failed through three paced retries. The SMB buyer's own voice is <b>untested, not answered</b> — the agent reported this rather than papering over it"],
+      ["h","<code>claim-verification</code>","~34 buyer-facing claims ledgered against executed checks"],
+      ["n","<code>convene-review-board</code> — the project core, once, early","Required for <b>every</b> project by the 2026-09-09 ruling, internal or not. Never convened. The largest process gap remaining"],
+      ["n","<code>superpowers:brainstorming</code>","Never run on this project"],
+      ["h","<code>third-party-content</code>","Recorded as blank, not left empty: the site ingests nothing external"],
+      ["o","Kill check and threshold, pre-registered before the check runs",""],
+      ["o","Gate recorded",""]]},
+
+  { n:"2", t:"Scope & design", chip:["owed","reached, never recorded"], gates:[
+      ["Gate (all)","criteria are checkable. \"Add validation\" fails; \"blank and malformed email each show a specific error, both covered by passing tests\" passes."],
+      ["Gate (public)","activation/UX doctrine applied <em>here</em>, not bolted on later — Ruthless Host Lens, no-guesswork-advance, the Attention System."]],
+    items:[
+      ["n","<code>reference-scan</code>, before any design work","Own design system → prior recorded scans → Mobbin → decide and record the reason. A scan run after the design is built is not research, it is looking for permission"],
+      ["n","Name the leaders' 3–4 structural properties, dated before the first build","Every board thereafter scores against those, never against the previous round"],
+      ["o","Success criteria stated so a machine can check them",""],
+      ["n","<span class='tag pub'>public</span> Activation / UX doctrine applied here","The gate a public surface owes at this stage. Never applied — and the site is already public"],
+      ["n","<code>frontend-design</code>",""],
+      ["n","<code>impeccable</code>, on any surface that exists before it reaches Verify",""],
+      ["n","<code>measure-dont-look</code> on the rung-0 style frames",""],
+      ["n","<code>motion-design</code>","Nothing on the site is animated; recorded as not run rather than assumed inapplicable"],
+      ["n","<code>pick-generation-model</code>","No assets were generated this session"],
+      ["n","<code>clearance</code>","Scoped to revenue. The name fronts a revenue line and has never been searched"],
+      ["n","<code>superpowers:writing-plans</code>",""],
+      ["o","Gate recorded",""]]},
+
+  { n:"3", t:"Build", chip:["owed","no gate defined"], gates:[
+      ["Spine","<b>No stage-specific gate.</b> The gate is that the code exists and matches the scope."]],
+    items:[
+      ["m","The spine defines no gate at this stage. Inventing a checkbox here would invent an obligation that can never be discharged.",""],
+      ["h","<code>test-driven-development</code>","Gates were written and watched failing <b>before</b> the fixes. The commit order preserves it: the suite commit is red on its own commit, deliberately"],
+      ["n","<span class='tag pub'>public</span> <code>web-design-guidelines</code> on UI code that ships",""],
+      ["h","<code>karpathy-guidelines</code> on the diff","Every changed line traces to a named falsehood. Three real defects were found and deliberately left out of this pass to keep the diff traceable"],
+      ["h","Admin / ops console created here, not deferred to stage 6","<code>docs/ADMIN-CONSOLE.md</code> — and its most important row is the one that says the lost submissions are not recoverable"],
+      ["h","Run it on the real target","Dev server driven in the browser pane; the deployed site smoke-tested against the live origin"]]},
+
+  { n:"4", t:"Verify", chip:["owed","reached, never recorded"], gates:[
+      ["Gate (all)","the project's own guard script passes. A criterion I have to verify by looking is not a guard."],
+      ["Gate (all)","a measurement pass on any surface that renders in more than one layout regime — assert computed geometry in a real browser; do not eyeball it."],
+      ["Gate (public)","a structured Nielsen 10-heuristics critique, run as its own dispatch."]],
+    items:[
+      ["h","<code>verify:all</code> exists and is ONE command","The repo had fifteen-suite-shaped ambitions and zero entry points: no tests, no CI, nothing"],
+      ["h","<code>verify:all</code> coverage asserted, not eyeballed","<code>verify:coverage</code> diffs gates on disk against gates the entry point names. \"Does it exist\" and \"does it run everything\" are different questions"],
+      ["o","Guard script passes","<b>4 of 5 green.</b> <code>verify:headers</code> is legitimately red — see stage 5"],
+      ["h","<code>red-proof</code> — every gate watched failing","6 of 6 RED. The first sweep reported 3 green under fault, which decomposed into one blind gate and two inert faults"],
+      ["o","Measurement pass committed as a script","Contrast and tap targets <b>were</b> measured in a real browser by the dispatched audit — but that measurement lives in a transcript, not in <code>scripts/</code>, so nothing re-runs it"],
+      ["n","<span class='tag pub'>public</span> <code>nielsen-critique</code> as its own dispatch","The public gate at this stage. Never run"],
+      ["n","<code>impeccable</code> critique",""],
+      ["o","Gate recorded",""]]},
+
+  { n:"5", t:"Security & data review", chip:["owed","reached, never recorded"], gates:[
+      ["Gate (public)","mandatory, full track checklist. This is the gate most likely to be missed by a surface that graduated from internal."],
+      ["Shape","an <em>enumerating</em> gate, not a checklist — a written review is a snapshot of one person's attention on one day."]],
+    items:[
+      ["h","Secret scan","Zero secrets in the tree and in <code>git log -p --all</code>"],
+      ["h","Third-party origins enumerated","Zero. The site loads nothing off-origin but its own fonts"],
+      ["o","Dependency audit acted on","<code>npm audit</code>: 1 critical, 3 high, 1 moderate. Blast radius assessed as unreachable from a static export — recorded rather than dismissed"],
+      ["o","Security headers on the live origin","<b>The one red gate.</b> No HSTS, CSP, Referrer-Policy or X-Frame-Options. Not fixable from this repo — an edge config change. Exact rule ready to paste in <code>docs/SECURITY-HEADERS.md</code>"],
+      ["o","License check","No LICENSE file. A stray <code>\"license\": \"ISC\"</code> on a proprietary company site was removed from the lockfile"],
+      ["m","Route enumeration sweep does not apply — a static export has no routes to gate. Recorded as reasoned, not as silence.",""],
+      ["n","<span class='tag pub'>public</span> Full security track checklist","Mandatory for a public surface. Never run, on a surface that has been public for six months"],
+      ["o","Gate recorded",""]]},
+
+  { n:"6", t:"Deploy", chip:["owed","shipped before it was gated"], gates:[
+      ["Gate (public)","P0/P1 findings from stages 4 and 5 are resolved first."],
+      ["Reach","<b>public</b> — anyone can reach it. This obliges the full stage 5 checklist, and stage 9 applies retroactively to every public gate skipped on the way here."]],
+    items:[
+      ["h","Host picked and the reason recorded","Render static site behind Cloudflare. Established by probe — <code>rndr-id</code> on a cache MISS — not by reading a config file"],
+      ["h","Reach recorded","public"],
+      ["h","How it deploys recorded","<b>Auto on push to main.</b> Measured, not assumed: pushed and polled production until the change arrived, ~50 s. So deploy is <b>not</b> an owner item here — the standing push authorization is the deploy authorization"],
+      ["h","Production smoke test against the live origin","All five pages 200, all four new assets 200, 404 correct, every one of the five falsehoods absent"],
+      ["n","<span class='tag pub'>public</span> P0/P1 from stages 4 and 5 resolved <em>before</em> deploy","<b>Not met, and cannot retroactively be.</b> The site went public in March having run neither stage. This row is the shape of the whole record"],
+      ["o","Gate recorded",""]]},
+
+  { n:"7", t:"Observe & handoff", chip:["owed","partially met today"], gates:[
+      ["Gate (all)","HANDOFF.md reflects measured reality — git SHA, test counts, CI status — not intentions."],
+      ["Gate (public)","instrumentation wired (analytics, error tracking), and the tracker entry matches reality."]],
+    items:[
+      ["h","HANDOFF.md with measured state and active traps","Written today. The repo had none"],
+      ["h","The SHA is a real recent ancestor of HEAD","Not equal to HEAD — writing the SHA changes HEAD, so demanding equality makes the check unsatisfiable"],
+      ["h","Tracker entry matches reality","Gate recorded today; the project is visible to the tracker for the first time"],
+      ["o","CLAUDE.md cross-links HANDOFF as the first read",""],
+      ["n","<span class='tag pub'>public</span> Instrumentation wired — the emit call AND the counter, read from code","Zero analytics and zero error tracking. A deploy could break a page and nothing would report it"],
+      ["o","Gate recorded",""]]},
+
+  { n:"8", t:"Maintain", chip:["locked","not reached"], gates:[
+      ["Spine","ongoing handoff discipline, dependency review, tech-debt passes."]],
+    items:[
+      ["m","<code>requiredSkills[8]</code> is ruled EMPTY, not forgotten — no skill is adopted at this stage yet.",""],
+      ["l","Ongoing handoff discipline",""],
+      ["l","Dependency review cadence",""],
+      ["l","Tech-debt pass",""]]},
+
+  { n:"9", t:"Promotion", chip:["owed","applies retroactively — already public"], gates:[
+      ["Gate","all four public gates, explicitly, as a checklist. Nothing goes public having skipped a step merely because it wasn't public when it was built."],
+      ["Server","a stage-9 pass is <b>refused</b> without a <code>boardVerdict</code> and <code>boardSeats</code> — the only rule in the spine that hard-fails a write."]],
+    items:[
+      ["n","Stage 2 public gate — activation / UX doctrine",""],
+      ["n","Stage 4 public gate — impeccable critique",""],
+      ["n","Stage 5 public gate — full security & data review",""],
+      ["n","Stage 7 public gate — instrumentation + tracker sync",""],
+      ["n","Board verdict and seats","No board has ever been convened for this project"],
+      ["o","Gate recorded",""]]},
+
+  { n:"10", t:"Sunset", chip:["locked","not reached"], gates:[
+      ["Spine","an explicit retirement note. A project that goes quiet without one is a liability, not a completed thing."]],
+    items:[
+      ["m","<code>requiredSkills[10]</code> is ruled EMPTY — the spine says no skill, and may not need one. An empty key is how you tell that from a stage nobody considered.",""],
+      ["l","Retirement note",""]]}
+];
+
+const TRACKS = [
+  { title:"Security track", blurb:"Woven through the spine and consolidated at stage 5. Security bolted on at the end finds architecture problems too late to fix cheaply.", items:[
+      ["o","Stage 2 — threat-model the data","What PII, payments, credentials or third-party data does this touch? Never done. The answer today is <em>none</em>, and that is a finding worth writing rather than assuming"],
+      ["h","Stage 3 — secrets in env vars, never source or git history","Verified across the tree and the full history"],
+      ["m","Stage 4 — enumerate the routers and assert an unauthorized caller gets 401/403: does not apply to a static export with no routes",""],
+      ["o","Stage 5 — the consolidated gate","Open. See stage 5"],
+      ["o","Stage 6 — prod error responses carry no stack traces; backup exists and restore is verified","Error responses are clean (static files). No backup or restore procedure is documented"],
+      ["n","Stage 7 — error tracking wired so failures are visible rather than reported by a user","Nothing is wired. This is how a six-month outage stays invisible"]]},
+
+  { title:"Marketing & promotion track", blurb:"Starts at stage 2, not after Deploy — positioning shapes the product. This project is unusual: the site <em>is</em> the acquisition asset, so the track is load-bearing rather than parallel.", items:[
+      ["n","<b>Phase 1 — Positioning</b> (stage 2). Exit: a falsifiable acquisition thesis.","<code>demand-scan</code> ran and returned <b>NO-GO</b>: three of the four capability-card names have no buyer-side search footprint, and the tagline returns only itself. The positioning thesis has never been gated. <b>Producing an asset is not passing a phase</b>"],
+      ["n","<b>Phase 2 — Comprehension proof</b> (stages 3–4). Exit: scored with strangers, not judged in the room.","Never run. This is the most-skipped phase in the doctrine, for exactly this reason"],
+      ["n","<b>Phase 3 — Economics proof</b> (stages 4–5, always before the first spend). Exit: unit cost measured.","Never run. No spend has occurred, so nothing is yet violated — but the gate must clear before any does"],
+      ["n","<b>Phase 4 — Spend and iterate</b> (stages 6–9). Exit: spend gate honored, or no spend.","No spend. Blocked behind Phases 1–3"],
+      ["n","Marketing finding that constrains a phase, recorded in the phase","The channel evidence says a brochure site does not generate leads for a solo operator — it gets checked <em>after</em> a referral. That is a Phase 1 constraint, not a footnote in a research doc"],
+      ["h","Stage 6 — every listing sentence carries the check that proves it","The claim ledger exists. It rates 13 capability sentences unsubstantiated against the org's own prohibition on the words <em>client</em>, <em>engagement</em> and <em>delivered to</em>"]]}
+];
+
+function itemEl(stageKey, idx, spec){
+  const [kind, label, why] = spec;
+  const li = document.createElement("li");
+  li.className = "item";
+  li.dataset.kind = kind;
+
+  if (kind === "m"){
+    li.classList.add("marker");
+    li.innerHTML = '<span class="txt">' + label + (why ? '<span class="why">'+why+'</span>' : '') + '</span>';
+    return li;
+  }
+
+  const id = stageKey + "-" + idx;
+  const box = document.createElement("input");
+  box.type = "checkbox"; box.id = id;
+  if (kind === "h"){ box.checked = true; box.disabled = true; }
+  else if (kind === "l"){ box.checked = false; box.disabled = true; }
+  else { box.checked = !!store[id];
+         box.addEventListener("change", () => { store[id] = box.checked; save(store); render(); }); }
+
+  const txt = document.createElement("label");
+  txt.className = "txt"; txt.htmlFor = id;
+  let badge = "";
+  if (kind === "n") badge = ' <span class="tag notrun">not run</span>';
+  else if (kind === "o") badge = ' <span class="tag owed">owed</span>';
+  txt.innerHTML = label + badge + (why ? '<span class="why">'+why+'</span>' : '');
+
+  li.append(box, txt);
+  if (kind === "h" || box.checked) li.classList.add("done");
+  return li;
+}
+
+function render(){
+  const hiding = document.getElementById("hide").getAttribute("aria-pressed") === "true";
+  const host = document.getElementById("stages");
+  host.textContent = "";
+  let total = 0, handled = 0, open = 0, notrun = 0, locked = 0, hidden = 0;
+
+  for (const s of STAGES){
+    const card = document.createElement("section");
+    card.className = "stage";
+    const key = "s" + s.n;
+
+    const h = document.createElement("div");
+    h.className = "stage-h";
+    h.innerHTML = '<span class="stage-n">'+s.n+'</span><h3>'+s.t+'</h3>'+
+                  '<span class="chip '+s.chip[0]+'">'+s.chip[1]+'</span>';
+    card.append(h);
+
+    for (const [k,v] of s.gates){
+      const g = document.createElement("p");
+      g.className = "gate";
+      g.innerHTML = '<b>'+k+':</b> '+v;
+      card.append(g);
+    }
+
+    const list = document.createElement("ul");
+    list.className = "items";
+    let sHandled = 0, sTotal = 0, sHidden = 0;
+
+    s.items.forEach((spec, i) => {
+      const li = itemEl(key, i, spec);
+      const kind = spec[0];
+      if (kind !== "m"){
+        sTotal++; total++;
+        if (kind === "h"){ sHandled++; handled++; }
+        else if (kind === "l"){ locked++; }
+        else if (kind === "n"){ notrun++; if (store[key+"-"+s.items.indexOf(spec)]) {} }
+        else { open++; }
+      }
+      // "completed" means recorded-PASS or a ticked open item. NOT RUN is NEVER hidden.
+      const ticked = li.querySelector("input")?.checked;
+      const completed = kind === "h" || (kind === "o" && ticked);
+      if (hiding && completed){ li.hidden = true; sHidden++; hidden++; }
+      list.append(li);
+    });
+
+    const ratio = document.createElement("p");
+    ratio.className = "ratio";
+    ratio.textContent = sHandled + " of " + sTotal + " handled · " + (sTotal - sHandled) + " still owed";
+    card.append(ratio, list);
+
+    // hide a stage only when every one of its items is hidden, so no empty card shows
+    if (hiding && sHidden === sTotal && sTotal > 0) card.hidden = true;
+    host.append(card);
+  }
+
+  // tracks
+  const th = document.getElementById("tracks");
+  th.textContent = "";
+  for (const t of TRACKS){
+    const sec = document.createElement("div");
+    sec.style.marginTop = "48px";
+    const head = document.createElement("h2"); head.textContent = t.title;
+    const blurb = document.createElement("p"); blurb.innerHTML = t.blurb;
+    blurb.style.cssText = "color:var(--ink-2);max-width:64ch;margin-top:12px";
+    const card = document.createElement("section");
+    card.className = "stage"; card.style.marginTop = "18px";
+    const list = document.createElement("ul"); list.className = "items";
+    t.items.forEach((spec,i) => {
+      const li = itemEl("t"+t.title.slice(0,3), i, spec);
+      const kind = spec[0];
+      if (kind !== "m"){
+        total++;
+        if (kind === "h") handled++;
+        else if (kind === "l") locked++;
+        else if (kind === "n") notrun++;
+        else open++;
+      }
+      const ticked = li.querySelector("input")?.checked;
+      if (hiding && (kind === "h" || (kind === "o" && ticked))){ li.hidden = true; hidden++; }
+      list.append(li);
+    });
+    card.append(list);
+    sec.append(head, blurb, card);
+    th.append(sec);
+  }
+
+  document.getElementById("tally").innerHTML =
+    "<b>"+total+"</b> obligations · <b>"+handled+"</b> handled · <b>"+open+"</b> open · " +
+    "<b>"+notrun+"</b> not run · <b>"+locked+"</b> unreached" +
+    (hiding ? " · "+hidden+" hidden" : "");
+}
+
+document.getElementById("hide").addEventListener("click", (e) => {
+  const b = e.currentTarget;
+  const on = b.getAttribute("aria-pressed") === "true";
+  b.setAttribute("aria-pressed", String(!on));
+  try { store.__hide = !on; save(store); } catch {}
+  render();
+});
+
+if (store.__hide) document.getElementById("hide").setAttribute("aria-pressed","true");
+render();
+</script>

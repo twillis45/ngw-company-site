@@ -1,0 +1,14 @@
+{
+  "version": "0.0.1",
+  "configurations": [
+    {
+      "name": "ngw-company-site",
+      "runtimeExecutable": "/bin/sh",
+      "runtimeArgs": [
+        "-c",
+        "PATH=/usr/local/Cellar/node@22/22.23.2_1/bin:$PATH exec npm run dev -- --port 3111"
+      ],
+      "port": 3111
+    }
+  ]
+}

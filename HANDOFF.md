@@ -12,6 +12,17 @@
 | Gates | 5, all reachable from `verify:all` (coverage asserted, not eyeballed) |
 | Red-proofs | 6, **all watched going red** |
 
+## Path artifact
+
+| | |
+|---|---|
+| Name | **Thanked and Discarded** |
+| URL | https://claude.ai/artifact/VHZk1nx6VrNRFmAmxEUuot |
+| Source | `docs/artifact/thanked-and-discarded.html` — edit and republish THIS file so the URL stays stable |
+| Watch | confirmed 2026-09-23T04:56:47.802Z — connected, armed by a publish, auto-replies armed |
+| Measured | 11 stages · 87 rows · 82 checkboxes · 5 markers · 27 handled · 21 open · 30 NOT RUN · 4 unreached · 0 sideways scroll · 0 JS errors |
+| Stamp | `data-recorded="2026-09-23T04:47:05.129Z"`, equal to the stage-0 gate record's `recordedAt` |
+
 ## How it deploys
 
 **Auto-deploy on push to `main`** (Render static site). There is no deploy
