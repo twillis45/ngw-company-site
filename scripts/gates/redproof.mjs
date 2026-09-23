@@ -135,6 +135,23 @@ const CASES = [
     gate: "copy",
     file: "src/site.ts",
     needsBuild: true,
+    describe: "restore the SUPERSEDED Oakland address — the D&B value, not the record",
+    mutate: (s) =>
+      s
+        .replace('street: "306 W Redwood St, STE 201"', 'street: "5000 Thayer Center, Suite E"')
+        .replace('cityStateZip: "Baltimore, MD 21201"', 'cityStateZip: "Oakland, MD 21550"'),
+  },
+  {
+    gate: "copy",
+    file: "src/components/Footer.tsx",
+    needsBuild: true,
+    describe: "remove the address entirely — the gate must fail on ABSENCE, not pass",
+    mutate: (s) => s.replace("{site.address.street}", "").replace("{site.address.cityStateZip}", ""),
+  },
+  {
+    gate: "copy",
+    file: "src/site.ts",
+    needsBuild: true,
     describe: "hardcode the copyright year back to 2025",
     mutate: (s) => s.replace("return new Date().getFullYear();", "return 2025;"),
   },

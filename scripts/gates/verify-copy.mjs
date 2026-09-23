@@ -18,7 +18,9 @@
 //     passes because its subject was absent is worse than no gate, because it
 //     reports coverage it does not have.
 
-import { shippedFiles, requireExport, report } from "./lib.mjs";
+import { readFileSync } from "node:fs";
+import { join } from "node:path";
+import { ROOT, shippedFiles, requireExport, report } from "./lib.mjs";
 
 requireExport();
 
@@ -50,4 +52,64 @@ for (const f of files) {
   }
 }
 
-report(`copyright year is current (${YEAR}) and present on every page`, failures, files.length);
+// THE ADDRESS OF RECORD. The site published the SUPERSEDED Dun & Bradstreet
+// value — 5000 Thayer Center, Oakland MD — on six surfaces, while the register
+// recorded 306 W Redwood St, Baltimore as verified against the Maryland
+// Principal Office. COMPANY-REGISTER flags the old value as the leading cause
+// of Apple organization-enrollment rejection, and the owner ruled Baltimore
+// correct for public display on 2026-09-23.
+//
+// Asserted two ways, because the second is what actually prevents a drift:
+//   1. The superseded value must not appear in anything that ships.
+//   2. The address that DOES ship must equal the one constant in src/site.ts,
+//      so the two copies cannot diverge again — they already did once.
+const SUPERSEDED = [/5000\s+Thayer/i, /Oakland,\s*MD/i, /\b21550\b/];
+
+const siteTs = readFileSync(join(ROOT, "src/site.ts"), "utf8");
+const street = (siteTs.match(/street:\s*"([^"]+)"/) || [])[1];
+const cityStateZip = (siteTs.match(/cityStateZip:\s*"([^"]+)"/) || [])[1];
+
+if (!street || !cityStateZip) {
+  failures.push("src/site.ts declares no address — this gate cannot pass on a constant it did not find");
+} else {
+  let carriedBy = 0;
+  const missing = [];
+  for (const f of files) {
+    const text = f.text.replace(/<!--[\s\S]*?-->/g, "");
+    for (const re of SUPERSEDED) {
+      if (re.test(text)) {
+        failures.push(
+          `${f.rel} — ships the SUPERSEDED address (${re.source}). The address of ` +
+            `record is "${street}, ${cityStateZip}", owner-ruled 2026-09-23.`
+        );
+      }
+    }
+    // React splits adjacent text nodes, so match the street alone.
+    if (text.includes(street)) carriedBy++;
+    else missing.push(f.rel);
+  }
+  // EVERY page, not merely one. The address lives in the footer, and the footer
+  // is on every page — so "somewhere on the site" was a weaker invariant than
+  // the design actually guarantees. A red-proof case that stripped the address
+  // from the footer alone went GREEN, because /contact renders it separately
+  // and kept the count above zero. The runner caught the gate being looser than
+  // intended; the fault was fine.
+  if (carriedBy === 0) {
+    failures.push(
+      `NO shipped page carries the address of record ("${street}") — either it was ` +
+        `removed, or its markup changed shape and this gate can no longer see it`
+    );
+  } else if (missing.length) {
+    failures.push(
+      `${missing.length} page(s) do not carry the address of record: ${missing.join(", ")}. ` +
+        `It lives in the footer, which every page renders — so a page without it means ` +
+        `the footer stopped rendering there.`
+    );
+  }
+}
+
+report(
+  `copyright year is current (${YEAR}) and the address of record ships`,
+  failures,
+  files.length + 2
+);
