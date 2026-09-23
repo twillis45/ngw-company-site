@@ -36,7 +36,7 @@ export default function RootLayout({
 }) {
   return (
     <html lang="en" className={inter.variable}>
-      <body className="bg-navy text-cool-gray">
+      <body className="bg-carbon text-muted">
         <Navbar />
         <main>{children}</main>
         <Footer />

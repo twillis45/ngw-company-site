@@ -101,3 +101,47 @@ Every item below was a live falsehood on the company's public face before this.
   owner 2026-09-23 over the alternative of a real relay account. **Undo:** revert
   `src/components/ContactForm.tsx` and wire a real endpoint — but keep the
   `res.ok` check, or `verify:contact` will refuse it, which is the point.
+
+- **Four service entries were removed** — "AI Decision Support" and "Operational
+  Intelligence" from the home page, "AI Decision Support" and "Operational
+  Reporting & Visibility" from Solutions. The stage-1 board ranked this (a) on
+  the grounds that none has a backing artifact in
+  `ngw-consulting/case-studies/CLAIM-LEDGER.md`, and that "Operational
+  Intelligence" is additionally the term Google Suggest rewrites to "business
+  intelligence consultant". This narrows the stated offering, which is the
+  owner's to widen again. **Undo:** re-add the entries to the `services` array
+  in `src/app/page.tsx` and the `solutions` array in
+  `src/app/solutions/page.tsx` — but `verify:claims` will refuse any firm-voice
+  body copy that comes back with them, which is the point.
+
+- **The site was re-skinned to Studio Matte**, the existing NGW design system in
+  `ngw-leadgen/docs/brand/`. It had shipped in navy and neon teal; that system's
+  light-mode spec ends with the line *"No warm gold. No pink. No neon teal. No
+  blue."* The accent is now steel `#849EB8`, used only on actions — the landing
+  reference states the discipline in four words, *"the accent, used once"* — and
+  kickers, card rules, ghost numerals and check glyphs no longer carry it.
+  **Undo:** the token block at the top of `src/app/globals.css` is the whole
+  surface; reverting it reverts the skin.
+
+## Owner items the board named, in its ranked order
+
+1. **Transfer-lock, renew and DNSSEC-sign `noguessworksystems.com`.** Verified
+   live against RDAP 2026-09-23: status is bare `["active"]` — **no transfer
+   lock, no delete lock, no update lock** — `delegationSigned: false`, expires
+   **2027-02-08, 139 days out**, alone on DomainRegistry.com. Every other domain
+   in the portfolio carries `client transfer prohibited` and runs to 2029. A
+   lapse or transfer takes the entity name, `info@`, `admin@`, every product
+   subdomain, every password-reset path and the Apple enrollment site at once.
+   **The only item here with a hard deadline and an unrecoverable failure mode.**
+2. Rule whether the two worked problems may be published — the only change that
+   would give a referral-checker something checkable to believe.
+3. **Never ship an app branded "No Guesswork" without class-9 clearance.**
+   "NO GUESSWORK" is a live mark held by No Guess Work LLC for downloadable
+   software, and that registrant already publishes on both stores. The board's
+   source returned HTTP 403, so this is reconnaissance and **not** a clearance.
+4. Run `clearance` properly.
+5. Security headers — `docs/SECURITY-HEADERS.md`.
+6. Analytics: a cookieless server-side referrer count, or accept that the
+   declared basis stays unchecked.
+7. The 180-day discarded-mail question: whether any record is recoverable
+   within Cloudflare/Render retention, and whether notice is owed.

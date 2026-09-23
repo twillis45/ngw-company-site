@@ -79,6 +79,39 @@ const CASES = [
     describe: "delete the site icon — nothing exported, no <link rel=icon> on any page",
   },
   {
+    gate: "claims",
+    file: "src/app/page.tsx",
+    needsBuild: true,
+    describe: "restore an asserted OUTCOME with nothing measured behind it",
+    mutate: (s) =>
+      s.replace('"Every claim carries where it came from",',
+                '"More consistent execution across teams",'),
+  },
+  {
+    gate: "claims",
+    file: "src/app/page.tsx",
+    needsBuild: true,
+    describe: "restore the firm-voice sentence the claim ledger prohibits",
+    mutate: (s) =>
+      s.replace("Each system targets one specific act of guessing",
+                "We help organizations address inconsistent workflows and unclear"),
+  },
+  {
+    gate: "claims",
+    file: "src/app/page.tsx",
+    needsBuild: true,
+    describe: "DELETE the honest anchor — the gate must go red on ABSENCE, not pass",
+    mutate: (s) => s.replace("was created to help", "exists to serve"),
+  },
+  {
+    gate: "contrast",
+    file: "src/app/page.tsx",
+    needsBuild: false,
+    describe: "put the bright accent back on the light section (1.78:1)",
+    mutate: (s) =>
+      s.replace('tracking-[0.08em] text-ink-support"', 'tracking-[0.08em] text-steel"'),
+  },
+  {
     gate: "assets",
     file: "src/app/robots.ts",
     needsBuild: true,
@@ -117,9 +150,18 @@ for (const c of CASES) {
       // silently no-ops proves nothing and would be recorded as a passing gate.
       const next = c.mutate(original);
       if (next === original) throw new Error(`fault did not apply to ${c.file}`);
-      changed = Math.abs(next.length - original.length);
+      // Count DIFFERING characters, not the length delta. A same-length
+      // substitution — "Every claim carries where it came from" for "More
+      // consistent execution across teams", both 37 characters — reported
+      // "0 bytes" and read exactly like an inert fault, on the one instrument
+      // whose job is to tell an inert fault from a blind gate.
+      let diff = 0;
+      for (let i = 0; i < Math.max(next.length, original.length); i++) {
+        if (next[i] !== original[i]) diff++;
+      }
+      changed = diff;
       writeFileSync(path, next);
-      note = `fault changed ${changed} bytes in ${c.file}`;
+      note = `fault changed ${changed} chars in ${c.file} (length ${original.length} -> ${next.length})`;
     }
 
     if (c.needsBuild && run("npm run build") !== 0) {

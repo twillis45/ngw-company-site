@@ -7,23 +7,23 @@ export const metadata: Metadata = {
 
 export default function PrivacyPolicy() {
   return (
-    <section className="bg-navy pt-40 pb-24 md:pt-44 md:pb-28">
+    <section className="bg-carbon pt-40 pb-24 md:pt-44 md:pb-28">
       <div className="mx-auto max-w-[680px] px-6 md:px-12">
-        <h1 className="mb-2 text-[28px] font-semibold leading-tight text-white md:text-[40px] md:leading-[48px]">
+        <h1 className="mb-2 text-[28px] font-semibold leading-tight text-ink md:text-[40px] md:leading-[48px]">
           Privacy Policy
         </h1>
-        <p className="mb-10 text-[13px] text-cool-gray">
+        <p className="mb-10 text-[13px] text-muted">
           Last updated: September 2026
         </p>
 
-        <div className="space-y-6 text-[17px] leading-7 text-cool-gray">
+        <div className="space-y-6 text-[17px] leading-7 text-muted">
           <p>
             No Guesswork Systems LLC (&ldquo;we,&rdquo; &ldquo;us,&rdquo; or
             &ldquo;our&rdquo;) respects your privacy. This page describes how we
             handle information collected through noguessworksystems.com.
           </p>
 
-          <h2 className="text-[18px] font-semibold text-light-gray pt-2">
+          <h2 className="text-[18px] font-semibold text-muted pt-2">
             1. Information We Collect
           </h2>
           <p>
@@ -34,7 +34,7 @@ export default function PrivacyPolicy() {
             choose to send or discard.
           </p>
 
-          <h2 className="text-[18px] font-semibold text-light-gray pt-2">
+          <h2 className="text-[18px] font-semibold text-muted pt-2">
             2. How We Use Information
           </h2>
           <p>
@@ -47,7 +47,7 @@ export default function PrivacyPolicy() {
             below and we will respond within 30 days.
           </p>
 
-          <h2 className="text-[18px] font-semibold text-light-gray pt-2">
+          <h2 className="text-[18px] font-semibold text-muted pt-2">
             3. Third Parties
           </h2>
           <p>
@@ -59,25 +59,25 @@ export default function PrivacyPolicy() {
             metadata, including your IP address, in order to serve the page.
           </p>
 
-          <h2 className="text-[18px] font-semibold text-light-gray pt-2">
+          <h2 className="text-[18px] font-semibold text-muted pt-2">
             4. Cookies
           </h2>
           <p>
             This site sets no cookies and runs no analytics. There is no
             tracking script, no tag manager, and no advertising pixel on any
             page. You can confirm this yourself: the site sends no
-            <code className="px-1 text-light-gray">Set-Cookie</code> header on
+            <code className="px-1 text-muted">Set-Cookie</code> header on
             any page, and its scripts contain no analytics code.
           </p>
 
-          <h2 className="text-[18px] font-semibold text-light-gray pt-2">
+          <h2 className="text-[18px] font-semibold text-muted pt-2">
             5. Contact
           </h2>
           <p>
             For privacy-related questions, email{" "}
             <a
               href="mailto:info@noguessworksystems.com"
-              className="text-accent hover:text-accent-hover"
+              className="text-steel hover:text-steel-hover"
             >
               info@noguessworksystems.com
             </a>

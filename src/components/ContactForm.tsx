@@ -56,16 +56,16 @@ export function ContactForm() {
 
   if (handedOff) {
     return (
-      <div className="rounded-2xl border border-border-dark bg-slate-surface p-10 text-center">
-        <p className="text-xl font-semibold text-white mb-2">
+      <div className="rounded-2xl border border-hair bg-surface-2 p-10 text-center">
+        <p className="text-xl font-semibold text-ink mb-2">
           Your email app should be opening
         </p>
-        <p className="text-cool-gray">
+        <p className="text-muted">
           Your message is drafted and ready to send — it is not sent until you
           send it. If nothing opened, email{" "}
           <a
             href={`mailto:${site.email}`}
-            className="text-accent hover:underline"
+            className="text-steel hover:underline"
           >
             {site.email}
           </a>{" "}
@@ -76,34 +76,34 @@ export function ContactForm() {
   }
 
   const inputClass =
-    "w-full rounded-lg border border-border-dark bg-charcoal px-4 py-3.5 text-white placeholder:text-[#64748B] focus:border-accent focus:outline-none transition-colors";
+    "w-full rounded-lg border border-hair bg-surface px-4 py-3.5 text-ink placeholder:text-faint focus:border-steel focus:outline-none transition-colors";
 
   return (
     <form
       onSubmit={handleSubmit}
-      className="rounded-2xl border border-border-dark bg-slate-surface p-10"
+      className="rounded-2xl border border-hair bg-surface-2 p-10"
     >
       <div className="space-y-5">
         <div>
-          <label htmlFor="cf-name" className="mb-1.5 block text-sm font-medium text-light-gray">
+          <label htmlFor="cf-name" className="mb-1.5 block text-sm font-medium text-muted">
             Name
           </label>
           <input id="cf-name" type="text" name="name" required className={inputClass} placeholder="Your name" />
         </div>
         <div>
-          <label htmlFor="cf-email" className="mb-1.5 block text-sm font-medium text-light-gray">
+          <label htmlFor="cf-email" className="mb-1.5 block text-sm font-medium text-muted">
             Email
           </label>
           <input id="cf-email" type="email" name="email" required className={inputClass} placeholder="you@company.com" />
         </div>
         <div>
-          <label htmlFor="cf-company" className="mb-1.5 block text-sm font-medium text-light-gray">
-            Company <span className="text-cool-gray font-normal">(optional)</span>
+          <label htmlFor="cf-company" className="mb-1.5 block text-sm font-medium text-muted">
+            Company <span className="text-muted font-normal">(optional)</span>
           </label>
           <input id="cf-company" type="text" name="company" className={inputClass} placeholder="Company name" />
         </div>
         <div>
-          <label htmlFor="cf-message" className="mb-1.5 block text-sm font-medium text-light-gray">
+          <label htmlFor="cf-message" className="mb-1.5 block text-sm font-medium text-muted">
             Message
           </label>
           <textarea
@@ -118,13 +118,13 @@ export function ContactForm() {
       </div>
       <button
         type="submit"
-        className="mt-6 w-full rounded-lg bg-accent px-7 py-3.5 text-[15px] font-medium text-navy hover:bg-accent-hover transition-colors"
+        className="mt-6 w-full rounded-lg bg-steel px-7 py-3.5 text-[15px] font-medium text-carbon hover:bg-steel-hover transition-colors"
       >
         Compose Message
       </button>
-      <p className="mt-4 text-center text-[13px] text-cool-gray">
+      <p className="mt-4 text-center text-[13px] text-muted">
         Opens in your email app. Or write to{" "}
-        <a href={`mailto:${site.email}`} className="text-accent hover:underline">
+        <a href={`mailto:${site.email}`} className="text-steel hover:underline">
           {site.email}
         </a>
         .

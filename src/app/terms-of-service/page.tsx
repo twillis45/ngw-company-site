@@ -7,22 +7,22 @@ export const metadata: Metadata = {
 
 export default function TermsOfService() {
   return (
-    <section className="bg-navy pt-40 pb-24 md:pt-44 md:pb-28">
+    <section className="bg-carbon pt-40 pb-24 md:pt-44 md:pb-28">
       <div className="mx-auto max-w-[680px] px-6 md:px-12">
-        <h1 className="mb-2 text-[28px] font-semibold leading-tight text-white md:text-[40px] md:leading-[48px]">
+        <h1 className="mb-2 text-[28px] font-semibold leading-tight text-ink md:text-[40px] md:leading-[48px]">
           Terms of Service
         </h1>
-        <p className="mb-10 text-[13px] text-cool-gray">
+        <p className="mb-10 text-[13px] text-muted">
           Last updated: September 2026
         </p>
 
-        <div className="space-y-6 text-[17px] leading-7 text-cool-gray">
+        <div className="space-y-6 text-[17px] leading-7 text-muted">
           <p>
             These terms govern your use of noguessworksystems.com, operated by
             No Guesswork Systems LLC.
           </p>
 
-          <h2 className="text-[18px] font-semibold text-light-gray pt-2">
+          <h2 className="text-[18px] font-semibold text-muted pt-2">
             1. Use of This Site
           </h2>
           <p>
@@ -31,7 +31,7 @@ export default function TermsOfService() {
             otherwise stated.
           </p>
 
-          <h2 className="text-[18px] font-semibold text-light-gray pt-2">
+          <h2 className="text-[18px] font-semibold text-muted pt-2">
             2. No Guarantees
           </h2>
           <p>
@@ -40,7 +40,7 @@ export default function TermsOfService() {
             purpose.
           </p>
 
-          <h2 className="text-[18px] font-semibold text-light-gray pt-2">
+          <h2 className="text-[18px] font-semibold text-muted pt-2">
             3. Limitation of Liability
           </h2>
           <p>
@@ -48,21 +48,21 @@ export default function TermsOfService() {
             from the use of this website or its content.
           </p>
 
-          <h2 className="text-[18px] font-semibold text-light-gray pt-2">
+          <h2 className="text-[18px] font-semibold text-muted pt-2">
             4. Governing Law
           </h2>
           <p>
             These terms are governed by the laws of the State of Maryland.
           </p>
 
-          <h2 className="text-[18px] font-semibold text-light-gray pt-2">
+          <h2 className="text-[18px] font-semibold text-muted pt-2">
             5. Contact
           </h2>
           <p>
             For questions regarding these terms, email{" "}
             <a
               href="mailto:info@noguessworksystems.com"
-              className="text-accent hover:text-accent-hover"
+              className="text-steel hover:text-steel-hover"
             >
               info@noguessworksystems.com
             </a>

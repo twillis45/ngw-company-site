@@ -38,13 +38,13 @@ export function Navbar() {
   return (
     <nav
       className={`fixed top-0 left-0 right-0 z-50 h-[72px] transition-colors duration-300 ${
-        scrolled ? "bg-navy/95 backdrop-blur-md" : "bg-transparent"
+        scrolled ? "bg-carbon/95 backdrop-blur-md" : "bg-transparent"
       }`}
     >
       <div className="mx-auto flex h-full max-w-[1200px] items-center justify-between px-6 md:px-12">
         <Link
           href="/"
-          className="text-[15px] font-semibold tracking-[0.06em] uppercase text-white"
+          className="text-[15px] font-semibold tracking-[0.06em] uppercase text-ink"
         >
           No Guesswork Systems
         </Link>
@@ -53,25 +53,25 @@ export function Navbar() {
         <div className="hidden items-center gap-8 md:flex">
           <Link
             href="/"
-            className="text-[15px] text-light-gray hover:text-white transition-colors"
+            className="text-[15px] text-muted hover:text-ink transition-colors"
           >
             Home
           </Link>
           <Link
             href="/solutions"
-            className="text-[15px] text-light-gray hover:text-white transition-colors"
+            className="text-[15px] text-muted hover:text-ink transition-colors"
           >
             Solutions
           </Link>
           <Link
             href="/contact"
-            className="text-[15px] text-light-gray hover:text-white transition-colors"
+            className="text-[15px] text-muted hover:text-ink transition-colors"
           >
             Contact
           </Link>
           <Link
             href="/contact"
-            className="rounded-lg border border-accent text-accent px-5 py-2 text-[15px] font-medium hover:bg-accent/10 transition-colors"
+            className="rounded-lg border border-steel text-steel px-5 py-2 text-[15px] font-medium hover:bg-steel/10 transition-colors"
           >
             Contact Us →
           </Link>
@@ -109,33 +109,33 @@ export function Navbar() {
       {menuOpen && (
         <div
           id="mobile-menu"
-          className="fixed inset-0 top-[72px] bg-navy z-40 flex flex-col items-center justify-center gap-12 md:hidden"
+          className="fixed inset-0 top-[72px] bg-carbon z-40 flex flex-col items-center justify-center gap-12 md:hidden"
         >
           <Link
             href="/"
             onClick={() => setMenuOpen(false)}
-            className="text-2xl text-light-gray hover:text-white"
+            className="text-2xl text-muted hover:text-ink"
           >
             Home
           </Link>
           <Link
             href="/solutions"
             onClick={() => setMenuOpen(false)}
-            className="text-2xl text-light-gray hover:text-white"
+            className="text-2xl text-muted hover:text-ink"
           >
             Solutions
           </Link>
           <Link
             href="/contact"
             onClick={() => setMenuOpen(false)}
-            className="text-2xl text-light-gray hover:text-white"
+            className="text-2xl text-muted hover:text-ink"
           >
             Contact
           </Link>
           <Link
             href="/contact"
             onClick={() => setMenuOpen(false)}
-            className="rounded-lg border border-accent text-accent px-8 py-3 text-lg font-medium"
+            className="rounded-lg border border-steel text-steel px-8 py-3 text-lg font-medium"
           >
             Contact Us →
           </Link>

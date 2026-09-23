@@ -1,29 +1,65 @@
 @import "tailwindcss";
 
+/* Studio Matte — the NGW design system.
+   Source: ngw-leadgen/docs/brand/light-mode-tokens.md (light spec, 2026-08-15)
+           ngw-leadgen/docs/brand/landing-carbon.html (canonical dark)
+           ngw-leadgen/docs/brand/ngw-wordmark.svg
+
+   This replaces a navy-and-neon-teal palette that the system explicitly
+   forbids: "No warm gold. No pink. No neon teal. No blue." The accent is
+   steel, and the landing reference states its discipline in four words —
+   "the accent, used once."
+
+   Every ratio below is computed, not eyeballed, and verify:contrast recomputes
+   them from these declarations on every run. */
+
 @theme {
-  --color-navy: #0B1221;
-  --color-charcoal: #111827;
-  --color-slate-surface: #1E293B;
-  --color-border-dark: #334155;
-  --color-cool-gray: #94A3B8;
-  --color-light-gray: #CBD5E1;
-  --color-border-light: #E2E8F0;
-  --color-off-white: #F8FAFC;
-  --color-accent: #2DD4BF;
-  --color-accent-hover: #14B8A6;
-  /* The bright accent is 10.05:1 on navy and 1.78:1 on off-white — correct in
-     one place, a hard WCAG 1.4.3 failure in the other. This is the same hue
-     carried to a luminance that passes on the light surface: 5.55:1, chosen
-     with margin rather than scraping the 4.5 bar. verify:contrast computes
-     both and refuses text-accent inside a bg-off-white section. */
-  --color-accent-deep: #0B7267;
-  --color-accent-muted: rgba(45, 212, 191, 0.10);
+  /* --- canonical dark: Studio Matte --- */
+  --color-carbon: #0B0B0C;        /* the page */
+  --color-surface: #121316;       /* first layer */
+  --color-surface-2: #171A1F;     /* second layer — depth from stacked matte, not borders */
+  --color-ink: #E8E9EA;           /* 16.18:1. Warm near-white, NEVER #FFF */
+  --color-muted: #9DA2A8;         /* 7.65:1 — secondary prose */
+  --color-faint: #858B91;         /* 5.71:1 — metadata, kickers, eyebrows */
+  --color-steel: #849EB8;         /* 7.09:1 — the one accent */
+  --color-steel-hover: #9DB3C9;
+  --color-hair: rgba(232, 233, 234, 0.11);
+  --color-hair-strong: rgba(232, 233, 234, 0.22);
+
+  /* --- light / print surfaces --- */
+  --color-paper: #F4F6F8;         /* never pure white — the matte principle holds */
+  --color-paper-raised: #FFFFFF;
+  --color-ink-dark: #14171D;      /* 16.57:1 on paper. Near-black, never pure black */
+  --color-ink-support: #4A5A6B;   /* 6.54:1 */
+  --color-ink-whisper: #5C6C7E;   /* 4.97:1 */
+  --color-rule: #D6DDE4;
+  --color-steel-brand: #425C77;   /* 6.40:1 — steel darkened for paper */
+
+  /* --- status tier. Amber is STATUS ONLY, never an accent, never wallpaper --- */
+  --color-amber: #EF962E;
+  --color-amber-ink: #3A2600;
+  --color-alert: #C62828;
+  --color-confirm: #2E7D52;
 
   --font-sans: "Inter", ui-sans-serif, system-ui, sans-serif;
 }
 
+/* Depth in light is ONE elevation step — never two. Nested shadows are what
+   makes a light interface look like every SaaS dashboard. */
+@utility ground {
+  box-shadow: 0 1px 2px rgba(20, 23, 29, 0.06), 0 4px 12px rgba(20, 23, 29, 0.05);
+}
+
 html {
   scroll-behavior: smooth;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  html { scroll-behavior: auto; }
+  *, *::before, *::after {
+    animation-duration: 0.01ms !important;
+    transition-duration: 0.01ms !important;
+  }
 }
 
 body {
