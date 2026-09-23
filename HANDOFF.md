@@ -9,10 +9,11 @@
 | Live at | https://noguessworksystems.com — Cloudflare proxy in front of a **Render** origin |
 | Stack | Next.js 16.2.1 static export (`output: "export"`), React 19, Tailwind 4, TypeScript 6 |
 | Node | **≥ 20.9 required.** Pinned in `engines` + `.nvmrc`. The build fails hard below it and nothing said so before. |
-| Gates | **12**, all reachable from `verify:all` **and from CI** (both asserted, not eyeballed). **11 PASS, 1 FAIL** — the one red is `verify:headers`, owner-held |
+| Gates | **13**, all reachable from `verify:all` **and from CI** (both asserted, not eyeballed). **12 PASS, 1 FAIL** — the one red is `verify:headers`, owner-held |
 | CI | `.github/workflows/verify.yml` — **green on `d5762c1`** (run 35872315248), the last commit that changed code. `gates (code)` and `red-proof` block; `live origin` is continue-on-error and RED by design until the edge rule lands, re-read daily by cron. **While one gate is permanently non-blocking, a green CI does not mean what it appears to** — the owner ruling on that is open |
-| Red-proofs | **34 cases, 34 as expected, 0 NOT as expected, 0 unevaluated** — 28 file-mutation cases in `redproof.mjs` plus 6 generated origin cases. They run **in CI**, so each fault is reintroduced on a clean runner rather than only on this machine. Two of the newest first scored `?`: they broke the BUILD, so the gate never ran, and **an unevaluated case is not a result** — both were rewritten to compile and still be wrong |
-| Newest gates | `verify:identity` (the site names who is behind it, and the JSON-LD agrees), `verify:hero` (exactly one hero *action* per route — counts destinations, not elements) |
+| Red-proofs | **36 cases, 36 as expected, 0 NOT as expected, 0 unevaluated** — 28 file-mutation cases in `redproof.mjs` plus 6 generated origin cases. They run **in CI**, so each fault is reintroduced on a clean runner rather than only on this machine. Two of the newest first scored `?`: they broke the BUILD, so the gate never ran, and **an unevaluated case is not a result** — both were rewritten to compile and still be wrong |
+| Newest gates | `verify:identity` (the site names who is behind it, and the JSON-LD agrees), `verify:hero` (exactly one hero *action* per route — counts destinations, not elements), `verify:geometry` (real Chromium at 375/768/1280 — tap targets and document overflow) |
+| Browser dep | `playwright@1.58.0` **devDependency**, added for `verify:geometry`. CI installs chromium. The gate cannot exist without a real layout engine, and it must run in CI or `verify:coverage` refuses it. |
 
 ## Spine position
 
@@ -129,7 +130,8 @@ Every item below was a live falsehood on the company's public face before this.
 | 6 | **The two worked problems aim at territory that is solved or empty.** Two open-discovery passes (600 Reddit posts, 440 HN comments, 843 Ramp reviews, 100 Expensify reviews). Expense reconciliation: the incumbent **structurally excludes your segment** — Ramp's own docs require a corporation/LLC/LP, **$25,000 in a business bank account**, and no free email, and refuse sole proprietors outright; its unhappy reviewers are 14 *forced* users against 6 owners, two of whom were bounced at signup. Cross-tool governance: **no buyer-side footprint at all**. | Under PORTFOLIO this does **not** make the page dishonest — the worked problems prove real work with real checks, not a market. It changes what to *build*. Your call whether to act. |
 | 7 | **Run the open-discovery unlock, or accept PORTFOLIO on the record.** | The board: *an unlock nobody intends to run is a decayed BLOCKED wearing a better label.* Either answer is legitimate; silence is not. |
 | 8 | **May `verify:headers` stay `continue-on-error`?** | While one gate is permanently non-blocking, a green CI does not mean what it appears to. |
-| 9 | **Which of the two contact paths is the hero** — `/contact` or the raw `mailto:`. | Shipped as a stated assumption (`/contact`), undo recorded in `src/app/page.tsx`. Two-token edit. |
+| 9 | **The wedge that cleared its kill condition has no observable PRICE.** Operators call SOPs "100% necessary" and none names a figure they paid; every price in that space came from a seller. Operational *hiring* produced clean buyer prices at once — $30/hr, $25/hr, $42k/yr, $5/hr. | Two readings this evidence cannot separate: no transaction market exists because people buy a **person**, or those buyers have not been looked at. Named next step: comment trees (not the post index) against r/smallbusiness, r/agency, r/msp, r/EOSTraction. |
+| 10 | **Which of the two contact paths is the hero** — `/contact` or the raw `mailto:`. | Shipped as a stated assumption (`/contact`), undo recorded in `src/app/page.tsx`. Two-token edit. |
 
 ### Demand findings worth keeping, measured
 

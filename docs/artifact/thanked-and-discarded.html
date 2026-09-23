@@ -158,7 +158,7 @@ code{font-family:"IBM Plex Mono",monospace;font-size:.86em;background:var(--surf
     and no mechanism existed by which anyone could have found out.</p>
 
   <div class="stamp">
-    <span><b>Recorded</b> <span data-recorded="2026-09-23T14:22:41.625Z">2026-09-23</span></span>
+    <span><b>Recorded</b> <span data-recorded="2026-09-23T14:38:18.299Z">2026-09-23</span></span>
     <span><b>Gates</b> 0–7 · all passed-with-conditions</span>
     <span><b>HEAD</b> d7c9f3ed</span>
     <span><b>Live</b> noguessworksystems.com</span>
@@ -208,6 +208,35 @@ code{font-family:"IBM Plex Mono",monospace;font-size:.86em;background:var(--surf
   <section class="sec">
     <h2>Corrections</h2>
     <p>What was believed, what replaced it, and the evidence. The original stays visible.</p>
+
+    <div class="corr">
+      <p class="was">The geometry was measured in a real browser, so it is measured.</p>
+      <p class="now"><b>Measured once, by hand, with the result stored in prose &mdash; which is
+        a memory, not a guard.</b> When that measurement was finally written as a script it
+        failed <b>43 times on its first run</b>, and every failure was real: every stacked
+        footer link on every route computed <b>327&times;23</b> on a phone, below even the AA
+        floor of 24&times;24 by one pixel, and it had been that way since before this session.
+        This is the opposite of the three blind gates above &mdash; not a check that could not
+        see, but a check that <em>could</em> see and was never re-run.</p>
+      <p class="src">2026-09-23 &middot; <code>verify:geometry</code>, real Chromium at three
+        widths &middot; raised to 44px rather than arguing the bar down &middot; 2/2 red-proofed</p>
+    </div>
+
+    <div class="corr">
+      <p class="was">The wedge is open, so there is a market.</p>
+      <p class="now"><b>Open on product-absence, and it has no observable PRICE.</b> A further
+        pass found the highest-yield route was the one nobody had tried &mdash; reddit
+        <em>comment trees</em> rather than the post index, which is effectively a seller
+        directory. Operators call SOPs &ldquo;100% necessary&rdquo; and describe the pain at
+        length, and <b>not one names a figure they paid</b>; every price in that space came
+        from somebody selling. Operational <em>hiring</em>, by contrast, produced clean buyer
+        prices immediately &mdash; $30/hr, $25/hr, $42k/yr, $5/hr. <b>Two readings this cannot
+        separate:</b> either no transaction market exists because people buy a person rather
+        than the documentation, or the buyers who pay for it have not been looked at yet.</p>
+      <p class="src">2026-09-23 &middot; 9 vendor posts rejected and named &middot; 4 of the 6
+        buyer prices sit in ONE thread, which the agent flagged itself rather than counting as
+        four</p>
+    </div>
 
     <div class="corr">
       <p class="was">The top-ranked opportunity is unproven, and the one artifact that would
@@ -620,7 +649,7 @@ const STAGES = [
       ["h","<code>verify:all</code> coverage asserted, not eyeballed","<code>verify:coverage</code> diffs gates on disk against gates the entry point names. \"Does it exist\" and \"does it run everything\" are different questions"],
       ["o","Guard script passes","<b>11 of 12 green</b> at <code>d5762c1</code> — <code>verify:coverage</code>, <code>placeholders</code> (82), <code>contact</code> (64), <code>copy</code> (9), <code>claims</code> (20), <code>assets</code> (12), <code>brand</code> (82), <code>identity</code> (4), <code>hero</code> (7), <code>affordance</code> (21), <code>contrast</code> (18). <code>verify:headers</code> is the one red, legitimately, and cannot be fixed from this repo — see stage 5. It reads PRODUCTION, not a config file: 8 targets × 5 headers = 40 assertions, 32 failing"],
       ["h","<code>red-proof</code> — every gate watched failing","<b>34 cases, 34 as expected, 0 NOT as expected, 0 unevaluated</b> at <code>d5762c1</code>. Two of the newest faults first scored <code>?</code> — they broke the BUILD, so the gate never ran, and an unevaluated case is not a result; both were rewritten to compile and still be wrong. Earlier: <b>10 of 10 RED</b>, 0 green, 0 unevaluated. The first sweep reported 3 green under fault, which the spine warns is TWO hypotheses: it decomposed into ONE genuinely blind gate and TWO inert faults. The runner own change metric was also wrong — a length delta, so a same-length substitution printed 0 bytes and read exactly like an inert fault"],
-      ["o","Measurement pass committed as a script","<b>Half done.</b> <code>verify:contrast</code> now computes 18 pairs on every run, so the colour half is permanently gated. The geometry half — tap targets, 375px overflow — was measured in a real browser but lives in a transcript, not in <code>scripts/</code>, so nothing re-runs it"],
+      ["h","Measurement pass committed as a script","<b>WHOLE as of 2026-09-23.</b> <code>verify:geometry</code> serves the export on an ephemeral port and drives real Chromium at 375/768/1280. It found <b>43 failures on its first run, all real</b>: every stacked footer link computed <b>327&times;23</b> on a phone, the nav wordmark 219&times;23, the contact mailto 327&times;26. 23px is below even the WCAG 2.5.8 AA floor of 24&times;24 &mdash; <b>by one pixel</b>. Raised to 44px rather than arguing the bar down, verified on production. Horizontal overflow passed clean at all three widths first time. Dependency named per the rule: <code>playwright@1.58.0</code>, because the gate cannot exist without a real layout engine and must run in CI or <code>verify:coverage</code> refuses it. The original state follows.<br><br><b>Half done.</b> <code>verify:contrast</code> now computes 18 pairs on every run, so the colour half is permanently gated. The geometry half — tap targets, 375px overflow — was measured in a real browser but lives in a transcript, not in <code>scripts/</code>, so nothing re-runs it"],
       ["h","<span class='tag pub'>public</span> <code>nielsen-critique</code> as its own dispatch","<b>RUN, driven in a browser.</b> Five severity-3 findings, <b>four of them defects this session had introduced</b> — which is the argument for the instrument, not against it. All five addressed; four fixed and re-verified <em>on production</em>"],
       ["h","A board re-scores the build on the CODE","<b>RUN.</b> Overall <b>5.3</b> against a code-alone cap of <b>7.6</b>. It rejected two of nine claims and narrowed six — and it did not argue, it <b>defeated four gates by executing the bypass</b>. Every (a) item is now closed and every bypass reproduced against the fix"],
       ["h","Three gates added and red-proofed after the re-score","<code>verify:identity</code> (the site names who is behind it, and the JSON-LD agrees), <code>verify:hero</code> (exactly one hero <em>action</em> per shipped route), and meta-content coverage inside <code>verify:claims</code>"],
