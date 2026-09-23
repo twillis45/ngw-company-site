@@ -106,24 +106,30 @@ if (!existsSync(backingPath)) {
       `the claim ledger, so a card can name anything`
   );
 } else {
-  const backing = readFileSync(backingPath, "utf8");
-  // Titles are read from SOURCE, where they are structured data. In the export
-  // they are prose among prose and cannot be told apart from a heading.
-  // Scoped to the CAPABILITY arrays only. A first cut matched every `title:` in
-  // source and flagged "Contact", "Privacy Policy", "Solutions" and "Terms of
-  // Service" — page metadata, not claims about what this company can do. A gate
-  // that cries wolf on four rows out of five gets switched off within a week,
-  // and it was hiding one true finding among them.
+  const backingRaw = readFileSync(backingPath, "utf8");
+
+  // MATCH ONLY THE LIVE TABLE. A re-score board re-added "AI Decision Support"
+  // — a card the doc RETIRED for having no artifact in the ledger — and this
+  // gate passed, because the removed-cards table names it in backticks too.
+  // The gate's own comment claimed "a row, not a mere mention"; the code did
+  // not implement the distinction it described.
+  const removedAt = backingRaw.search(/^##\s+Removed\b/m);
+  const backing = removedAt === -1 ? backingRaw : backingRaw.slice(0, removedAt);
+
+  // ENUMERATE EVERY RENDERED TITLE, not two array names. The same board shipped
+  // "Guaranteed ROI Analytics" and "Enterprise AI Transformation" in an array
+  // called something else and the gate never looked at them. Renaming an array
+  // is not a claim review.
+  //
+  // Page metadata titles are excluded — they are route names, not capability
+  // claims, and including them made this gate cry wolf on four rows out of five.
   const titles = new Set();
   for (const f of sourceFiles().filter((f) => f.rel.endsWith(".tsx"))) {
-    const code = stripComments(f.text);
-    for (const decl of ["services", "solutions"]) {
-      const i = code.indexOf(`const ${decl} = [`);
-      if (i === -1) continue;
-      const block = code.slice(i, code.indexOf("];", i));
-      for (const m of block.matchAll(/title:\s*"([^"]+)"/g)) titles.add(m[1]);
-    }
+    let code = stripComments(f.text);
+    code = code.replace(/export const metadata[\s\S]*?\n\};/g, "");
+    for (const m of code.matchAll(/(?:^|[\s{,])title:\s*"([^"]+)"/g)) titles.add(m[1]);
   }
+
   if (titles.size === 0) {
     failures.push(
       "no capability titles found in source — either they moved, or this check " +
@@ -132,7 +138,6 @@ if (!existsSync(backingPath)) {
   }
   for (const t of titles) {
     checked++;
-    // A row, not a mere mention: the removed-cards table names them too.
     if (!backing.includes(`\`${t}\``)) {
       failures.push(
         `"${t}" ships with no backing row in ${BACKING_DOC} — the ledger does ` +

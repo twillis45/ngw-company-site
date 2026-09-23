@@ -1,4 +1,9 @@
 <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 64 64" width="64" height="64">
-  <rect width="64" height="64" rx="12" fill="#0F172A"/>
-  <path d="M16 46V18h6l14 19V18h6v28h-6L22 27v19z" fill="#2DD4BF"/>
+  <!-- Studio Matte only. This mark shipped #2DD4BF on #0F172A — the neon teal
+       the brand spec bans by name, in the most-repeated brand mark on the site,
+       live on every page, while the rest of the site was being migrated off it.
+       Ground is carbon, mark is steel. What the mark DEPICTS is the owner's
+       call; what colours it may use is not. -->
+  <rect width="64" height="64" rx="12" fill="#0B0B0C"/>
+  <path d="M16 46V18h6l14 19V18h6v28h-6L22 27v19z" fill="#849EB8"/>
 </svg>

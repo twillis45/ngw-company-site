@@ -44,6 +44,24 @@ const REQUIRED = {
     if (!/default-src\s+'self'/.test(v)) return "no default-src 'self'";
     if (!/frame-ancestors\s+'none'/.test(v)) return "no frame-ancestors 'none'";
     if (/'unsafe-eval'/.test(v)) return "allows 'unsafe-eval'";
+    // SCRIPT-SRC. There was no assertion here at all, and a re-score board
+    // proved the hole by serving
+    //   default-src 'self'; frame-ancestors 'none'; script-src * 'unsafe-inline' https://evil.example
+    // which PASSED with zero findings. Constraining script is CSP's primary
+    // job, and script-src OVERRIDES default-src for exactly that — so a
+    // policy can satisfy every other directive here and still permit any
+    // script from anywhere.
+    const scriptSrc = (v.match(/script-src([^;]*)/) || [])[1];
+    if (!scriptSrc) return "no script-src — default-src alone does not pin the directive that matters most";
+    const tokens = scriptSrc.trim().split(/\s+/).filter(Boolean);
+    // 'unsafe-inline' is permitted, deliberately and with a reason recorded in
+    // docs/SECURITY-HEADERS.md: Next's hydration payload needs it until headers
+    // ship atomically with the build. Everything else must be 'self'.
+    const ALLOWED = new Set(["'self'", "'unsafe-inline'"]);
+    const rogue = tokens.filter((t) => !ALLOWED.has(t));
+    if (rogue.length) {
+      return `script-src permits ${rogue.join(" ")} — only 'self' and the documented 'unsafe-inline' may appear`;
+    }
     // Measured 2026-09-23: zero <style> blocks and zero style= attributes ship,
     // and the Navbar's body.style.overflow write is NOT governed by style-src,
     // so this is genuinely unnecessary rather than merely undesirable.
@@ -105,7 +123,14 @@ for (const path of targets) {
     process.exit(2);
   }
   if (!res.ok) {
+    // Do not discard what has already been measured. Exiting here threw away
+    // every finding collected from earlier targets, so one 404 late in the
+    // list turned a real FAIL into a CANNOT CHECK.
     console.error(`CANNOT CHECK — ${ORIGIN}${path} returned HTTP ${res.status}`);
+    if (failures.length) {
+      console.error(`\n${failures.length} finding(s) had already been measured before that target:`);
+      for (const f of failures) console.error(`  ✗ ${f}`);
+    }
     process.exit(2);
   }
   for (const [h, verdict] of Object.entries(REQUIRED)) {

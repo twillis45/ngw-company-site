@@ -17,6 +17,7 @@
 // an inert fault rather than misread as a blind gate.
 
 import { readFileSync, writeFileSync, rmSync } from "node:fs";
+import { createServer } from "node:http";
 import { execSync } from "node:child_process";
 import { join } from "node:path";
 import { ROOT } from "./lib.mjs";
@@ -164,14 +165,72 @@ const CASES = [
   },
 ];
 
-const run = (cmd) => {
+const run = (cmd, env = process.env) => {
   try {
-    execSync(cmd, { cwd: ROOT, stdio: "pipe", env: process.env });
+    execSync(cmd, { cwd: ROOT, stdio: "pipe", env });
     return 0;
   } catch (e) {
     return e.status ?? 1;
   }
 };
+
+// verify:headers had ZERO red-proof cases — the one gate already found
+// defective was the only one never watched failing under a reintroduced fault.
+// It reads a live origin rather than a file, so its faults are SERVED, not
+// written to disk.
+//
+// The last case is the important one and is easy to leave out: a GOOD origin
+// that must go GREEN. Without it the gate's pass path is never exercised, and
+// a gate that has only ever been seen failing is as unproven as one that has
+// only ever been seen passing.
+const GOOD_CSP =
+  "default-src 'self'; script-src 'self' 'unsafe-inline'; style-src 'self'; " +
+  "font-src 'self'; img-src 'self'; connect-src 'self'; form-action 'none'; " +
+  "frame-ancestors 'none'; base-uri 'none'; object-src 'none'";
+const GOOD = {
+  "strict-transport-security": "max-age=31536000; includeSubDomains",
+  "content-security-policy": GOOD_CSP,
+  "x-content-type-options": "nosniff",
+  "referrer-policy": "strict-origin-when-cross-origin",
+  "x-frame-options": "DENY",
+};
+
+const ORIGIN_CASES = [
+  ["max-age=0 — the header is PRESENT and DISABLES HSTS", { "strict-transport-security": "max-age=0" }, "RED"],
+  ["default-src * — permits everything", { "content-security-policy": "default-src *; frame-ancestors 'none'" }, "RED"],
+  ["script-src * 'unsafe-inline' https://evil.example — the directive that matters most", {
+    "content-security-policy": "default-src 'self'; frame-ancestors 'none'; script-src * 'unsafe-inline' https://evil.example",
+  }, "RED"],
+  ["referrer-policy: unsafe-url — still leaks full URLs", { "referrer-policy": "unsafe-url" }, "RED"],
+  ["x-frame-options: ALLOWALL — not a real value", { "x-frame-options": "ALLOWALL" }, "RED"],
+  ["a GOOD origin — the gate's PASS path, which had never been exercised", {}, "GREEN"],
+];
+
+async function runOriginCases() {
+  const out = [];
+  for (const [describe, override, expect] of ORIGIN_CASES) {
+    const headers = { ...GOOD, ...override };
+    const srv = createServer((req, res) => {
+      for (const [k, v] of Object.entries(headers)) res.setHeader(k, v);
+      res.setHeader("content-type", "text/html");
+      res.end("<html></html>");
+    });
+    await new Promise((r) => srv.listen(3408, r));
+    let verdict = "?";
+    try {
+      const code = run("npm run verify:headers", { ...process.env, NGWS_ORIGIN: "http://localhost:3408" });
+      verdict = code === 0 ? "GREEN" : code === 1 ? "RED" : "?";
+    } finally {
+      await new Promise((r) => srv.close(r));
+    }
+    const ok = verdict === expect;
+    const mark = verdict === "?" ? "?" : ok ? "✓" : "✗";
+    console.log(`${mark} ${verdict.padEnd(5)} verify:headers      ${describe}`);
+    console.log(`         served a controlled origin; expected ${expect}`);
+    out.push({ gate: "headers", verdict: ok ? "RED" : verdict === "?" ? "?" : "GREEN", describe, note: "" });
+  }
+  return out;
+}
 
 const results = [];
 
@@ -194,16 +253,30 @@ for (const c of CASES) {
       // silently no-ops proves nothing and would be recorded as a passing gate.
       const next = c.mutate(original);
       if (next === original) throw new Error(`fault did not apply to ${c.file}`);
-      // Count DIFFERING characters, not the length delta. A same-length
-      // substitution — "Every claim carries where it came from" for "More
-      // consistent execution across teams", both 37 characters — reported
-      // "0 bytes" and read exactly like an inert fault, on the one instrument
-      // whose job is to tell an inert fault from a blind gate.
-      let diff = 0;
-      for (let i = 0; i < Math.max(next.length, original.length); i++) {
-        if (next[i] !== original[i]) diff++;
-      }
-      changed = diff;
+      // Report the size of the CHANGE, not a position-by-position mismatch.
+      //
+      // Two wrong versions preceded this one, and both misreported on the one
+      // instrument whose entire job is telling an INERT fault from a BLIND
+      // gate:
+      //   1. A length DELTA, so an equal-length substitution printed 0 bytes
+      //      and read exactly like a fault that never applied.
+      //   2. A position-by-position comparison, so a ONE-CHARACTER insertion
+      //      near the top of a 6 KB file printed 5306 — every character after
+      //      the insertion is shifted and counts as different. It was accurate
+      //      only for equal-length substitutions, which is the single case the
+      //      first version had been written for.
+      //
+      // Trimming the common prefix and suffix gives the real edit size for
+      // insertions, deletions and substitutions alike, in O(n).
+      let a = 0;
+      while (a < next.length && a < original.length && next[a] === original[a]) a++;
+      let b = 0;
+      while (
+        b < next.length - a &&
+        b < original.length - a &&
+        next[next.length - 1 - b] === original[original.length - 1 - b]
+      ) b++;
+      changed = Math.max(next.length - a - b, original.length - a - b);
       writeFileSync(path, next);
       note = `fault changed ${changed} chars in ${c.file} (length ${original.length} -> ${next.length})`;
     }
@@ -228,6 +301,8 @@ for (const c of CASES) {
 }
 
 run("npm run build"); // restore the export the mutated builds overwrote
+
+if (!only || only === "headers") results.push(...(await runOriginCases()));
 
 const red = results.filter((r) => r.verdict === "RED");
 const blind = results.filter((r) => r.verdict === "GREEN");

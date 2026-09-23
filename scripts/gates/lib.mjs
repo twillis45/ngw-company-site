@@ -66,5 +66,20 @@ export function report(name, failures, checked) {
 export function stripComments(text) {
   return text
     .replace(/\/\*[\s\S]*?\*\//g, "")
-    .replace(/^[ \t]*\/\/.*$/gm, "");
+    .replace(/^[ \t]*\/\/.*$/gm, "")
+    // YAML comments too. verify:coverage reads a workflow file, and a comment
+    // there satisfied it for a whole session — a board deleted the job that
+    // ran a gate, left the comment naming it, and the gate stayed green.
+    .replace(/^[ \t]*#.*$/gm, "")
+    // HTML/XML/SVG comments. verify:brand reads .svg, and the very comment
+    // explaining WHY a colour is banned contains that colour — so the gate
+    // failed on its own documentation.
+    //
+    // This is the FOURTH time a comment has tripped or could have silenced a
+    // gate here: verify:contact matched a comment quoting the bug it replaced;
+    // an assertion matched a comment naming the cards it removed;
+    // verify:coverage was satisfied by a YAML comment; and now this. The rule
+    // is one line and it has earned repeating — a gate analyzes CODE, and a
+    // check a comment can trip is a check a comment can also silence.
+    .replace(/<!--[\s\S]*?-->/g, "");
 }

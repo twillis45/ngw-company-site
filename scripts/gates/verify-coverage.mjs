@@ -9,7 +9,7 @@
 
 import { readdirSync, readFileSync } from "node:fs";
 import { join } from "node:path";
-import { ROOT } from "./lib.mjs";
+import { ROOT, stripComments } from "./lib.mjs";
 
 const onDisk = readdirSync(join(ROOT, "scripts/gates"))
   .filter((f) => f.startsWith("verify-") && f.endsWith(".mjs"))
@@ -31,7 +31,20 @@ let ciPresent = false;
 try {
   const wf = readFileSync(join(ROOT, ".github/workflows/verify.yml"), "utf8");
   ciPresent = true;
-  inCi = onDisk.filter((n) => wf.includes(`verify:${n}`));
+  // A COMMENT USED TO SATISFY THIS. A re-score board deleted the entire
+  // `origin` job — the only place verify:headers runs — and this gate still
+  // printed PASS, because the job's explanatory comment still contained the
+  // string "verify:headers". lib.mjs has shipped stripComments the whole time
+  // and this was the one gate that did not use it.
+  //
+  // Now: comments stripped, and the gate name must appear on an actual
+  // `run:` line. A step that runs it is the only thing that counts as running
+  // it.
+  const runLines = stripComments(wf)
+    .split("\n")
+    .filter((l) => /^\s*-?\s*run:/.test(l) || /^\s+npm run /.test(l))
+    .join("\n");
+  inCi = onDisk.filter((n) => new RegExp(`verify:${n}(?![\\w-])`).test(runLines));
 } catch {
   /* no workflow — reported below, not silently treated as covered */
 }
