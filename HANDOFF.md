@@ -5,6 +5,7 @@
 | | |
 |---|---|
 | Repo | `twillis45/ngw-company-site` (**public**) |
+| HEAD at write | `881d918d` |
 | Live at | https://noguessworksystems.com — Cloudflare proxy in front of a **Render** origin |
 | Stack | Next.js 16.2.1 static export (`output: "export"`), React 19, Tailwind 4, TypeScript 6 |
 | Node | **≥ 20.9 required.** Pinned in `engines` + `.nvmrc`. The build fails hard below it and nothing said so before. |
