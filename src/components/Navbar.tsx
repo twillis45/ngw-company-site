@@ -70,7 +70,7 @@ export function Navbar() {
       <div className="mx-auto flex h-full max-w-[1200px] items-center justify-between px-6 md:px-12">
         <Link
           href="/"
-          className="text-[15px] font-semibold tracking-[0.06em] uppercase text-ink"
+          className="inline-flex min-h-[44px] items-center text-[15px] font-semibold tracking-[0.06em] uppercase text-ink"
         >
           No Guesswork Systems
         </Link>

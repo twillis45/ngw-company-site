@@ -278,6 +278,25 @@ const CASES = [
     mutate: (s) => s.replace("was created to help", "exists to serve"),
   },
   {
+    gate: "geometry",
+    file: "src/components/Footer.tsx",
+    needsBuild: true,
+    // The real defect this gate found: stacked footer links computed 327x23 on
+    // a phone — below even the WCAG 2.5.8 AA floor of 24x24, by one pixel.
+    describe: "drop the footer tap targets back to their 23px height",
+    mutate: (s) => s.replace(/inline-flex min-h-\[44px\] items-center /g, ""),
+  },
+  {
+    gate: "geometry",
+    file: "src/app/globals.css",
+    needsBuild: true,
+    // The other half. A single element wider than the screen looks correct at
+    // desktop and pushes the whole document sideways on a phone — which is why
+    // it has to be asserted at 375px and not judged from a screenshot.
+    describe: "introduce an element wider than a phone viewport",
+    mutate: (s) => s + "\nbody::after{content:'';display:block;width:1200px;height:1px}\n",
+  },
+  {
     gate: "identity",
     file: "src/site.ts",
     needsBuild: true,

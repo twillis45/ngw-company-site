@@ -13,7 +13,7 @@ export function Footer() {
             </p>
             <a
               href={`mailto:${site.email}`}
-              className="block text-[15px] text-ink/85 underline underline-offset-4 hover:text-ink transition-colors"
+              className="inline-flex min-h-[44px] items-center text-[15px] text-ink/85 underline underline-offset-4 hover:text-ink transition-colors"
             >
               {site.email}
             </a>
@@ -25,34 +25,34 @@ export function Footer() {
           </div>
 
           {/* Right column */}
-          <div className="flex flex-col gap-3">
+          <div className="flex flex-col">
             <Link
               href="/"
-              className="text-[15px] text-ink/85 hover:text-ink underline-offset-4 hover:underline transition-colors"
+              className="inline-flex min-h-[44px] items-center text-[15px] text-ink/85 hover:text-ink underline-offset-4 hover:underline transition-colors"
             >
               Home
             </Link>
             <Link
               href="/solutions"
-              className="text-[15px] text-ink/85 hover:text-ink underline-offset-4 hover:underline transition-colors"
+              className="inline-flex min-h-[44px] items-center text-[15px] text-ink/85 hover:text-ink underline-offset-4 hover:underline transition-colors"
             >
               Solutions
             </Link>
             <Link
               href="/contact"
-              className="text-[15px] text-ink/85 hover:text-ink underline-offset-4 hover:underline transition-colors"
+              className="inline-flex min-h-[44px] items-center text-[15px] text-ink/85 hover:text-ink underline-offset-4 hover:underline transition-colors"
             >
               Contact
             </Link>
             <Link
               href="/privacy-policy"
-              className="text-[15px] text-ink/85 hover:text-ink underline-offset-4 hover:underline transition-colors"
+              className="inline-flex min-h-[44px] items-center text-[15px] text-ink/85 hover:text-ink underline-offset-4 hover:underline transition-colors"
             >
               Privacy Policy
             </Link>
             <Link
               href="/terms-of-service"
-              className="text-[15px] text-ink/85 hover:text-ink underline-offset-4 hover:underline transition-colors"
+              className="inline-flex min-h-[44px] items-center text-[15px] text-ink/85 hover:text-ink underline-offset-4 hover:underline transition-colors"
             >
               Terms of Service
             </Link>
